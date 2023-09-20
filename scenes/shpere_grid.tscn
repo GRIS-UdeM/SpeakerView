@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://byo0lrwh1rug6"]
+
+[ext_resource type="PackedScene" uid="uid://cjk1vd0a0wu1b" path="res://assets/shpere_grid.glb" id="1_f11kk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_epfkx"]
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="shpere_grid" instance=ExtResource("1_f11kk")]
+
+[node name="Sphere" parent="." index="0"]
+material_override = SubResource("StandardMaterial3D_epfkx")
+transparency = 0.3

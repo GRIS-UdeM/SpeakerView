@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://c51kvjg8rfpuq"]
+
+[ext_resource type="PackedScene" uid="uid://cclclgr0h4fip" path="res://assets/cube_grid.glb" id="1_kppvp"]
+[ext_resource type="Material" uid="uid://dhmde0jx3gybx" path="res://materials/cube_grid.tres" id="2_ebsq2"]
+
+[node name="cube_grid" instance=ExtResource("1_kppvp")]
+
+[node name="Grid_floor" parent="." index="0"]
+material_override = ExtResource("2_ebsq2")
+transparency = 0.7
+
+[node name="Grid_top" parent="." index="1"]
+material_override = ExtResource("2_ebsq2")
+transparency = 0.7
+
+[node name="Grid_left" parent="." index="2"]
+material_override = ExtResource("2_ebsq2")
+transparency = 0.7
+
+[node name="Grid_right" parent="." index="3"]
+material_override = ExtResource("2_ebsq2")
+transparency = 0.7
+
+[node name="Grid_front" parent="." index="4"]
+material_override = ExtResource("2_ebsq2")
+transparency = 0.7
+
+[node name="Grid_back" parent="." index="5"]
+material_override = ExtResource("2_ebsq2")
+transparency = 0.7

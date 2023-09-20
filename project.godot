@@ -1,0 +1,33 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="SpeakerView"
+run/main_scene="res://scenes/speakerview.tscn"
+config/features=PackedStringArray("4.1", "Forward Plus")
+boot_splash/image="res://icons/SpeakerView_Logo.png"
+config/icon="res://icons/SpeakerView_Logo.png"
+config/windows_native_icon="res://icon.ico"
+
+[audio]
+
+driver/driver="NULL"
+
+[display]
+
+window/size/viewport_width=800
+window/size/viewport_height=600
+
+[rendering]
+
+textures/vram_compression/import_s3tc_bptc=true
+environment/defaults/default_clear_color=Color(0.431373, 0.447059, 0.466667, 1)
+anti_aliasing/quality/msaa_3d=1
