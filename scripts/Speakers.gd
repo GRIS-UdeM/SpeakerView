@@ -81,6 +81,7 @@ func update_spk_scenes(data: Variant):
 		spk.spk_number = spk_number
 		spk.spk_is_selected = spk_is_selected
 		spk.spk_is_direct_out_only = spk_is_direct_out_only
+		cube.look_at(Vector3(0, 0, 0), Vector3(0, 1, 0), true)
 
 func get_speaker(index: int):
 	for speaker in speakers_scenes:

@@ -36,7 +36,8 @@ func _ready():
 
 func _process(_delta):
 	speaker_number_mesh.visible = speakerview_node.show_speaker_number
-	speaker_number_mesh.look_at(camera_node.global_position, Vector3(0, 1, 0), true)
+	if speaker_number_mesh.visible:
+		speaker_number_mesh.look_at(camera_node.global_position, Vector3(0, 1, 0), true)
 
 func _on_area_3d_input_event(_camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton:
