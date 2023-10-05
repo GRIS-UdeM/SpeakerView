@@ -42,5 +42,10 @@ func _process(_delta):
 func _on_area_3d_input_event(_camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click == true:
-			speakerview_node.selected_speaker_number = spk_number
+			if spk_is_selected:
+				spk_is_selected = !spk_is_selected
+				speakerview_node.selected_speaker_number = -1
+			else:
+				speakerview_node.selected_speaker_number = spk_number
+			
 			network_node.send_UDP()
