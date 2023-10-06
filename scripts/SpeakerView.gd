@@ -2,6 +2,8 @@ extends Node3D
 
 enum SpatMode {DOME=0, CUBE=1, HYBRID=2}
 
+const APP_VERSION = "0.0.0.1"
+
 const SG_SCALE: float = 10.0
 const MAX_ELEVATION = 89.0
 const MIN_ELEVATION = -89.0
