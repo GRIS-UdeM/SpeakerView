@@ -15,6 +15,7 @@ enum MenuItemId {SEPARATOR_CMDS=0,
 				TOGGLE_FULLSCREEN,
 				SHOW_FRAMES_PER_SECOND,
 				SEPARATOR_APP,
+				ABOUT_WINDOW,
 				CLOSE_SPEAKERVIEW}
 
 var commands: Array
@@ -50,6 +51,7 @@ func _ready():
 	commands.append("Toggle Fullscreen")
 	commands.append("Show Frames Per Second")
 	commands.append("Application")
+	commands.append("About SpeakerView")
 	commands.append("Close SpeakerView")
 
 	var shortcut_string: String
@@ -80,6 +82,7 @@ func _ready():
 	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_FRAMES_PER_SECOND] + "", MenuItemId.SHOW_FRAMES_PER_SECOND)
 	
 	menu_params.get_popup().add_separator(commands[MenuItemId.SEPARATOR_APP], MenuItemId.SEPARATOR_APP)
+	menu_params.get_popup().add_item(commands[MenuItemId.ABOUT_WINDOW], MenuItemId.ABOUT_WINDOW)
 	menu_params.get_popup().add_item(commands[MenuItemId.CLOSE_SPEAKERVIEW] + " (" + shortcut_string + "+V)", MenuItemId.CLOSE_SPEAKERVIEW)
 	
 	menu_params.get_popup().id_pressed.connect(_on_popup_menu_id_pressed)
@@ -132,6 +135,8 @@ func _on_popup_menu_id_pressed(id: int):
 			handle_fullscreen()
 		MenuItemId.SHOW_FRAMES_PER_SECOND:
 			handle_show_framerate()
+		MenuItemId.ABOUT_WINDOW:
+			speakerview_node.handle_show_about_window()
 		MenuItemId.CLOSE_SPEAKERVIEW:
 			handle_close_speakerview()
 

@@ -2,7 +2,8 @@ extends Node3D
 
 enum SpatMode {DOME=0, CUBE=1, HYBRID=2}
 
-const APP_VERSION = "0.0.0.1"
+const APP_VERSION: String = "0.0.0.1"
+var rendering_method: String
 
 const SG_SCALE: float = 10.0
 const MAX_ELEVATION = 89.0
@@ -56,6 +57,9 @@ var triplets_node
 var speakers_node
 var camera_node
 
+var about_window = preload("res://scenes/about_window.tscn")
+var about_window_inst
+
 func _ready():
 	network_node = get_node("Network")
 	dome_grid_node = get_node("origin_grid/dome")
@@ -66,6 +70,8 @@ func _ready():
 	
 	sphere_grid = $shpere_grid
 	cube_grid = $cube_grid
+	
+	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
 	
 	var args = OS.get_cmdline_user_args()
 	var dbgArgs: String = ""
@@ -221,3 +227,18 @@ func render_spk_triplets():
 	
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, arrays)
 	triplets_node.mesh = arr_mesh
+
+func handle_show_about_window():
+	if about_window_inst in get_children():
+		remove_child(about_window_inst)
+		return
+	
+	about_window_inst = about_window.instantiate()
+	add_child(about_window_inst)
+	about_window_inst.visible = true
+	about_window_inst.size = Vector2(300, 200)
+	about_window_inst.unresizable = true
+	about_window_inst.position = Vector2(get_viewport().get_window().position.x + get_viewport().get_window().size.x / 2 - about_window_inst.size.x / 2,
+		get_viewport().get_window().position.y + get_viewport().get_window().size.y / 2 - about_window_inst.size.y / 2)
+	about_window_inst.title = "About"
+
