@@ -15,16 +15,16 @@ enum MenuItemId {SEPARATOR_CMDS=0,
 				TOGGLE_FULLSCREEN,
 				SHOW_FRAMES_PER_SECOND,
 				SEPARATOR_APP,
+				ABOUT_WINDOW,
 				CLOSE_SPEAKERVIEW}
 
 var commands: Array
-
-var menu_params
 
 var speakerview_node
 var network_node
 var framerate_node
 var room_node
+var params_node
 
 var show_room: bool = false
 var show_framerate: bool = false
@@ -34,6 +34,7 @@ func _ready():
 	network_node = get_parent().get_node("Network")
 	framerate_node = get_parent().get_node("FrameRate")
 	room_node = get_node("/root/SpeakerView/room")
+	params_node = get_node("MenuBar/Params")
 	
 	commands.append("Commands")
 	commands.append("Show Source Numbers")
@@ -50,6 +51,7 @@ func _ready():
 	commands.append("Toggle Fullscreen")
 	commands.append("Show Frames Per Second")
 	commands.append("Application")
+	commands.append("About SpeakerView")
 	commands.append("Close SpeakerView")
 
 	var shortcut_string: String
@@ -59,37 +61,36 @@ func _ready():
 		"macOS":
 			shortcut_string = "Opt"
 	
-	menu_params = $MenuBar/Params
+	params_node.get_popup().add_separator(commands[MenuItemId.SEPARATOR_CMDS], MenuItemId.SEPARATOR_CMDS)
 	
-	menu_params.get_popup().add_separator(commands[MenuItemId.SEPARATOR_CMDS], MenuItemId.SEPARATOR_CMDS)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_SOURCE_NUMBERS] + " (" + shortcut_string + "+N)", MenuItemId.SHOW_SOURCE_NUMBERS)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_SPEAKER_NUMBERS] + " (" + shortcut_string + "+Z)", MenuItemId.SHOW_SPEAKER_NUMBERS)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_SPEAKERS] + " (" + shortcut_string + "+S)", MenuItemId.SHOW_SPEAKERS)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_SPEAKER_TRIPLETS] + " (" + shortcut_string + "+T)", MenuItemId.SHOW_SPEAKER_TRIPLETS)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_SOURCE_ACTIVITY] + " (" + shortcut_string + "+A)", MenuItemId.SHOW_SOURCE_ACTIVITY)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_SPEAKER_LEVEL] + " (" + shortcut_string + "+L)", MenuItemId.SHOW_SPEAKER_LEVEL)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_SPHERE_CUBE] + " (" + shortcut_string + "+O)", MenuItemId.SHOW_SPHERE_CUBE)
 	
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_SOURCE_NUMBERS] + " (" + shortcut_string + "+N)", MenuItemId.SHOW_SOURCE_NUMBERS)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_SPEAKER_NUMBERS] + " (" + shortcut_string + "+Z)", MenuItemId.SHOW_SPEAKER_NUMBERS)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_SPEAKERS] + " (" + shortcut_string + "+S)", MenuItemId.SHOW_SPEAKERS)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_SPEAKER_TRIPLETS] + " (" + shortcut_string + "+T)", MenuItemId.SHOW_SPEAKER_TRIPLETS)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_SOURCE_ACTIVITY] + " (" + shortcut_string + "+A)", MenuItemId.SHOW_SOURCE_ACTIVITY)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_SPEAKER_LEVEL] + " (" + shortcut_string + "+L)", MenuItemId.SHOW_SPEAKER_LEVEL)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_SPHERE_CUBE] + " (" + shortcut_string + "+O)", MenuItemId.SHOW_SPHERE_CUBE)
+	params_node.get_popup().add_item(commands[MenuItemId.RESET_SOURCE_POSITION] + " (" + shortcut_string + "+R)", MenuItemId.RESET_SOURCE_POSITION)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_ROOM] + " (R)", MenuItemId.SHOW_ROOM)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_VBAP_SPANS_COMPLETE_SPHERE] + " (S)", MenuItemId.SHOW_VBAP_SPANS_COMPLETE_SPHERE)
 	
-	menu_params.get_popup().add_item(commands[MenuItemId.RESET_SOURCE_POSITION] + " (" + shortcut_string + "+R)", MenuItemId.RESET_SOURCE_POSITION)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_ROOM] + " (R)", MenuItemId.SHOW_ROOM)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_VBAP_SPANS_COMPLETE_SPHERE] + " (S)", MenuItemId.SHOW_VBAP_SPANS_COMPLETE_SPHERE)
+	params_node.get_popup().add_separator(commands[MenuItemId.SEPARATOR_WINDOW], MenuItemId.SEPARATOR_WINDOW)
+	params_node.get_popup().add_check_item(commands[MenuItemId.TOGGLE_FULLSCREEN] + " (F)", MenuItemId.TOGGLE_FULLSCREEN)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_FRAMES_PER_SECOND] + "", MenuItemId.SHOW_FRAMES_PER_SECOND)
 	
-	menu_params.get_popup().add_separator(commands[MenuItemId.SEPARATOR_WINDOW], MenuItemId.SEPARATOR_WINDOW)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.TOGGLE_FULLSCREEN] + " (F)", MenuItemId.TOGGLE_FULLSCREEN)
-	menu_params.get_popup().add_check_item(commands[MenuItemId.SHOW_FRAMES_PER_SECOND] + "", MenuItemId.SHOW_FRAMES_PER_SECOND)
+	params_node.get_popup().add_separator(commands[MenuItemId.SEPARATOR_APP], MenuItemId.SEPARATOR_APP)
+	params_node.get_popup().add_item(commands[MenuItemId.ABOUT_WINDOW], MenuItemId.ABOUT_WINDOW)
+	params_node.get_popup().add_item(commands[MenuItemId.CLOSE_SPEAKERVIEW] + " (" + shortcut_string + "+V)", MenuItemId.CLOSE_SPEAKERVIEW)
 	
-	menu_params.get_popup().add_separator(commands[MenuItemId.SEPARATOR_APP], MenuItemId.SEPARATOR_APP)
-	menu_params.get_popup().add_item(commands[MenuItemId.CLOSE_SPEAKERVIEW] + " (" + shortcut_string + "+V)", MenuItemId.CLOSE_SPEAKERVIEW)
-	
-	menu_params.get_popup().id_pressed.connect(_on_popup_menu_id_pressed)
+	params_node.get_popup().id_pressed.connect(_on_popup_menu_id_pressed)
 	
 	set_menu_scale()
 
 func _on_params_about_to_popup():
 	set_menu_scale()
 	
-	var popup = menu_params.get_popup()
+	var popup = params_node.get_popup()
 	popup.set_item_checked(MenuItemId.SHOW_SOURCE_NUMBERS, speakerview_node.show_source_number)
 	popup.set_item_checked(MenuItemId.SHOW_SPEAKER_NUMBERS, speakerview_node.show_speaker_number)
 	popup.set_item_checked(MenuItemId.SHOW_SPEAKERS, speakerview_node.show_speakers)
@@ -132,6 +133,8 @@ func _on_popup_menu_id_pressed(id: int):
 			handle_fullscreen()
 		MenuItemId.SHOW_FRAMES_PER_SECOND:
 			handle_show_framerate()
+		MenuItemId.ABOUT_WINDOW:
+			speakerview_node.handle_show_about_window()
 		MenuItemId.CLOSE_SPEAKERVIEW:
 			handle_close_speakerview()
 
@@ -166,37 +169,37 @@ func _input(event):
 
 func handle_show_source_numbers():
 	speakerview_node.show_source_number = !speakerview_node.show_source_number
-	menu_params.get_popup().set_item_checked(MenuItemId.SHOW_SOURCE_NUMBERS, speakerview_node.show_source_number)
+	params_node.get_popup().set_item_checked(MenuItemId.SHOW_SOURCE_NUMBERS, speakerview_node.show_source_number)
 	network_node.send_UDP()
 
 func handle_show_speaker_numbers():
 	speakerview_node.show_speaker_number = !speakerview_node.show_speaker_number
-	menu_params.get_popup().set_item_checked(MenuItemId.SHOW_SPEAKER_NUMBERS, speakerview_node.show_speaker_number)
+	params_node.get_popup().set_item_checked(MenuItemId.SHOW_SPEAKER_NUMBERS, speakerview_node.show_speaker_number)
 	network_node.send_UDP()
 
 func handle_show_speakers():
 	speakerview_node.show_speakers = !speakerview_node.show_speakers
-	menu_params.get_popup().set_item_checked(MenuItemId.SHOW_SPEAKERS, speakerview_node.show_speakers)
+	params_node.get_popup().set_item_checked(MenuItemId.SHOW_SPEAKERS, speakerview_node.show_speakers)
 	network_node.send_UDP()
 
 func handle_show_speaker_triplets():
 	speakerview_node.show_speaker_triplets = !speakerview_node.show_speaker_triplets
-	menu_params.get_popup().set_item_checked(MenuItemId.SHOW_SPEAKER_TRIPLETS, speakerview_node.show_speaker_triplets)
+	params_node.get_popup().set_item_checked(MenuItemId.SHOW_SPEAKER_TRIPLETS, speakerview_node.show_speaker_triplets)
 	network_node.send_UDP()
 
 func handle_show_source_activity():
 	speakerview_node.show_source_activity = !speakerview_node.show_source_activity
-	menu_params.get_popup().set_item_checked(MenuItemId.SHOW_SOURCE_ACTIVITY, speakerview_node.show_source_activity)
+	params_node.get_popup().set_item_checked(MenuItemId.SHOW_SOURCE_ACTIVITY, speakerview_node.show_source_activity)
 	network_node.send_UDP()
 
 func handle_show_speaker_level():
 	speakerview_node.show_speaker_level = !speakerview_node.show_speaker_level
-	menu_params.get_popup().set_item_checked(MenuItemId.SHOW_SPEAKER_LEVEL, speakerview_node.show_speaker_level)
+	params_node.get_popup().set_item_checked(MenuItemId.SHOW_SPEAKER_LEVEL, speakerview_node.show_speaker_level)
 	network_node.send_UDP()
 
 func handle_show_sphere_or_cube():
 	speakerview_node.show_sphere_or_cube = !speakerview_node.show_sphere_or_cube
-	menu_params.get_popup().set_item_checked(MenuItemId.SHOW_SPHERE_CUBE, speakerview_node.show_sphere_or_cube)
+	params_node.get_popup().set_item_checked(MenuItemId.SHOW_SPHERE_CUBE, speakerview_node.show_sphere_or_cube)
 	network_node.send_UDP()
 
 func handle_show_room():
@@ -241,7 +244,8 @@ func set_menu_scale():
 		"macOS":
 			new_scale_factor = DisplayServer.screen_get_dpi() / 160.0
 	
-	get_viewport().content_scale_factor = new_scale_factor
+	params_node.get_popup().add_theme_font_size_override("font_size", get_theme_default_font_size() * new_scale_factor)
+	params_node.scale = Vector2(0.04 * new_scale_factor, 0.04 * new_scale_factor)
 
 func _process(_delta):
 	if show_framerate:

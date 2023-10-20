@@ -5,6 +5,9 @@ enum SpatMode {DOME=0, CUBE=1, HYBRID=2}
 enum MacOSMouseLeftButtonState {RELEASED=0, PRESSED=1}
 enum MacOSMouseEvent {RELEASED=0, WAITING_FOR_RELEASE=1, PRESSED=2}
 
+const APP_VERSION: String = "0.0.0.1"
+var rendering_method: String
+
 const SG_SCALE: float = 10.0
 const MAX_ELEVATION = 89.0
 const MIN_ELEVATION = -89.0
@@ -55,6 +58,7 @@ var platform_is_macos: bool = false
 var macos_get_mouse_events_process: int
 var speakerview_just_get_focus_back: bool = false
 var speakerview_lost_focus: bool = false
+var first_click_is_menu_item: bool = false
 var macos_mouse_left_button_state: MacOSMouseLeftButtonState
 var macos_mouse_event: MacOSMouseEvent
 var macos_mouse_last_pos: Vector2
@@ -66,6 +70,9 @@ var triplets_node
 var speakers_node
 var camera_node
 var UI_menu_node
+
+var about_window = preload("res://scenes/about_window.tscn")
+var about_window_inst
 
 func _ready():
 	network_node = get_node("Network")
@@ -79,6 +86,7 @@ func _ready():
 	sphere_grid = $shpere_grid
 	cube_grid = $cube_grid
 	
+
 	platform_is_macos = OS.get_name() == "macOS"
 	
 	if platform_is_macos:
@@ -88,6 +96,8 @@ func _ready():
 			macos_get_mouse_events_process = int(output[0])
 		else:
 			macos_get_mouse_events_process = OS.create_process("SV_mouse_events/SV_mouse_events", [], false)
+	
+	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
 	
 	var args = OS.get_cmdline_user_args()
 	var dbgArgs: String = ""
@@ -133,13 +143,16 @@ func _process(delta):
 			# check if mouse pos is inside the window (including window decoration and resize_margin)
 			if (mouse_pos.y < 0 or mouse_pos.y > viewport_size.y - 4) or (mouse_pos.x < 4 or mouse_pos.x > viewport_size.x - 4):
 				speakerview_lost_focus = false
+			if (mouse_pos.x >= 0 and mouse_pos.x <= 28) and (mouse_pos.y >= 0 and mouse_pos.y <= 36):
+				first_click_is_menu_item = true
 		
 		if macos_mouse_left_button_state == MacOSMouseLeftButtonState.PRESSED:
 			if speakerview_lost_focus and speakerview_just_get_focus_back:
-				if (mouse_pos.x >= 0 and mouse_pos.x <= 22) and (mouse_pos.y >= 0 and mouse_pos.y <= 22):
+				if first_click_is_menu_item:
 					UI_menu_node.show_popup()
 					speakerview_lost_focus = false
 					speakerview_just_get_focus_back = false
+					first_click_is_menu_item = false
 				elif macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE:
 					var rel_mouse = macos_mouse_last_pos - mouse_pos
 					camera_azimuth -= rel_mouse.x * MOUSE_DRAG_SPEED
@@ -284,3 +297,18 @@ func render_spk_triplets():
 	
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, arrays)
 	triplets_node.mesh = arr_mesh
+
+func handle_show_about_window():
+	if about_window_inst in get_children():
+		remove_child(about_window_inst)
+		return
+	
+	about_window_inst = about_window.instantiate()
+	add_child(about_window_inst)
+	about_window_inst.visible = true
+	about_window_inst.size = Vector2(300, 200)
+	about_window_inst.unresizable = true
+	about_window_inst.position = Vector2(get_viewport().get_window().position.x + get_viewport().get_window().size.x / 2.0 - about_window_inst.size.x / 2,
+		get_viewport().get_window().position.y + get_viewport().get_window().size.y / 2.0 - about_window_inst.size.y / 2)
+	about_window_inst.title = "About"
+

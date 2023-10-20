@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpoopb38hgey5"]
+
+[ext_resource type="Script" path="res://scripts/about_window.gd" id="1_4jvqw"]
+
+[node name="About" type="Window"]
+script = ExtResource("1_4jvqw")
+
+[node name="title" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+
+[node name="version" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="renderer" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]

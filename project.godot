@@ -25,6 +25,7 @@ driver/driver="NULL"
 
 window/size/viewport_width=800
 window/size/viewport_height=600
+window/subwindows/embed_subwindows=false
 
 [rendering]
 
