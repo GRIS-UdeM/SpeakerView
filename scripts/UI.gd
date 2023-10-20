@@ -160,11 +160,11 @@ func _input(event):
 				handle_show_speaker_numbers()
 			elif event.keycode == KEY_V:
 				handle_close_speakerview()
-		elif event.pressed and event.echo == false and event.keycode == KEY_F:
+		elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
 			handle_fullscreen()
-		elif event.pressed and event.echo == false and event.keycode == KEY_R:
+		elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_R:
 			handle_show_room()
-		elif event.pressed and event.echo == false and event.keycode == KEY_S:
+		elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_S:
 			handle_show_vbap_spans_complete_sphere()
 
 func handle_show_source_numbers():

@@ -200,16 +200,6 @@ func _input(event):
 		cam_radius += event.delta.y
 		cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
 
-	elif event is InputEventKey:
-		# Handle Fullscreen mode
-		if event.pressed and event.ctrl_pressed:
-			if event.keycode == KEY_F:
-				var mode = get_viewport().get_mode()
-				if mode == Window.MODE_FULLSCREEN:
-					get_viewport().set_mode(Window.MODE_WINDOWED)
-				else:
-					get_viewport().set_mode(Window.MODE_FULLSCREEN)
-
 func _notification(what):
 	if platform_is_macos:
 		if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
