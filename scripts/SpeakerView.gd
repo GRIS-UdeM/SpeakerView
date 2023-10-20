@@ -1,6 +1,9 @@
 extends Node3D
 
 enum SpatMode {DOME=0, CUBE=1, HYBRID=2}
+# MacOS click trough
+enum MacOSMouseLeftButtonState {RELEASED=0, PRESSED=1}
+enum MacOSMouseEvent {RELEASED=0, WAITING_FOR_RELEASE=1, PRESSED=2}
 
 const SG_SCALE: float = 10.0
 const MAX_ELEVATION = 89.0
@@ -47,12 +50,22 @@ var cube_grid
 
 var use_vbap_complete_sphere: bool = false
 
+# MacOS click trough
+var platform_is_macos: bool = false
+var macos_get_mouse_events_process: int
+var speakerview_just_get_focus_back: bool = false
+var speakerview_lost_focus: bool = false
+var macos_mouse_left_button_state: MacOSMouseLeftButtonState
+var macos_mouse_event: MacOSMouseEvent
+var macos_mouse_last_pos: Vector2
+
 var network_node
 var dome_grid_node
 var cube_grid_node
 var triplets_node
 var speakers_node
 var camera_node
+var UI_menu_node
 
 func _ready():
 	network_node = get_node("Network")
@@ -61,9 +74,20 @@ func _ready():
 	triplets_node = get_node("triplets")
 	speakers_node = get_node("Speakers")
 	camera_node = get_node("Center/Camera")
+	UI_menu_node = get_node("UI/MenuBar/Params")
 	
 	sphere_grid = $shpere_grid
 	cube_grid = $cube_grid
+	
+	platform_is_macos = OS.get_name() == "macOS"
+	
+	if platform_is_macos:
+		var output = []
+		var exit_code = OS.execute("pgrep", ["SV_mouse_events"], output)
+		if exit_code == 0 and !output.is_empty():
+			macos_get_mouse_events_process = int(output[0])
+		else:
+			macos_get_mouse_events_process = OS.create_process("SV_mouse_events/SV_mouse_events", [], false)
 	
 	var args = OS.get_cmdline_user_args()
 	var dbgArgs: String = ""
@@ -95,6 +119,34 @@ func _ready():
 		get_viewport().size = speakerview_window_size
 
 func _process(delta):
+	# MacOS click through
+	if platform_is_macos:
+		var mouse_pos = get_viewport().get_mouse_position()
+		var viewport_size = get_viewport().get_visible_rect().size
+		
+		if macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE and macos_mouse_left_button_state == MacOSMouseLeftButtonState.RELEASED:
+			macos_mouse_event = MacOSMouseEvent.RELEASED
+			speakerview_lost_focus = false
+		
+		if macos_mouse_event == MacOSMouseEvent.PRESSED and macos_mouse_left_button_state == MacOSMouseLeftButtonState.PRESSED:
+			macos_mouse_event = MacOSMouseEvent.WAITING_FOR_RELEASE
+			# check if mouse pos is inside the window (including window decoration and resize_margin)
+			if (mouse_pos.y < 0 or mouse_pos.y > viewport_size.y - 4) or (mouse_pos.x < 4 or mouse_pos.x > viewport_size.x - 4):
+				speakerview_lost_focus = false
+		
+		if macos_mouse_left_button_state == MacOSMouseLeftButtonState.PRESSED:
+			if speakerview_lost_focus and speakerview_just_get_focus_back:
+				if (mouse_pos.x >= 0 and mouse_pos.x <= 22) and (mouse_pos.y >= 0 and mouse_pos.y <= 22):
+					UI_menu_node.show_popup()
+					speakerview_lost_focus = false
+					speakerview_just_get_focus_back = false
+				elif macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE:
+					var rel_mouse = macos_mouse_last_pos - mouse_pos
+					camera_azimuth -= rel_mouse.x * MOUSE_DRAG_SPEED
+					camera_elevation -= rel_mouse.y * MOUSE_DRAG_SPEED
+					camera_elevation = clamp(camera_elevation, MIN_ELEVATION, MAX_ELEVATION)
+					macos_mouse_last_pos = mouse_pos
+	
 	# update_camera_position has to be called here if launched by SpatGris
 	update_camera_position()
 	
@@ -122,6 +174,8 @@ func _input(event):
 			camera_zoom_velocity -= (camera_zoom_velocity + 2.0) * 0.1
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			camera_zoom_velocity += (camera_zoom_velocity + 1.0) * 0.1 
+		elif platform_is_macos and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			speakerview_lost_focus = false
 	
 	elif event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		camera_azimuth += event.relative.x * MOUSE_DRAG_SPEED
@@ -144,7 +198,18 @@ func _input(event):
 					get_viewport().set_mode(Window.MODE_FULLSCREEN)
 
 func _notification(what):
+	if platform_is_macos:
+		if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+			speakerview_lost_focus = true
+			speakerview_just_get_focus_back = false
+		if what == NOTIFICATION_APPLICATION_FOCUS_IN:
+			speakerview_just_get_focus_back = true
+			macos_mouse_last_pos = get_viewport().get_mouse_position()
+			macos_mouse_event = MacOSMouseEvent.PRESSED
+	
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if platform_is_macos:
+			OS.kill(macos_get_mouse_events_process)
 		if !speakerview_has_received_SG_data_at_least_once:
 			return
 		
