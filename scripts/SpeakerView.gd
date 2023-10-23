@@ -95,7 +95,9 @@ func _ready():
 		if exit_code == 0 and !output.is_empty():
 			macos_get_mouse_events_process = int(output[0])
 		else:
-			macos_get_mouse_events_process = OS.create_process("SV_mouse_events/SV_mouse_events", [], false)
+			var svme_path = OS.get_executable_path().get_base_dir() + "/../../../SVME/SV_mouse_events"
+			svme_path = svme_path.simplify_path()
+			macos_get_mouse_events_process = OS.create_process(svme_path, [], false)
 	
 	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
 	
