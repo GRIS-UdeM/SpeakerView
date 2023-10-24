@@ -106,6 +106,7 @@ func _ready():
 	# mbap_spans
 	mbap_spans.material_override = src_sphere_mat
 	mbap_spans.transparency = 0.9
+	mbap_spans.mesh = CylinderMesh.new()
 	
 	update_polar_coords()
 

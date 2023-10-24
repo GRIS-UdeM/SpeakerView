@@ -1,12 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvyqopiijpond"]
+[gd_scene load_steps=2 format=3 uid="uid://bvyqopiijpond"]
 
 [ext_resource type="Script" path="res://scripts/source.gd" id="1_ie8li"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_5ffyy"]
 
 [node name="source" type="Node3D"]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 script = ExtResource("1_ie8li")
 
 [node name="mbap_spans" type="MeshInstance3D" parent="."]
-mesh = SubResource("CylinderMesh_5ffyy")
