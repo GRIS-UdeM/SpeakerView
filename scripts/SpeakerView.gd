@@ -298,9 +298,6 @@ func handle_show_about_window():
 	about_window_inst = about_window.instantiate()
 	add_child(about_window_inst)
 	about_window_inst.visible = true
-	about_window_inst.size = Vector2(300, 200)
 	about_window_inst.unresizable = true
 	about_window_inst.position = Vector2(get_viewport().get_window().position.x + get_viewport().get_window().size.x / 2.0 - about_window_inst.size.x / 2,
 		get_viewport().get_window().position.y + get_viewport().get_window().size.y / 2.0 - about_window_inst.size.y / 2)
-	about_window_inst.title = "About"
-
