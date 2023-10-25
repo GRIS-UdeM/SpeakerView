@@ -32,6 +32,7 @@ var SG_asked_to_kill_speakerview: bool = false
 
 var speaker_setup_name: String = ""
 var old_speaker_setup_name: String = ""
+var SG_has_focus: bool = false
 var spat_mode: SpatMode
 var show_source_number: bool
 var show_speaker_number: bool
@@ -238,6 +239,7 @@ func toggle_reset_sources_positions():
 func update_app_data(data: Variant):
 	SG_asked_to_kill_speakerview = data.killSV
 	speaker_setup_name = data.spkStpName
+	SG_has_focus = data.SGHasFocus
 	spat_mode = data.spatMode
 	show_source_number = data.showSourceNumber
 	show_speaker_number = data.showSpeakerNumber
@@ -263,6 +265,8 @@ func update_app_data(data: Variant):
 	
 	if SG_asked_to_kill_speakerview:
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+	
+	get_viewport().always_on_top = SG_has_focus
 	
 	speakerview_has_received_SG_data_at_least_once = true
 
