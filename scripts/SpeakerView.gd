@@ -23,6 +23,7 @@ var reset_sources_position: bool = false
 var quitting: bool = false
 
 var speakerview_has_received_SG_data_at_least_once: bool = false
+var should_move_SG_to_foreground: bool = false
 
 # command line args
 var is_started_by_SG: bool = false # not used for now
@@ -96,7 +97,7 @@ func _ready():
 		if exit_code == 0 and !output.is_empty():
 			macos_get_mouse_events_process = int(output[0])
 		else:
-			var svme_path = OS.get_executable_path().get_base_dir() + "/../../../SVME/SV_mouse_events"
+			var svme_path = OS.get_executable_path().get_base_dir() + "/../../../utilities/SVME/SV_mouse_events"
 			svme_path = svme_path.simplify_path()
 			macos_get_mouse_events_process = OS.create_process(svme_path, [], false)
 	
@@ -130,6 +131,8 @@ func _ready():
 		get_viewport().position = speakerview_window_position
 	if speakerview_window_size != Vector2i(0, 0):
 		get_viewport().size = speakerview_window_size
+	
+	should_move_SG_to_foreground = true
 
 func _process(delta):
 	# MacOS click through
@@ -269,6 +272,10 @@ func update_app_data(data: Variant):
 	get_viewport().always_on_top = SG_has_focus
 	
 	speakerview_has_received_SG_data_at_least_once = true
+	
+	if should_move_SG_to_foreground:
+		SG_move_to_foreground()
+		should_move_SG_to_foreground = false
 
 func render_spk_triplets():
 	var vertices = PackedVector3Array()
@@ -305,3 +312,13 @@ func handle_show_about_window():
 	about_window_inst.unresizable = true
 	about_window_inst.position = Vector2(get_viewport().get_window().position.x + get_viewport().get_window().size.x / 2.0 - about_window_inst.size.x / 2,
 		get_viewport().get_window().position.y + get_viewport().get_window().size.y / 2.0 - about_window_inst.size.y / 2)
+
+func SG_move_to_foreground():
+	var output = []
+	var exit_code = OS.execute("pgrep", ["SpatGRIS"], output)
+	
+	if exit_code == 0 and !output.is_empty():
+		var err = []
+		var script_path = OS.get_executable_path().get_base_dir() + "/../../../utilities/MSGTF/moveSGToForegroundMacOS.sh"
+		script_path.simplify_path()
+		var _osascript_exit_code = OS.execute("bash", [script_path], err)
