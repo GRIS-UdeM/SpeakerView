@@ -25,6 +25,9 @@ var quitting: bool = false
 var speakerview_has_received_SG_data_at_least_once: bool = false
 var should_move_SG_to_foreground: bool = false
 
+var window_position: Vector2i
+var window_size: Vector2i
+
 # command line args
 var is_started_by_SG: bool = false # not used for now
 var speakerview_window_position: Vector2i
@@ -102,6 +105,8 @@ func _ready():
 			macos_get_mouse_events_process = OS.create_process(svme_path, [], false)
 	
 	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
+	window_position = get_viewport().position
+	window_size = get_viewport().size
 	
 	var args = OS.get_cmdline_user_args()
 	var dbgArgs: String = ""
@@ -135,6 +140,11 @@ func _ready():
 	should_move_SG_to_foreground = true
 
 func _process(delta):
+	if window_position != get_viewport().position or window_size != get_viewport().size:
+		window_position = get_viewport().position
+		window_size = get_viewport().size
+		network_node.send_UDP()
+	
 	# MacOS click through
 	if platform_is_macos:
 		var mouse_pos = get_viewport().get_mouse_position()
