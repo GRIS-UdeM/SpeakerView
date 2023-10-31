@@ -24,6 +24,7 @@ size = Vector2(33.33, 33.33)
 gradient = SubResource("Gradient_0lvoh")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ov205"]
+albedo_color = Color(0.780392, 0.780392, 0.780392, 1)
 albedo_texture = SubResource("GradientTexture2D_aimmb")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_g3gkn"]
@@ -289,22 +290,22 @@ text = "DEBUG"
 
 [node name="light_back" type="OmniLight3D" parent="room"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 15, 10)
-light_energy = 2.0
+light_energy = 0.5
 omni_range = 30.0
 
 [node name="light_front" type="OmniLight3D" parent="room"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 15, -10)
-light_energy = 2.0
+light_energy = 0.5
 omni_range = 30.0
 
 [node name="light_left" type="OmniLight3D" parent="room"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 15, 2.08165e-12)
-light_energy = 2.0
+light_energy = 0.5
 omni_range = 30.0
 
 [node name="light_right" type="OmniLight3D" parent="room"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 15, 2.08165e-12)
-light_energy = 2.0
+light_energy = 0.5
 omni_range = 30.0
 
 [node name="light_middle" type="OmniLight3D" parent="room"]

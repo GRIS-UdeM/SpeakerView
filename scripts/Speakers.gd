@@ -106,7 +106,7 @@ func _ready():
 	spk_cube_mat_direct_out_only = StandardMaterial3D.new()
 	spk_num_mat = StandardMaterial3D.new()
 	
-	spk_cube_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+#	spk_cube_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	spk_cube_mat_selected.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	spk_cube_mat_direct_out_only.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	spk_num_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
