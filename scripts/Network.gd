@@ -69,10 +69,10 @@ func listen_to_UDP():
 		# Parse JSON data
 		json_data.data = null
 		if json_data.parse(message) == OK:
-			if typeof(json_data.data) == 28:# 28 == TYPE_ARRAY
+			if typeof(json_data.data) == Variant.Type.TYPE_ARRAY:
 				if json_data.data[0] == "sources":
 					sources_node.set_sources_info(json_data.data)
 				elif json_data.data[0] == "speakers":
 					speakers_node.set_speakers_info(json_data.data)
-			elif typeof(json_data.data) == 27:# 27 == TYPE_DICTIONARY
+			elif typeof(json_data.data) == Variant.Type.TYPE_DICTIONARY:
 				speakerview_node.update_app_data(json_data.data)
