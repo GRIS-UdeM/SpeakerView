@@ -92,7 +92,7 @@ func _ready():
 	vbap_multimesh_instance3D.transparency = src_transparency
 	vbap_multimesh_instance3D.set_cast_shadows_setting(GeometryInstance3D.ShadowCastingSetting.SHADOW_CASTING_SETTING_OFF)
 	vbap_multimesh.mesh = mmesh
-	mmesh.size = Vector3(0.15, 0.15, 0.15)
+	mmesh.size = Vector3(0.3, 0.3, 0.3)
 	# Set the format first.
 	vbap_multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	# Then resize (otherwise, changing the format is not allowed).
