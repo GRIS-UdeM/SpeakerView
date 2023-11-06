@@ -15,8 +15,7 @@ enum MenuItemId {SEPARATOR_CMDS=0,
 				TOGGLE_FULLSCREEN,
 				SHOW_FRAMES_PER_SECOND,
 				SEPARATOR_APP,
-				ABOUT_WINDOW,
-				CLOSE_SPEAKERVIEW}
+				ABOUT_WINDOW}
 
 var commands: Array
 
@@ -52,7 +51,6 @@ func _ready():
 	commands.append("Show Frames Per Second")
 	commands.append("Application")
 	commands.append("About SpeakerView")
-	commands.append("Close SpeakerView")
 
 #	var shortcut_string: String
 #	match OS.get_name():
@@ -81,7 +79,6 @@ func _ready():
 	
 	params_node.get_popup().add_separator(commands[MenuItemId.SEPARATOR_APP], MenuItemId.SEPARATOR_APP)
 	params_node.get_popup().add_item(commands[MenuItemId.ABOUT_WINDOW], MenuItemId.ABOUT_WINDOW)
-	params_node.get_popup().add_item(commands[MenuItemId.CLOSE_SPEAKERVIEW], MenuItemId.CLOSE_SPEAKERVIEW)
 	
 	params_node.get_popup().id_pressed.connect(_on_popup_menu_id_pressed)
 	
@@ -135,8 +132,6 @@ func _on_popup_menu_id_pressed(id: int):
 			handle_show_framerate()
 		MenuItemId.ABOUT_WINDOW:
 			speakerview_node.handle_show_about_window()
-		MenuItemId.CLOSE_SPEAKERVIEW:
-			handle_close_speakerview()
 
 func _input(event):
 	if event is InputEventKey:
@@ -158,8 +153,6 @@ func _input(event):
 #				handle_show_sphere_or_cube()
 #			elif event.keycode == KEY_Z:
 #				handle_show_speaker_numbers()
-#			elif event.keycode == KEY_V:
-#				handle_close_speakerview()
 		if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
 			handle_fullscreen()
 		elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_R:
@@ -231,9 +224,6 @@ func handle_fullscreen():
 func handle_show_framerate():
 	show_framerate = !show_framerate
 	framerate_node.visible = show_framerate
-
-func handle_close_speakerview():
-	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 func set_menu_scale():
 	var new_scale_factor: float
