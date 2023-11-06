@@ -95,14 +95,7 @@ func _ready():
 	platform_is_macos = OS.get_name() == "macOS"
 	
 	if platform_is_macos:
-		var output = []
-		var exit_code = OS.execute("pgrep", ["SV_mouse_events"], output)
-		if exit_code == 0 and !output.is_empty():
-			macos_get_mouse_events_process = int(output[0])
-		else:
-			var svme_path = OS.get_executable_path().get_base_dir() + "/../../../utilities/SVME/SV_mouse_events"
-			svme_path = svme_path.simplify_path()
-			macos_get_mouse_events_process = OS.create_process(svme_path, [], false)
+		start_SVME()
 	
 	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
 	window_position = get_viewport().position
@@ -222,6 +215,7 @@ func _notification(what):
 			speakerview_lost_focus = true
 			speakerview_just_get_focus_back = false
 		if what == NOTIFICATION_APPLICATION_FOCUS_IN:
+			start_SVME()
 			speakerview_just_get_focus_back = true
 			macos_mouse_last_pos = get_viewport().get_mouse_position()
 			macos_mouse_event = MacOSMouseEvent.PRESSED
@@ -332,3 +326,13 @@ func SG_move_to_foreground():
 		var script_path = OS.get_executable_path().get_base_dir() + "/../../../utilities/MSGTF/moveSGToForegroundMacOS.sh"
 		script_path.simplify_path()
 		var _osascript_exit_code = OS.execute("bash", [script_path], err)
+
+func start_SVME():
+	var output = []
+	var exit_code = OS.execute("pgrep", ["SV_mouse_events"], output)
+	if exit_code == 0 and !output.is_empty():
+		macos_get_mouse_events_process = int(output[0])
+	else:
+		var svme_path = OS.get_executable_path().get_base_dir() + "/../../../utilities/SVME/SV_mouse_events"
+		svme_path = svme_path.simplify_path()
+		macos_get_mouse_events_process = OS.create_process(svme_path, [], false)
