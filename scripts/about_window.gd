@@ -40,7 +40,11 @@ func _ready():
 	version_label.scale = Vector2(new_scale_factor, new_scale_factor)
 	renderer_label.scale = Vector2(new_scale_factor, new_scale_factor)
 	
+	visible = true
+	unresizable = true
 	size = Vector2(300 * new_scale_factor, 200 * new_scale_factor)
+	position = Vector2(get_parent().get_viewport().get_window().position.x + get_parent().get_viewport().get_window().size.x / 2.0 - size.x / 2.0,
+		get_parent().get_viewport().get_window().position.y + get_parent().get_viewport().get_window().size.y / 2.0 - size.y / 2.0)
 	title = "About"
 
 func _process(_delta):

@@ -213,11 +213,13 @@ func _notification(what):
 		if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 			speakerview_lost_focus = true
 			speakerview_just_get_focus_back = false
-		if what == NOTIFICATION_APPLICATION_FOCUS_IN:
+		elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
 			start_SVME()
 			speakerview_just_get_focus_back = true
 			macos_mouse_last_pos = get_viewport().get_mouse_position()
 			macos_mouse_event = MacOSMouseEvent.PRESSED
+		elif what == NOTIFICATION_WM_ABOUT:
+			handle_show_about_window()
 	
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		if platform_is_macos:
@@ -306,11 +308,7 @@ func handle_show_about_window():
 		return
 	
 	about_window_inst = about_window.instantiate()
-	add_child(about_window_inst)
-	about_window_inst.visible = true
-	about_window_inst.unresizable = true
-	about_window_inst.position = Vector2(get_viewport().get_window().position.x + get_viewport().get_window().size.x / 2.0 - about_window_inst.size.x / 2,
-		get_viewport().get_window().position.y + get_viewport().get_window().size.y / 2.0 - about_window_inst.size.y / 2)
+	add_child.call_deferred(about_window_inst)
 
 func SG_move_to_foreground():
 	var output = []
