@@ -23,6 +23,7 @@ var reset_sources_position: bool = false
 var quitting: bool = false
 
 var should_move_SG_to_foreground: bool = false
+var Sg_has_focus_last_focus: bool = false
 
 var window_position: Vector2i
 var window_size: Vector2i
@@ -272,7 +273,9 @@ func update_app_data(data: Variant):
 	if SG_asked_to_kill_speakerview:
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	
-	get_viewport().always_on_top = SG_has_focus
+	if SG_has_focus != Sg_has_focus_last_focus:
+		get_viewport().always_on_top = SG_has_focus
+		Sg_has_focus_last_focus = SG_has_focus
 	
 	if should_move_SG_to_foreground:
 		SG_move_to_foreground()
