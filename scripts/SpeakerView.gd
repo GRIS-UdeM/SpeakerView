@@ -304,7 +304,7 @@ func render_spk_triplets():
 
 func handle_show_about_window():
 	if about_window_inst in get_children():
-		remove_child(about_window_inst)
+		remove_child.call_deferred(about_window_inst)
 		return
 	
 	about_window_inst = about_window.instantiate()
