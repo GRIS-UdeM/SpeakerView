@@ -5,7 +5,7 @@ enum SpatMode {DOME=0, CUBE=1, HYBRID=2}
 enum MacOSMouseLeftButtonState {RELEASED=0, PRESSED=1}
 enum MacOSMouseEvent {RELEASED=0, WAITING_FOR_RELEASE=1, PRESSED=2}
 
-const APP_VERSION: String = "0.0.0.1"
+const APP_VERSION: String = "0.0.1.0"
 var rendering_method: String
 
 const SG_SCALE: float = 10.0
