@@ -26,6 +26,12 @@ fi
 #==============================================================================
 # Set SpeakerView version in files
 
-sed -i '' "s/const APP_VERSION: String = .*/const APP_VERSION: String = \"$VERSION\"/g" scripts/SpeakerView.gd || exit 1
-sed -i '' "s/application\/short_version=.*/application\/short_version=\"$VERSION\"/g" export_presets.cfg || exit 1
-sed -i '' "s/application\/version=.*/application\/version=\"$VERSION\"/g" export_presets.cfg || exit 1
+if [[ "$OSTYPE" == "darwin"* ]];then
+	sed -i '' "s/const APP_VERSION: String = .*/const APP_VERSION: String = \"$VERSION\"/g" scripts/SpeakerView.gd || exit 1
+	sed -i '' "s/application\/short_version=.*/application\/short_version=\"$VERSION\"/g" export_presets.cfg || exit 1
+	sed -i '' "s/application\/version=.*/application\/version=\"$VERSION\"/g" export_presets.cfg || exit 1
+elif [[ "$OSTYPE" == "msys" ]];then
+	sed -i "s/const APP_VERSION: String = .*/const APP_VERSION: String = \"$VERSION\"/g" scripts/SpeakerView.gd || exit 1
+	sed -i "s/application\/file_version=.*/application\/file_version=\"$VERSION\"/g" export_presets.cfg || exit 1
+	sed -i "s/application\/product_version=.*/application\/product_version=\"$VERSION\"/g" export_presets.cfg || exit 1
+fi
