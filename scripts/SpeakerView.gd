@@ -22,7 +22,6 @@ var selected_speaker_number: int = 0
 var reset_sources_position: bool = false
 var quitting: bool = false
 
-var speakerview_has_received_SG_data_at_least_once: bool = false
 var should_move_SG_to_foreground: bool = false
 
 var window_position: Vector2i
@@ -223,8 +222,6 @@ func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		if platform_is_macos:
 			OS.kill(macos_get_mouse_events_process)
-		if !speakerview_has_received_SG_data_at_least_once:
-			return
 		
 		# When closing window, send info to SpatGris
 		quitting = true
@@ -274,8 +271,6 @@ func update_app_data(data: Variant):
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	
 	get_viewport().always_on_top = SG_has_focus
-	
-	speakerview_has_received_SG_data_at_least_once = true
 	
 	if should_move_SG_to_foreground:
 		SG_move_to_foreground()
