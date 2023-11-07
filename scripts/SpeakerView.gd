@@ -94,10 +94,6 @@ func _ready():
 
 	platform_is_macos = OS.get_name() == "macOS"
 	
-	if platform_is_macos:
-		start_SVME()
-		should_move_SG_to_foreground = true
-	
 	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
 	window_position = get_viewport().position
 	window_size = get_viewport().size
@@ -130,6 +126,10 @@ func _ready():
 		get_viewport().position = speakerview_window_position
 	if speakerview_window_size != Vector2i(0, 0):
 		get_viewport().size = speakerview_window_size
+	
+	if platform_is_macos:
+		start_SVME()
+		should_move_SG_to_foreground = true
 
 func _process(delta):
 	if window_position != get_viewport().position or window_size != get_viewport().size:
