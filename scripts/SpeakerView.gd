@@ -24,6 +24,7 @@ var quitting: bool = false
 
 var should_move_SG_to_foreground: bool = false
 var SG_has_focus_last_focus: bool = false
+var SV_keep_on_top_last: bool = false
 
 var window_position: Vector2i
 var window_size: Vector2i
@@ -37,6 +38,7 @@ var SG_asked_to_kill_speakerview: bool = false
 var speaker_setup_name: String = ""
 var old_speaker_setup_name: String = ""
 var SG_has_focus: bool = false
+var SV_keep_on_top: bool = false
 var spat_mode: SpatMode
 var show_source_number: bool
 var show_speaker_number: bool
@@ -246,6 +248,7 @@ func update_app_data(data: Variant):
 	SG_asked_to_kill_speakerview = data.killSV
 	speaker_setup_name = data.spkStpName
 	SG_has_focus = data.SGHasFocus
+	SV_keep_on_top = data.KeepSVOnTop
 	spat_mode = data.spatMode
 	show_source_number = data.showSourceNumber
 	show_speaker_number = data.showSpeakerNumber
@@ -272,9 +275,10 @@ func update_app_data(data: Variant):
 	if SG_asked_to_kill_speakerview:
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	
-	if SG_has_focus != SG_has_focus_last_focus:
-		get_viewport().always_on_top = SG_has_focus
+	if SV_keep_on_top != SV_keep_on_top_last or SG_has_focus != SG_has_focus_last_focus:
+		get_viewport().always_on_top = SV_keep_on_top and SG_has_focus
 		SG_has_focus_last_focus = SG_has_focus
+		SV_keep_on_top_last = SV_keep_on_top
 	
 	if should_move_SG_to_foreground:
 		SG_move_to_foreground()
