@@ -22,24 +22,30 @@ var selected_speaker_number: int = 0
 var reset_sources_position: bool = false
 var quitting: bool = false
 
+var SV_has_received_SG_data_at_least_once: bool = false
 var should_move_SG_to_foreground: bool = false
 var SG_has_focus_last_focus: bool = false
 var SV_keep_on_top_last: bool = false
+var show_hall_last: bool = false
+var SV_should_grab_focus_last: bool = false
 
 var window_position: Vector2i
 var window_size: Vector2i
 
 # command line args
 var is_started_by_SG: bool = false # not used for now
+var SV_started_by_SG_for_the_first_time: bool = false
 var speakerview_window_position: Vector2i
 var speakerview_window_size: Vector2i
-var SG_asked_to_kill_speakerview: bool = false
 
+var SG_asked_to_kill_speakerview: bool = false
 var speaker_setup_name: String = ""
 var old_speaker_setup_name: String = ""
 var SG_has_focus: bool = false
 var SV_keep_on_top: bool = false
+var SV_should_grab_focus: bool = false
 var spat_mode: SpatMode
+var show_hall: bool = false
 var show_source_number: bool
 var show_speaker_number: bool
 var show_speakers: bool
@@ -77,6 +83,7 @@ var triplets_node
 var speakers_node
 var camera_node
 var UI_menu_node
+var room_node
 
 var about_window = preload("res://scenes/about_window.tscn")
 var about_window_inst
@@ -89,6 +96,7 @@ func _ready():
 	speakers_node = get_node("Speakers")
 	camera_node = get_node("Center/Camera")
 	UI_menu_node = get_node("UI/MenuBar/Params")
+	room_node = get_node("room")
 	
 	sphere_grid = $shpere_grid
 	cube_grid = $cube_grid
@@ -105,6 +113,8 @@ func _ready():
 	for arg in args:
 		if arg == "launchedBySG=true":
 			is_started_by_SG = true
+		elif arg == "firstLaunchBySG=true":
+			SV_started_by_SG_for_the_first_time = true
 		elif arg.contains("winPosition="):
 			var values = arg.get_slice('=', 1)
 			var split_values = values.split(",", false, 2)
@@ -131,7 +141,7 @@ func _ready():
 	
 	if platform_is_macos:
 		start_SVME()
-		should_move_SG_to_foreground = true
+		should_move_SG_to_foreground = !SV_started_by_SG_for_the_first_time
 
 func _process(delta):
 	if window_position != get_viewport().position or window_size != get_viewport().size:
@@ -249,6 +259,8 @@ func update_app_data(data: Variant):
 	speaker_setup_name = data.spkStpName
 	SG_has_focus = data.SGHasFocus
 	SV_keep_on_top = data.KeepSVOnTop
+	SV_should_grab_focus = data.SVGrabFocus
+	show_hall = data.showHall
 	spat_mode = data.spatMode
 	show_source_number = data.showSourceNumber
 	show_speaker_number = data.showSpeakerNumber
@@ -280,9 +292,22 @@ func update_app_data(data: Variant):
 		SG_has_focus_last_focus = SG_has_focus
 		SV_keep_on_top_last = SV_keep_on_top
 	
+	if SV_should_grab_focus != SV_should_grab_focus_last:
+		if SV_should_grab_focus:
+			get_window().grab_focus()
+		SV_should_grab_focus_last = SV_keep_on_top_last
+	
+	if show_hall != show_hall_last:
+		toggle_show_room()
+		show_hall_last = show_hall
+	
 	if should_move_SG_to_foreground:
 		SG_move_to_foreground()
 		should_move_SG_to_foreground = false
+	
+	if !SV_has_received_SG_data_at_least_once:
+		network_node.send_UDP()
+		SV_has_received_SG_data_at_least_once = true
 
 func render_spk_triplets():
 	var vertices = PackedVector3Array()
@@ -335,3 +360,17 @@ func start_SVME():
 		var svme_path = OS.get_executable_path().get_base_dir() + "/../../../utilities/SVME/SV_mouse_events"
 		svme_path = svme_path.simplify_path()
 		macos_get_mouse_events_process = OS.create_process(svme_path, [], false)
+
+func toggle_show_room():
+	var floor_deep_node = room_node.get_node("floor_deep")
+	var wall_left_node = room_node.get_node("wall_left")
+	var wall_front_node = room_node.get_node("wall_front")
+	var wall_back_node = room_node.get_node("wall_back")
+	var wall_right_node = room_node.get_node("wall_right")
+	var floor_stage_node = room_node.get_node("floor_stage")
+	floor_deep_node.visible = !floor_deep_node.visible
+	wall_left_node.visible = !wall_left_node.visible
+	wall_front_node.visible = !wall_front_node.visible
+	wall_back_node.visible = !wall_back_node.visible
+	wall_right_node.visible = !wall_right_node.visible
+	floor_stage_node.visible = !floor_stage_node.visible
