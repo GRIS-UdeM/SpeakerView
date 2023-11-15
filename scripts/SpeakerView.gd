@@ -73,7 +73,6 @@ var platform_is_macos: bool = false
 var macos_get_mouse_events_process: int
 var speakerview_just_get_focus_back: bool = false
 var speakerview_lost_focus: bool = false
-var first_click_is_menu_item: bool = false
 var macos_mouse_left_button_state: MacOSMouseLeftButtonState
 var macos_mouse_event: MacOSMouseEvent
 var macos_mouse_last_pos: Vector2
@@ -84,7 +83,6 @@ var cube_grid_node
 var triplets_node
 var speakers_node
 var camera_node
-var UI_menu_node
 var hall_node
 
 func _ready():
@@ -94,7 +92,6 @@ func _ready():
 	triplets_node = get_node("triplets")
 	speakers_node = get_node("Speakers")
 	camera_node = get_node("Center/Camera")
-	UI_menu_node = get_node("UI/MenuBar/Params")
 	hall_node = get_node("hall")
 	
 	sphere_grid = $shpere_grid
@@ -154,6 +151,8 @@ func _ready():
 		should_move_SG_to_foreground = !SV_started_by_SG_for_the_first_time
 
 func _process(delta):
+#	$FrameRate.text = str("FPS : ", Engine.get_frames_per_second())
+	
 	if window_position != get_viewport().position or window_size != get_viewport().size:
 		window_position = get_viewport().position
 		window_size = get_viewport().size
@@ -173,17 +172,10 @@ func _process(delta):
 			# check if mouse pos is inside the window (including window decoration and resize_margin)
 			if (mouse_pos.y < 0 or mouse_pos.y > viewport_size.y - 4) or (mouse_pos.x < 4 or mouse_pos.x > viewport_size.x - 4):
 				speakerview_lost_focus = false
-			if (mouse_pos.x >= 0 and mouse_pos.x <= 28) and (mouse_pos.y >= 0 and mouse_pos.y <= 36):
-				first_click_is_menu_item = true
 		
 		if macos_mouse_left_button_state == MacOSMouseLeftButtonState.PRESSED:
 			if speakerview_lost_focus and speakerview_just_get_focus_back:
-				if first_click_is_menu_item:
-					UI_menu_node.show_popup()
-					speakerview_lost_focus = false
-					speakerview_just_get_focus_back = false
-					first_click_is_menu_item = false
-				elif macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE:
+				if macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE:
 					var rel_mouse = macos_mouse_last_pos - mouse_pos
 					camera_azimuth -= rel_mouse.x * MOUSE_DRAG_SPEED
 					camera_elevation -= rel_mouse.y * MOUSE_DRAG_SPEED
@@ -229,6 +221,10 @@ func _input(event):
 	elif event is InputEventPanGesture:
 		cam_radius += event.delta.y
 		cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
+	
+	elif event is InputEventKey:
+		if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
+			handle_fullscreen()
 
 func _notification(what):
 	if platform_is_macos:
@@ -374,3 +370,10 @@ func toggle_show_hall():
 	wall_back_node.visible = !wall_back_node.visible
 	wall_right_node.visible = !wall_right_node.visible
 	floor_stage_node.visible = !floor_stage_node.visible
+
+func handle_fullscreen():
+	var mode = get_viewport().get_mode()
+	if mode == Window.MODE_FULLSCREEN:
+		get_viewport().set_mode(Window.MODE_WINDOWED)
+	else:
+		get_viewport().set_mode(Window.MODE_FULLSCREEN)
