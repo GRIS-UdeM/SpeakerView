@@ -95,7 +95,6 @@ func _ready():
 	sphere_grid = $shpere_grid
 	cube_grid = $cube_grid
 	
-
 	platform_is_macos = OS.get_name() == "macOS"
 	
 	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
@@ -220,9 +219,13 @@ func _input(event):
 		cam_radius += event.delta.y
 		cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
 	
+	# Handling quitting with CTRL or META + W
 	elif event is InputEventKey:
 		if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
 			handle_fullscreen()
+		elif event.pressed and event.echo == false and event.keycode == KEY_W:
+			if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
+				get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
 func _notification(what):
 	if platform_is_macos:
