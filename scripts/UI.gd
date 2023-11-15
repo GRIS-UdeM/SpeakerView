@@ -1,7 +1,7 @@
 extends Control
 
 enum MenuItemId {SEPARATOR_CMDS=0,
-				SHOW_ROOM,
+				SHOW_HALL,
 				SHOW_VBAP_SPANS_COMPLETE_SPHERE,
 				SEPARATOR_WINDOW,
 				TOGGLE_FULLSCREEN,
@@ -14,21 +14,21 @@ var commands: Array
 var speakerview_node
 var network_node
 var framerate_node
-var room_node
+var hall_node
 var params_node
 
-var show_room: bool = false
+var show_hall: bool = false
 var show_framerate: bool = false
 
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
 	network_node = get_parent().get_node("Network")
 	framerate_node = get_parent().get_node("FrameRate")
-	room_node = get_node("/root/SpeakerView/room")
+	hall_node = get_node("/root/SpeakerView/hall")
 	params_node = get_node("MenuBar/Params")
 	
 	commands.append("Commands")
-	commands.append("Show Room")
+	commands.append("Show Hall")
 	commands.append("Show Vbap Spans Complete Sphere")
 	commands.append("Window")
 	commands.append("Toggle Fullscreen")
@@ -38,7 +38,7 @@ func _ready():
 	
 	params_node.get_popup().add_separator(commands[MenuItemId.SEPARATOR_CMDS], MenuItemId.SEPARATOR_CMDS)
 
-	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_ROOM] + " (R)", MenuItemId.SHOW_ROOM)
+	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_HALL] + " (R)", MenuItemId.SHOW_HALL)
 	params_node.get_popup().add_check_item(commands[MenuItemId.SHOW_VBAP_SPANS_COMPLETE_SPHERE] + " (S)", MenuItemId.SHOW_VBAP_SPANS_COMPLETE_SPHERE)
 	
 	params_node.get_popup().add_separator(commands[MenuItemId.SEPARATOR_WINDOW], MenuItemId.SEPARATOR_WINDOW)
@@ -56,15 +56,15 @@ func _on_params_about_to_popup():
 	set_menu_scale()
 	var popup = params_node.get_popup()
 	
-	popup.set_item_checked(MenuItemId.SHOW_ROOM, show_room)
+	popup.set_item_checked(MenuItemId.SHOW_HALL, show_hall)
 	popup.set_item_checked(MenuItemId.SHOW_VBAP_SPANS_COMPLETE_SPHERE, speakerview_node.use_vbap_complete_sphere)
 	popup.set_item_checked(MenuItemId.TOGGLE_FULLSCREEN, get_viewport().get_mode() == Window.MODE_FULLSCREEN)
 	popup.set_item_checked(MenuItemId.SHOW_FRAMES_PER_SECOND, show_framerate)
 
 func _on_popup_menu_id_pressed(id: int):
 	match id:
-		MenuItemId.SHOW_ROOM:
-			handle_show_room()
+		MenuItemId.SHOW_HALL:
+			handle_show_hall()
 		MenuItemId.SHOW_VBAP_SPANS_COMPLETE_SPHERE:
 			handle_show_vbap_spans_complete_sphere()
 		MenuItemId.TOGGLE_FULLSCREEN:
@@ -78,18 +78,18 @@ func _input(event):
 	if event is InputEventKey:
 		if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
 			handle_fullscreen()
-		elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_R:
-			handle_show_room()
+		elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_H:
+			handle_show_hall()
 		elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_S:
 			handle_show_vbap_spans_complete_sphere()
 
-func handle_show_room():
-	var floor_deep_node = room_node.get_node("floor_deep")
-	var wall_left_node = room_node.get_node("wall_left")
-	var wall_front_node = room_node.get_node("wall_front")
-	var wall_back_node = room_node.get_node("wall_back")
-	var wall_right_node = room_node.get_node("wall_right")
-	var floor_stage_node = room_node.get_node("floor_stage")
+func handle_show_hall():
+	var floor_deep_node = hall_node.get_node("floor_deep")
+	var wall_left_node = hall_node.get_node("wall_left")
+	var wall_front_node = hall_node.get_node("wall_front")
+	var wall_back_node = hall_node.get_node("wall_back")
+	var wall_right_node = hall_node.get_node("wall_right")
+	var floor_stage_node = hall_node.get_node("floor_stage")
 	floor_deep_node.visible = !floor_deep_node.visible
 	wall_left_node.visible = !wall_left_node.visible
 	wall_front_node.visible = !wall_front_node.visible
@@ -97,7 +97,7 @@ func handle_show_room():
 	wall_right_node.visible = !wall_right_node.visible
 	floor_stage_node.visible = !floor_stage_node.visible
 	
-	show_room = !show_room
+	show_hall = !show_hall
 
 func handle_show_vbap_spans_complete_sphere():
 	speakerview_node.use_vbap_complete_sphere = !speakerview_node.use_vbap_complete_sphere

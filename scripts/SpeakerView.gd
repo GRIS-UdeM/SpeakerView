@@ -83,7 +83,7 @@ var triplets_node
 var speakers_node
 var camera_node
 var UI_menu_node
-var room_node
+var hall_node
 
 var about_window = preload("res://scenes/about_window.tscn")
 var about_window_inst
@@ -96,7 +96,7 @@ func _ready():
 	speakers_node = get_node("Speakers")
 	camera_node = get_node("Center/Camera")
 	UI_menu_node = get_node("UI/MenuBar/Params")
-	room_node = get_node("room")
+	hall_node = get_node("hall")
 	
 	sphere_grid = $shpere_grid
 	cube_grid = $cube_grid
@@ -298,7 +298,7 @@ func update_app_data(data: Variant):
 		SV_should_grab_focus_last = SV_keep_on_top_last
 	
 	if show_hall != show_hall_last:
-		toggle_show_room()
+		toggle_show_hall()
 		show_hall_last = show_hall
 	
 	if should_move_SG_to_foreground:
@@ -361,13 +361,13 @@ func start_SVME():
 		svme_path = svme_path.simplify_path()
 		macos_get_mouse_events_process = OS.create_process(svme_path, [], false)
 
-func toggle_show_room():
-	var floor_deep_node = room_node.get_node("floor_deep")
-	var wall_left_node = room_node.get_node("wall_left")
-	var wall_front_node = room_node.get_node("wall_front")
-	var wall_back_node = room_node.get_node("wall_back")
-	var wall_right_node = room_node.get_node("wall_right")
-	var floor_stage_node = room_node.get_node("floor_stage")
+func toggle_show_hall():
+	var floor_deep_node = hall_node.get_node("floor_deep")
+	var wall_left_node = hall_node.get_node("wall_left")
+	var wall_front_node = hall_node.get_node("wall_front")
+	var wall_back_node = hall_node.get_node("wall_back")
+	var wall_right_node = hall_node.get_node("wall_right")
+	var floor_stage_node = hall_node.get_node("floor_stage")
 	floor_deep_node.visible = !floor_deep_node.visible
 	wall_left_node.visible = !wall_left_node.visible
 	wall_front_node.visible = !wall_front_node.visible
