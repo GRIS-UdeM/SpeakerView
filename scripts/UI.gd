@@ -72,7 +72,8 @@ func _on_popup_menu_id_pressed(id: int):
 		MenuItemId.SHOW_FRAMES_PER_SECOND:
 			handle_show_framerate()
 		MenuItemId.ABOUT_WINDOW:
-			speakerview_node.handle_show_about_window()
+			pass
+#			speakerview_node.handle_show_about_window()
 
 func _input(event):
 	if event is InputEventKey:

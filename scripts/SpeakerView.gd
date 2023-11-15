@@ -87,9 +87,6 @@ var camera_node
 var UI_menu_node
 var hall_node
 
-var about_window = preload("res://scenes/about_window.tscn")
-var about_window_inst
-
 func _ready():
 	network_node = get_node("Network")
 	dome_grid_node = get_node("origin_grid/dome")
@@ -243,8 +240,6 @@ func _notification(what):
 			speakerview_just_get_focus_back = true
 			macos_mouse_last_pos = get_viewport().get_mouse_position()
 			macos_mouse_event = MacOSMouseEvent.PRESSED
-		elif what == NOTIFICATION_WM_ABOUT:
-			handle_show_about_window()
 	
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		if platform_is_macos:
@@ -345,14 +340,6 @@ func render_spk_triplets():
 	
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, arrays)
 	triplets_node.mesh = arr_mesh
-
-func handle_show_about_window():
-	if about_window_inst in get_children():
-		remove_child.call_deferred(about_window_inst)
-		return
-	
-	about_window_inst = about_window.instantiate()
-	add_child.call_deferred(about_window_inst)
 
 func SG_move_to_foreground():
 	var output = []
