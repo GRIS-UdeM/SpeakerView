@@ -44,20 +44,26 @@ func populate_speakers(data: Variant):
 		
 		if spk_is_selected:
 			cube.material_override = spk_cube_mat_selected
+			# Transparent is 0 in SG and 1 in Godot.
+			cube.transparency = 0.0
 		elif spk_is_direct_out_only:
 			cube.material_override = spk_cube_shader_dark_mat
-			cube.set_instance_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
+#			cube.set_instance_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
+			cube.material_override.set_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
 			cube.material_override.set_shader_parameter("tex", spk_dark_tex)
+			# Transparent is 0 in SG and 1 in Godot.
+			cube.transparency = 1.0 - spk_alpha
 		else:
 			cube.material_override = spk_cube_shader_light_mat
-			cube.set_instance_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
+#			cube.set_instance_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
+			cube.material_override.set_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
 			cube.material_override.set_shader_parameter("tex", spk_light_tex)
+			# Transparent is 0 in SG and 1 in Godot.
+			cube.transparency = 1.0 - spk_alpha
 		
 		instance.spk_number = spk_number
 		# SG is XZ-Y, Godot is XYZ. Let's fix this here.
 		instance.transform.origin = Vector3(spk_position[0], spk_position[2], -spk_position[1]) * speakerview_node.SG_SCALE
-		# Transparent is 0 in SG and 1 in Godot.
-		cube.transparency = 1.0 - spk_alpha
 		instance.spk_is_selected = spk_is_selected
 		instance.spk_is_direct_out_only = spk_is_direct_out_only
 		speakers_scenes.append(instance)
@@ -79,13 +85,15 @@ func update_spk_scenes(data: Variant):
 			cube.transparency = 0.0
 		elif spk_is_direct_out_only:
 			cube.material_override = spk_cube_shader_dark_mat
-			cube.set_instance_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
+#			cube.set_instance_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
+			cube.material_override.set_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
 			cube.material_override.set_shader_parameter("tex", spk_dark_tex)
 			# Transparent is 0 in SG and 1 in Godot.
 			cube.transparency = 1.0 - spk_alpha
 		else:
 			cube.material_override = spk_cube_shader_light_mat
-			cube.set_instance_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
+#			cube.set_instance_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
+			cube.material_override.set_shader_parameter("color", Vector4(COLOR_OUTLINE_SPEAKER.r, COLOR_OUTLINE_SPEAKER.g, COLOR_OUTLINE_SPEAKER.b, 0.0))
 			cube.material_override.set_shader_parameter("tex", spk_light_tex)
 			# Transparent is 0 in SG and 1 in Godot.
 			cube.transparency = 1.0 - spk_alpha

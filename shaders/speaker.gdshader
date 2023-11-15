@@ -4,7 +4,8 @@ uniform vec3 scale = vec3(1.0);
 uniform float width: hint_range(0.0, 10.0) = 0.05;
 uniform float sharpness: hint_range(0.0, 1.0) = 0.1;
 uniform float glow: hint_range(1.0, 16.0) = 3.0;
-instance uniform vec4 color: source_color = vec4(1.0);
+//instance uniform vec4 color: source_color = vec4(1.0);
+uniform vec4 color: source_color = vec4(1.0);
 uniform sampler2D tex: source_color;
 
 varying vec3 vert;
