@@ -151,7 +151,7 @@ func update_vbap_spans():
 	
 	vbap_multimesh_instance3D.visible = true
 	vbap_multimesh_instance3D.transparency = src_transparency
-	vbap_span_elevation = PI if speakerview_node.use_vbap_complete_sphere else PI / 2.0
+	vbap_span_elevation = PI / 2.0# PI for complete sphere
 	
 	counter = 0
 	for i in NUM:

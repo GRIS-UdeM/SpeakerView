@@ -66,8 +66,6 @@ var camera_zoom_velocity: float = 0.0
 var sphere_grid
 var cube_grid
 
-var use_vbap_complete_sphere: bool = false
-
 # MacOS click trough
 var platform_is_macos: bool = false
 var macos_get_mouse_events_process: int
