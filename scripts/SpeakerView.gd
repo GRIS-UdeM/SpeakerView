@@ -6,7 +6,9 @@ enum MacOSMouseLeftButtonState {RELEASED=0, PRESSED=1}
 enum MacOSMouseEvent {RELEASED=0, WAITING_FOR_RELEASE=1, PRESSED=2}
 
 const APP_VERSION: String = "0.0.1.0"
+var app_version_3_digit: String
 var rendering_method: String
+var renderer: String
 
 const SG_SCALE: float = 10.0
 const MAX_ELEVATION = 89.0
@@ -138,6 +140,17 @@ func _ready():
 		get_viewport().position = speakerview_window_position
 	if speakerview_window_size != Vector2i(0, 0):
 		get_viewport().size = speakerview_window_size
+	
+	match rendering_method:
+		"forward_plus":
+			renderer = "Forward"
+		"mobile":
+			renderer = "Mobile"
+		"gl_compatibility":
+			renderer = "Compatibility"
+	
+	app_version_3_digit = APP_VERSION.substr(0, APP_VERSION.length() - 2)
+	get_viewport().set_title("SpeakerView " + app_version_3_digit + " " + renderer + " - " + speaker_setup_name)
 	
 	if platform_is_macos:
 		start_SVME()
@@ -282,7 +295,7 @@ func update_app_data(data: Variant):
 	
 	if old_speaker_setup_name != speaker_setup_name:
 		old_speaker_setup_name = speaker_setup_name
-		get_viewport().set_title("SpeakerView - " + speaker_setup_name)
+		get_viewport().set_title("SpeakerView " + app_version_3_digit + " " + renderer + " - " + speaker_setup_name)
 	
 	if SG_asked_to_kill_speakerview:
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
