@@ -44,7 +44,7 @@ func _ready():
 	speaker_number_mesh.mesh.set_text(str(spk_number))
 
 func _process(_delta):
-	speaker_number_mesh.visible = speakerview_node.show_speaker_number
+	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
 	if speaker_number_mesh.visible:
 		speaker_number_mesh.look_at(camera_node.global_position, Vector3(0, 1, 0), true)
 	

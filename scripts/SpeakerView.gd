@@ -49,7 +49,7 @@ var SV_should_grab_focus: bool = false
 var spat_mode: SpatMode
 var show_hall: bool = false
 var show_source_number: bool
-var show_speaker_number: bool
+var show_speaker_numbers: bool
 var show_speakers: bool
 var show_speaker_triplets: bool
 var show_source_activity: bool
@@ -219,13 +219,35 @@ func _input(event):
 		cam_radius += event.delta.y
 		cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
 	
-	# Handling quitting with CTRL or META + W
 	elif event is InputEventKey:
 		if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
 			handle_fullscreen()
+		# Handling quitting with CTRL or META + W
 		elif event.pressed and event.echo == false and event.keycode == KEY_W:
 			if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
 				get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+		elif event.pressed and event.echo == false and event.alt_pressed and event.shift_pressed:
+			handle_keep_SV_on_top()
+		elif event.pressed and event.echo == false and event.alt_pressed:
+			if event.keycode == KEY_H:
+				handle_show_hall()
+			elif event.keycode == KEY_N:
+				handle_show_source_numbers()
+			elif event.keycode == KEY_Z:
+				handle_show_speaker_numbers()
+			elif event.keycode == KEY_S:
+				handle_show_speakers()
+			elif event.keycode == KEY_T:
+				if spat_mode != SpatMode.CUBE and show_speakers:
+					handle_show_speaker_triplets()
+			elif event.keycode == KEY_A:
+				handle_show_source_activity()
+			elif event.keycode == KEY_L:
+				handle_show_speaker_level()
+			elif event.keycode == KEY_O:
+				handle_show_sphere_or_cube()
+			if event.keycode == KEY_R:
+				toggle_reset_sources_positions()
 
 func _notification(what):
 	if platform_is_macos:
@@ -268,7 +290,7 @@ func update_app_data(data: Variant):
 	show_hall = data.showHall
 	spat_mode = data.spatMode
 	show_source_number = data.showSourceNumber
-	show_speaker_number = data.showSpeakerNumber
+	show_speaker_numbers = data.showSpeakerNumber
 	show_speakers = data.showSpeakers
 	show_speaker_triplets = data.showSpeakerTriplets
 	show_source_activity = data.showSourceActivity
@@ -279,7 +301,7 @@ func update_app_data(data: Variant):
 #	if is_started_by_SG:
 #		pass
 	
-	if show_speaker_triplets and !spk_triplets.is_empty():
+	if show_speaker_triplets and !spk_triplets.is_empty() and show_speakers:
 		triplets_node.visible = true
 		render_spk_triplets()
 	else:
@@ -303,7 +325,7 @@ func update_app_data(data: Variant):
 		SV_should_grab_focus_last = SV_keep_on_top_last
 	
 	if show_hall != show_hall_last:
-		toggle_show_hall()
+		draw_hall()
 		show_hall_last = show_hall
 	
 	if should_move_SG_to_foreground:
@@ -358,23 +380,59 @@ func start_SVME():
 		svme_path = svme_path.simplify_path()
 		macos_get_mouse_events_process = OS.create_process(svme_path, [], false)
 
-func toggle_show_hall():
-	var floor_deep_node = hall_node.get_node("floor_deep")
-	var wall_left_node = hall_node.get_node("wall_left")
-	var wall_front_node = hall_node.get_node("wall_front")
-	var wall_back_node = hall_node.get_node("wall_back")
-	var wall_right_node = hall_node.get_node("wall_right")
-	var floor_stage_node = hall_node.get_node("floor_stage")
-	floor_deep_node.visible = !floor_deep_node.visible
-	wall_left_node.visible = !wall_left_node.visible
-	wall_front_node.visible = !wall_front_node.visible
-	wall_back_node.visible = !wall_back_node.visible
-	wall_right_node.visible = !wall_right_node.visible
-	floor_stage_node.visible = !floor_stage_node.visible
-
 func handle_fullscreen():
 	var mode = get_viewport().get_mode()
 	if mode == Window.MODE_FULLSCREEN:
 		get_viewport().set_mode(Window.MODE_WINDOWED)
 	else:
 		get_viewport().set_mode(Window.MODE_FULLSCREEN)
+
+func handle_keep_SV_on_top():
+	SV_keep_on_top = !SV_keep_on_top
+	network_node.send_UDP()
+
+func draw_hall():
+	var floor_deep_node = hall_node.get_node("floor_deep")
+	var wall_left_node = hall_node.get_node("wall_left")
+	var wall_front_node = hall_node.get_node("wall_front")
+	var wall_back_node = hall_node.get_node("wall_back")
+	var wall_right_node = hall_node.get_node("wall_right")
+	var floor_stage_node = hall_node.get_node("floor_stage")
+	floor_deep_node.visible = show_hall
+	wall_left_node.visible = show_hall
+	wall_front_node.visible = show_hall
+	wall_back_node.visible = show_hall
+	wall_right_node.visible = show_hall
+	floor_stage_node.visible = show_hall
+
+func handle_show_hall():
+	show_hall = !show_hall
+	network_node.send_UDP()
+
+func handle_show_source_numbers():
+	show_source_number = !show_source_number
+	network_node.send_UDP()
+
+func handle_show_speaker_numbers():
+	show_speaker_numbers = !show_speaker_numbers
+	network_node.send_UDP()
+
+func handle_show_speakers():
+	show_speakers = !show_speakers
+	network_node.send_UDP()
+
+func handle_show_speaker_triplets():
+	show_speaker_triplets = !show_speaker_triplets
+	network_node.send_UDP()
+
+func handle_show_source_activity():
+	show_source_activity = !show_source_activity
+	network_node.send_UDP()
+
+func handle_show_speaker_level():
+	show_speaker_level = !show_speaker_level
+	network_node.send_UDP()
+
+func handle_show_sphere_or_cube():
+	show_sphere_or_cube = !show_sphere_or_cube
+	network_node.send_UDP()
