@@ -48,7 +48,7 @@ var SV_keep_on_top: bool = false
 var SV_should_grab_focus: bool = false
 var spat_mode: SpatMode
 var show_hall: bool = false
-var show_source_number: bool
+var show_source_numbers: bool
 var show_speaker_numbers: bool
 var show_speakers: bool
 var show_speaker_triplets: bool
@@ -289,7 +289,7 @@ func update_app_data(data: Variant):
 	SV_should_grab_focus = data.SVGrabFocus
 	show_hall = data.showHall
 	spat_mode = data.spatMode
-	show_source_number = data.showSourceNumber
+	show_source_numbers = data.showSourceNumber
 	show_speaker_numbers = data.showSpeakerNumber
 	show_speakers = data.showSpeakers
 	show_speaker_triplets = data.showSpeakerTriplets
@@ -410,7 +410,7 @@ func handle_show_hall():
 	network_node.send_UDP()
 
 func handle_show_source_numbers():
-	show_source_number = !show_source_number
+	show_source_numbers = !show_source_numbers
 	network_node.send_UDP()
 
 func handle_show_speaker_numbers():

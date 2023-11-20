@@ -47,7 +47,7 @@ func send_UDP():
 							"selSpkNum":speakerview_node.selected_speaker_number,
 							"keepSVTop":speakerview_node.SV_keep_on_top,
 							"showHall":speakerview_node.show_hall,
-							"showSrcNum":speakerview_node.show_source_number,
+							"showSrcNum":speakerview_node.show_source_numbers,
 							"showSpkNum":speakerview_node.show_speaker_numbers,
 							"showSpks":speakerview_node.show_speakers,
 							"showSpkTriplets":speakerview_node.show_speaker_triplets,

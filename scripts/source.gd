@@ -138,7 +138,7 @@ func update_sphere():
 	sphere.transparency = src_transparency
 
 func update_source_number():
-	source_number_mesh.visible = speakerview_node.show_source_number
+	source_number_mesh.visible = speakerview_node.show_source_numbers
 	if source_number_mesh.visible:
 		source_number_mesh.mesh.set_text(str(src_number))
 		source_number_mesh.look_at(camera_node.global_position, Vector3(0, 1, 0), true)
