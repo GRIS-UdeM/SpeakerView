@@ -44,7 +44,7 @@ func send_UDP():
 							"winPos":get_viewport().position,
 							"winSize":get_viewport().size,
 							"camPos":str(-speakerview_node.camera_azimuth, ",", speakerview_node.camera_elevation, ",", speakerview_node.cam_radius),
-							"selSpkNum":speakerview_node.selected_speaker_number,
+							"selSpkNum":str(speakerview_node.selected_speaker_number, ",", speakerview_node.spk_is_selected_with_mouse),
 							"keepSVTop":speakerview_node.SV_keep_on_top,
 							"showHall":speakerview_node.show_hall,
 							"showSrcNum":speakerview_node.show_source_numbers,

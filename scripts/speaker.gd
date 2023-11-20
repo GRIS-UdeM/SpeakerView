@@ -86,8 +86,10 @@ func _on_area_3d_input_event(_camera, event, _position, _normal, _shape_idx):
 func set_speaker_selected_state():
 	if spk_is_selected:
 		spk_is_selected = !spk_is_selected
-		speakerview_node.selected_speaker_number = -1
+		speakerview_node.selected_speaker_number = 0
 	else:
 		speakerview_node.selected_speaker_number = spk_number
 	
+	speakerview_node.spk_is_selected_with_mouse = true
 	network_node.send_UDP()
+	speakerview_node.spk_is_selected_with_mouse = false

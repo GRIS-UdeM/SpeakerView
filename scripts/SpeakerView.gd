@@ -30,6 +30,7 @@ var SG_has_focus_last_focus: bool = false
 var SV_keep_on_top_last: bool = false
 var show_hall_last: bool = false
 var SV_should_grab_focus_last: bool = false
+var spk_is_selected_with_mouse: bool = false
 
 var window_position: Vector2i
 var window_size: Vector2i
