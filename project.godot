@@ -19,7 +19,7 @@ config/windows_native_icon="res://icon.ico"
 
 [audio]
 
-driver/driver="NULL"
+driver/driver="Dummy"
 driver/mix_rate=48000
 
 [display]
