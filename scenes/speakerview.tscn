@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://dgx85am3uu7o7"]
+[gd_scene load_steps=67 format=3 uid="uid://dgx85am3uu7o7"]
 
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
 [ext_resource type="Script" path="res://scripts/Camera.gd" id="2_gy427"]
@@ -9,6 +9,11 @@
 [ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
 [ext_resource type="Script" path="res://scripts/Speakers.gd" id="10_0gnjq"]
 [ext_resource type="Script" path="res://scripts/MacOS_Mouse_Events.gd" id="11_d178e"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_8vjol"]
+font_size = 54
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vny03"]
 albedo_color = Color(0.254902, 0.247059, 0.231373, 1)
@@ -254,6 +259,16 @@ offset_left = 2.0
 offset_top = 32.0
 offset_right = 142.0
 offset_bottom = 58.0
+
+[node name="AlertNoSGLabel" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Please close this window and start SpeakerView from the SpatGris View menu"
+label_settings = SubResource("LabelSettings_8vjol")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
 
 [node name="Debug" type="Label" parent="."]
 visible = false

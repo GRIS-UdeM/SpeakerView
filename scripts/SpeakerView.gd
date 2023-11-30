@@ -36,7 +36,7 @@ var window_position: Vector2i
 var window_size: Vector2i
 
 # command line args
-var is_started_by_SG: bool = false # not used for now
+var is_started_by_SG: bool = false
 var SV_started_by_SG_for_the_first_time: bool = false
 var speakerview_window_position: Vector2i
 var speakerview_window_size: Vector2i
@@ -144,9 +144,12 @@ func _ready():
 	app_version_3_digit = APP_VERSION.substr(0, APP_VERSION.length() - 2)
 	get_viewport().set_title("SpeakerView " + app_version_3_digit + " " + renderer + " - " + speaker_setup_name)
 	
-	if platform_is_macos:
+	if platform_is_macos and is_started_by_SG:
 		start_SVME()
 		should_move_SG_to_foreground = !SV_started_by_SG_for_the_first_time
+	
+	if !is_started_by_SG:
+		show_noSG_alert()
 
 func _process(delta):
 #	$FrameRate.text = str("FPS : ", Engine.get_frames_per_second())
@@ -154,101 +157,106 @@ func _process(delta):
 	if window_position != get_viewport().position or window_size != get_viewport().size:
 		window_position = get_viewport().position
 		window_size = get_viewport().size
+		if !is_started_by_SG:
+			show_noSG_alert()
+			return
 		network_node.send_UDP()
 	
-	# MacOS click through
-	if platform_is_macos:
-		var mouse_pos = get_viewport().get_mouse_position()
-		var viewport_size = get_viewport().get_visible_rect().size
-		
-		if macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE and macos_mouse_left_button_state == MacOSMouseLeftButtonState.RELEASED:
-			macos_mouse_event = MacOSMouseEvent.RELEASED
-			speakerview_lost_focus = false
-		
-		if macos_mouse_event == MacOSMouseEvent.PRESSED and macos_mouse_left_button_state == MacOSMouseLeftButtonState.PRESSED:
-			macos_mouse_event = MacOSMouseEvent.WAITING_FOR_RELEASE
-			# check if mouse pos is inside the window (including window decoration and resize_margin)
-			if (mouse_pos.y < 0 or mouse_pos.y > viewport_size.y - 4) or (mouse_pos.x < 4 or mouse_pos.x > viewport_size.x - 4):
+	if is_started_by_SG:
+		# MacOS click through
+		if platform_is_macos:
+			var mouse_pos = get_viewport().get_mouse_position()
+			var viewport_size = get_viewport().get_visible_rect().size
+			
+			if macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE and macos_mouse_left_button_state == MacOSMouseLeftButtonState.RELEASED:
+				macos_mouse_event = MacOSMouseEvent.RELEASED
 				speakerview_lost_focus = false
+			
+			if macos_mouse_event == MacOSMouseEvent.PRESSED and macos_mouse_left_button_state == MacOSMouseLeftButtonState.PRESSED:
+				macos_mouse_event = MacOSMouseEvent.WAITING_FOR_RELEASE
+				# check if mouse pos is inside the window (including window decoration and resize_margin)
+				if (mouse_pos.y < 0 or mouse_pos.y > viewport_size.y - 4) or (mouse_pos.x < 4 or mouse_pos.x > viewport_size.x - 4):
+					speakerview_lost_focus = false
+			
+			if macos_mouse_left_button_state == MacOSMouseLeftButtonState.PRESSED:
+				if speakerview_lost_focus and speakerview_just_get_focus_back:
+					if macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE:
+						var rel_mouse = macos_mouse_last_pos - mouse_pos
+						camera_azimuth -= rel_mouse.x * MOUSE_DRAG_SPEED
+						camera_elevation -= rel_mouse.y * MOUSE_DRAG_SPEED
+						camera_elevation = clamp(camera_elevation, MIN_ELEVATION, MAX_ELEVATION)
+						macos_mouse_last_pos = mouse_pos
 		
-		if macos_mouse_left_button_state == MacOSMouseLeftButtonState.PRESSED:
-			if speakerview_lost_focus and speakerview_just_get_focus_back:
-				if macos_mouse_event == MacOSMouseEvent.WAITING_FOR_RELEASE:
-					var rel_mouse = macos_mouse_last_pos - mouse_pos
-					camera_azimuth -= rel_mouse.x * MOUSE_DRAG_SPEED
-					camera_elevation -= rel_mouse.y * MOUSE_DRAG_SPEED
-					camera_elevation = clamp(camera_elevation, MIN_ELEVATION, MAX_ELEVATION)
-					macos_mouse_last_pos = mouse_pos
-	
-	# update_camera_position has to be called here if launched by SpatGris
-	update_camera_position()
-	
-	sphere_grid.visible = ((spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
-	cube_grid.visible = ((spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
-	
-	dome_grid_node.visible = (spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)
-	cube_grid_node.visible = (spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)
-	
-	# camera zoom
-	var zoom_to_add = delta * camera_zoom_velocity
-	var current_zoom = (camera_node.global_position.length() - MIN_ZOOM) / ZOOM_RANGE
-	var scaled_zoom = pow(current_zoom, ZOOM_CURVE)
-	var scaled_target_zoom = max(scaled_zoom + zoom_to_add, 0.0)
-	var unclipped_target_zoom = pow(scaled_target_zoom, INVERSE_ZOOM_CURVE) * ZOOM_RANGE + MIN_ZOOM
-	var target_zoom = clamp(unclipped_target_zoom, MIN_ZOOM, MAX_ZOOM)
-	
-	camera_zoom_velocity *= pow(0.5, delta*8)
-	cam_radius = target_zoom
-	cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
+		# update_camera_position has to be called here if launched by SpatGris
+		update_camera_position()
+		
+		sphere_grid.visible = ((spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
+		cube_grid.visible = ((spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
+		
+		dome_grid_node.visible = (spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)
+		cube_grid_node.visible = (spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)
+		
+		# camera zoom
+		var zoom_to_add = delta * camera_zoom_velocity
+		var current_zoom = (camera_node.global_position.length() - MIN_ZOOM) / ZOOM_RANGE
+		var scaled_zoom = pow(current_zoom, ZOOM_CURVE)
+		var scaled_target_zoom = max(scaled_zoom + zoom_to_add, 0.0)
+		var unclipped_target_zoom = pow(scaled_target_zoom, INVERSE_ZOOM_CURVE) * ZOOM_RANGE + MIN_ZOOM
+		var target_zoom = clamp(unclipped_target_zoom, MIN_ZOOM, MAX_ZOOM)
+		
+		camera_zoom_velocity *= pow(0.5, delta*8)
+		cam_radius = target_zoom
+		cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			camera_zoom_velocity -= (camera_zoom_velocity + 2.0) * 0.1
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			camera_zoom_velocity += (camera_zoom_velocity + 1.0) * 0.1 
-		elif platform_is_macos and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			speakerview_lost_focus = false
-	
-	elif event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		camera_azimuth += event.relative.x * MOUSE_DRAG_SPEED
-		camera_elevation += event.relative.y * MOUSE_DRAG_SPEED
-		camera_elevation = clamp(camera_elevation, MIN_ELEVATION, MAX_ELEVATION)
-	
-	# trackpad on MacOS
-	elif event is InputEventPanGesture:
-		cam_radius += event.delta.y
-		cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
-	
-	elif event is InputEventKey:
-		if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
-			handle_fullscreen()
-		# Handling quitting with CTRL or META + W
-		elif event.pressed and event.echo == false and event.keycode == KEY_W:
-			if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
-				get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
-		elif event.pressed and event.echo == false and event.alt_pressed and event.shift_pressed:
-			handle_keep_SV_on_top()
-		elif event.pressed and event.echo == false and event.alt_pressed:
-			if event.keycode == KEY_H:
-				handle_show_hall()
-			elif event.keycode == KEY_N:
-				handle_show_source_numbers()
-			elif event.keycode == KEY_Z:
-				handle_show_speaker_numbers()
-			elif event.keycode == KEY_S:
-				handle_show_speakers()
-			elif event.keycode == KEY_T:
-				if spat_mode != SpatMode.CUBE and show_speakers:
-					handle_show_speaker_triplets()
-			elif event.keycode == KEY_A:
-				handle_show_source_activity()
-			elif event.keycode == KEY_L:
-				handle_show_speaker_level()
-			elif event.keycode == KEY_O:
-				handle_show_sphere_or_cube()
-			if event.keycode == KEY_R:
-				toggle_reset_sources_positions()
+	if is_started_by_SG:
+		if event is InputEventMouseButton:
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				camera_zoom_velocity -= (camera_zoom_velocity + 2.0) * 0.1
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				camera_zoom_velocity += (camera_zoom_velocity + 1.0) * 0.1
+			elif platform_is_macos and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+				speakerview_lost_focus = false
+		
+		elif event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			camera_azimuth += event.relative.x * MOUSE_DRAG_SPEED
+			camera_elevation += event.relative.y * MOUSE_DRAG_SPEED
+			camera_elevation = clamp(camera_elevation, MIN_ELEVATION, MAX_ELEVATION)
+		
+		# trackpad on MacOS
+		elif event is InputEventPanGesture:
+			cam_radius += event.delta.y
+			cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
+		
+		elif event is InputEventKey:
+			if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
+				handle_fullscreen()
+			# Handling quitting with CTRL or META + W
+			elif event.pressed and event.echo == false and event.keycode == KEY_W:
+				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
+					get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+			elif event.pressed and event.echo == false and event.alt_pressed and event.shift_pressed:
+				handle_keep_SV_on_top()
+			elif event.pressed and event.echo == false and event.alt_pressed:
+				if event.keycode == KEY_H:
+					handle_show_hall()
+				elif event.keycode == KEY_N:
+					handle_show_source_numbers()
+				elif event.keycode == KEY_Z:
+					handle_show_speaker_numbers()
+				elif event.keycode == KEY_S:
+					handle_show_speakers()
+				elif event.keycode == KEY_T:
+					if spat_mode != SpatMode.CUBE and show_speakers:
+						handle_show_speaker_triplets()
+				elif event.keycode == KEY_A:
+					handle_show_source_activity()
+				elif event.keycode == KEY_L:
+					handle_show_speaker_level()
+				elif event.keycode == KEY_O:
+					handle_show_sphere_or_cube()
+				if event.keycode == KEY_R:
+					toggle_reset_sources_positions()
 
 func _notification(what):
 	if platform_is_macos:
@@ -265,9 +273,10 @@ func _notification(what):
 		if platform_is_macos:
 			OS.kill(macos_get_mouse_events_process)
 		
-		# When closing window, send info to SpatGris
-		quitting = true
-		network_node.send_UDP()
+		if is_started_by_SG:
+			# When closing window, send info to SpatGris
+			quitting = true
+			network_node.send_UDP()
 		get_tree().quit()
 
 func update_camera_position():
@@ -298,9 +307,6 @@ func update_app_data(data: Variant):
 	show_speaker_level = data.showSpeakerLevel
 	show_sphere_or_cube = data.showSphereOrCube
 	spk_triplets = data.spkTriplets
-	
-#	if is_started_by_SG:
-#		pass
 	
 	if show_speaker_triplets and !spk_triplets.is_empty() and show_speakers:
 		triplets_node.visible = true
@@ -437,3 +443,12 @@ func handle_show_speaker_level():
 func handle_show_sphere_or_cube():
 	show_sphere_or_cube = !show_sphere_or_cube
 	network_node.send_UDP()
+
+func show_noSG_alert():
+	var alert_label = $AlertNoSGLabel
+	var axes = $axes
+	var win_size = get_window().size
+	
+	alert_label.size = win_size
+	alert_label.visible = true
+	axes.visible = false

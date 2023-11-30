@@ -37,26 +37,28 @@ func _process(_delta):
 	pass
 
 func _physics_process(_delta):
-	listen_to_UDP()
+	if speakerview_node.is_started_by_SG:
+		listen_to_UDP()
 
 func send_UDP():
-	var json_dict_to_send = {"quitting":speakerview_node.quitting,
-							"winPos":get_viewport().position,
-							"winSize":get_viewport().size,
-							"camPos":str(-speakerview_node.camera_azimuth, ",", speakerview_node.camera_elevation, ",", speakerview_node.cam_radius),
-							"selSpkNum":str(speakerview_node.selected_speaker_number, ",", speakerview_node.spk_is_selected_with_mouse),
-							"keepSVTop":speakerview_node.SV_keep_on_top,
-							"showHall":speakerview_node.show_hall,
-							"showSrcNum":speakerview_node.show_source_numbers,
-							"showSpkNum":speakerview_node.show_speaker_numbers,
-							"showSpks":speakerview_node.show_speakers,
-							"showSpkTriplets":speakerview_node.show_speaker_triplets,
-							"showSrcActivity":speakerview_node.show_source_activity,
-							"showSpkLevel":speakerview_node.show_speaker_level,
-							"showSphereCube":speakerview_node.show_sphere_or_cube,
-							"resetSrcPos":speakerview_node.reset_sources_position}
-	var json_string = JSON.stringify(json_dict_to_send, "\t")
-	udp_peer.put_packet(json_string.to_ascii_buffer())
+	if speakerview_node.is_started_by_SG:
+		var json_dict_to_send = {"quitting":speakerview_node.quitting,
+								"winPos":get_viewport().position,
+								"winSize":get_viewport().size,
+								"camPos":str(-speakerview_node.camera_azimuth, ",", speakerview_node.camera_elevation, ",", speakerview_node.cam_radius),
+								"selSpkNum":str(speakerview_node.selected_speaker_number, ",", speakerview_node.spk_is_selected_with_mouse),
+								"keepSVTop":speakerview_node.SV_keep_on_top,
+								"showHall":speakerview_node.show_hall,
+								"showSrcNum":speakerview_node.show_source_numbers,
+								"showSpkNum":speakerview_node.show_speaker_numbers,
+								"showSpks":speakerview_node.show_speakers,
+								"showSpkTriplets":speakerview_node.show_speaker_triplets,
+								"showSrcActivity":speakerview_node.show_source_activity,
+								"showSpkLevel":speakerview_node.show_speaker_level,
+								"showSphereCube":speakerview_node.show_sphere_or_cube,
+								"resetSrcPos":speakerview_node.reset_sources_position}
+		var json_string = JSON.stringify(json_dict_to_send, "\t")
+		udp_peer.put_packet(json_string.to_ascii_buffer())
 
 func listen_to_UDP():
 	# for some reason the server does not always bind...
