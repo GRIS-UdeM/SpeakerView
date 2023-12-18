@@ -103,7 +103,13 @@ func update_spk_scenes(data: Variant):
 		spk.spk_number = spk_number
 		spk.spk_is_selected = spk_is_selected
 		spk.spk_is_direct_out_only = spk_is_direct_out_only
-		cube.look_at(Vector3(0, 0, 0), Vector3(0, 1, 0), true)
+		
+		var spk_pos_normalized = spk.transform.origin.normalized()
+		var up_vector = Vector3(0, 1, 0)
+		var almost_zero = 0.000001
+		if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
+			up_vector = Vector3(0, 0, 1)
+		cube.look_at(Vector3(0, 0, 0), up_vector, true)
 
 func get_speaker(index: int):
 	for speaker in speakers_scenes:
