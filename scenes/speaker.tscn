@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckysy30g2fd55"]
+[gd_scene load_steps=5 format=3 uid="uid://ckysy30g2fd55"]
 
 [ext_resource type="Script" path="res://scripts/speaker.gd" id="1_q6jf0"]
+[ext_resource type="PackedScene" uid="uid://mhtxww22xdau" path="res://scenes/cube_edges.tscn" id="2_yyxc8"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5xs8x"]
 
@@ -17,5 +18,8 @@ mesh = SubResource("BoxMesh_5xs8x")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="cube/Area3D"]
 shape = SubResource("BoxShape3D_vnw8b")
+
+[node name="cube_edges" parent="." instance=ExtResource("2_yyxc8")]
+transform = Transform3D(0.51, 0, 0, 0, 0.51, 0, 0, 0, 0.51, 0, 0, 0)
 
 [connection signal="input_event" from="cube/Area3D" to="." method="_on_area_3d_input_event"]

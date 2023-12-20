@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://mhtxww22xdau"]
+
+[ext_resource type="PackedScene" uid="uid://dy5eja2b351hm" path="res://assets/cube_edges.glb" id="1_dkern"]
+
+[node name="cube_edges" instance=ExtResource("1_dkern")]
+
+[node name="Cube" parent="." index="0"]
+transparency = 0.35
+cast_shadow = 0
