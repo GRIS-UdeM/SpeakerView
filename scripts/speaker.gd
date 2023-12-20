@@ -7,11 +7,6 @@ extends Node3D
 
 var speaker_number_mesh
 
-# MacOS click through
-var mouse_first_click_pos: Vector2
-var mouse_first_click_down: bool = false
-var macos_mouse_event_last_position: Vector2i
-
 var event_last_position: Vector2
 
 var speakerview_node
@@ -53,32 +48,6 @@ func _process(_delta):
 	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
 	if speaker_number_mesh.visible:
 		speaker_number_mesh.look_at(camera_node.global_position, Vector3(0, 1, 0), true)
-	
-	if speakerview_node.platform_is_macos:
-		if speakerview_node.macos_mouse_event == speakerview_node.MacOSMouseEvent.WAITING_FOR_RELEASE:
-			if !mouse_first_click_down:
-				mouse_first_click_pos = speakerview_node.macos_mouse_last_pos
-				macos_mouse_event_last_position = Vector2i(get_viewport().get_mouse_position())
-				mouse_first_click_down = true
-		
-		elif speakerview_node.macos_mouse_event == speakerview_node.MacOSMouseEvent.RELEASED and mouse_first_click_down:
-			if macos_mouse_event_last_position == Vector2i(get_viewport().get_mouse_position()):
-				var space_state = get_world_3d().direct_space_state
-				var cam = camera_node
-				var mousepos = mouse_first_click_pos
-				
-				var origin = cam.project_ray_origin(mousepos)
-				var end = origin + cam.project_ray_normal(mousepos) * 1000
-				var query = PhysicsRayQueryParameters3D.create(origin, end)
-				query.collide_with_areas = true
-				
-				var result = space_state.intersect_ray(query)
-				
-				if !result.is_empty():
-					if area_node == result.collider:
-						set_speaker_selected_state()
-				
-			mouse_first_click_down = false
 
 func _on_area_3d_input_event(_camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton:

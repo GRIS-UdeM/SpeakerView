@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://dgx85am3uu7o7"]
+[gd_scene load_steps=66 format=3 uid="uid://dgx85am3uu7o7"]
 
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
 [ext_resource type="Script" path="res://scripts/Camera.gd" id="2_gy427"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://scripts/Network.gd" id="8_ntmpu"]
 [ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
 [ext_resource type="Script" path="res://scripts/Speakers.gd" id="10_0gnjq"]
-[ext_resource type="Script" path="res://scripts/MacOS_Mouse_Events.gd" id="11_d178e"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_8vjol"]
 font_size = 54
@@ -666,6 +665,3 @@ script = ExtResource("9_376al")
 
 [node name="Speakers" type="Node" parent="."]
 script = ExtResource("10_0gnjq")
-
-[node name="MacOS_Mouse_Events" type="Node" parent="."]
-script = ExtResource("11_d178e")
