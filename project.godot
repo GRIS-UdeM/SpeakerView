@@ -12,7 +12,7 @@ config_version=5
 
 config/name="SpeakerView"
 run/main_scene="res://scenes/speakerview.tscn"
-config/features=PackedStringArray("4.1", "Forward Plus")
+config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/image="res://icons/SpeakerView_Logo.png"
 config/icon="res://icons/SpeakerView_Logo.png"
 config/windows_native_icon="res://icon.ico"
