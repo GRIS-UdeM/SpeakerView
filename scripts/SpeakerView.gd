@@ -36,7 +36,7 @@ var window_position: Vector2i
 var window_size: Vector2i
 
 # command line args
-var is_started_by_SG: bool = false
+var is_started_by_SG: bool = true
 var SV_started_by_SG_for_the_first_time: bool = false
 var speakerview_window_position: Vector2i
 var speakerview_window_size: Vector2i
@@ -93,7 +93,7 @@ func _ready():
 	camera_node = get_node("Center/Camera")
 	hall_node = get_node("hall")
 	
-	sphere_grid = $shpere_grid
+	sphere_grid = $sphere_grid
 	cube_grid = $cube_grid
 	
 	platform_is_macos = OS.get_name() == "macOS"

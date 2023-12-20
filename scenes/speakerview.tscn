@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
 [ext_resource type="Script" path="res://scripts/Camera.gd" id="2_gy427"]
 [ext_resource type="Script" path="res://scripts/axes.gd" id="5_2k5yi"]
-[ext_resource type="PackedScene" uid="uid://byo0lrwh1rug6" path="res://scenes/shpere_grid.tscn" id="6_5uwtl"]
+[ext_resource type="PackedScene" uid="uid://byo0lrwh1rug6" path="res://scenes/sphere_grid.tscn" id="6_5uwtl"]
 [ext_resource type="PackedScene" uid="uid://c51kvjg8rfpuq" path="res://scenes/cube_grid.tscn" id="7_mddiq"]
 [ext_resource type="Script" path="res://scripts/Network.gd" id="8_ntmpu"]
 [ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
@@ -432,7 +432,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10, 3
 visible = false
 light_energy = 1.463
 
-[node name="shpere_grid" parent="." instance=ExtResource("6_5uwtl")]
+[node name="sphere_grid" parent="." instance=ExtResource("6_5uwtl")]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
 visible = false
 
