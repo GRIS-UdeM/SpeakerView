@@ -11,14 +11,12 @@ var event_last_position: Vector2
 
 var speakerview_node
 var network_node
-var camera_node
 var speakers_node
 var area_node
 
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
 	network_node = get_node("/root/SpeakerView/Network")
-	camera_node = get_node("/root/SpeakerView/Center/Camera")
 	speakers_node = get_parent()
 	area_node = get_node("cube/Area3D")
 	
@@ -43,11 +41,6 @@ func _ready():
 	speaker_number_mesh.scale = Vector3(3, 3, 1)
 	speaker_number_mesh.set_cast_shadows_setting(0)
 	speaker_number_mesh.mesh.set_text(str(spk_number))
-
-func _process(_delta):
-	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
-	if speaker_number_mesh.visible:
-		speaker_number_mesh.look_at(camera_node.global_position, Vector3(0, 1, 0), true)
 
 func _on_area_3d_input_event(_camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton:

@@ -19,6 +19,7 @@ var spk_cube_mat_selected: StandardMaterial3D
 var spk_num_mat: StandardMaterial3D
 
 var speakerview_node
+var camera_node
 
 func set_speakers_info(data: Variant):
 	if project_num_speakers != data.size() - 1 and speakers_scenes.size() != data.size() - 1:
@@ -106,6 +107,11 @@ func update_spk_scenes(data: Variant):
 		if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
 			up_vector = Vector3(0, 0, 1)
 		cube.look_at(Vector3(0, 0, 0), up_vector, true)
+		
+		# It looks like executing content of every speaker _process() here gives better performances
+		spk.speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
+		if spk.speaker_number_mesh.visible:
+			spk.speaker_number_mesh.look_at(camera_node.global_position, Vector3(0, 1, 0), true)
 
 func get_speaker(index: int):
 	for speaker in speakers_scenes:
@@ -124,6 +130,7 @@ func free_spk_scenes():
 
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
+	camera_node = get_node("/root/SpeakerView/Center/Camera")
 	
 	spk_cube_light_mat = StandardMaterial3D.new()
 	spk_cube_dark_mat = StandardMaterial3D.new()
@@ -145,6 +152,3 @@ func _ready():
 	spk_cube_edges_mat_selected.albedo_color = COLOR_BLACK_SPEAKER
 	spk_cube_mat_selected.albedo_color = COLOR_SPEAKER_SELECT
 	spk_num_mat.albedo_color = Color.BLACK
-
-func _process(_delta):
-	pass

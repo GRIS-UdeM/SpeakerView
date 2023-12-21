@@ -33,9 +33,6 @@ func _ready():
 	
 	json_data = JSON.new()
 
-func _process(_delta):
-	pass
-
 func _physics_process(_delta):
 	if speakerview_node.is_started_by_SG:
 		listen_to_UDP()

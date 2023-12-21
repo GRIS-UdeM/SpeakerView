@@ -56,16 +56,40 @@ func update_src_scenes(data: Variant):
 		var src_hybrid_spat_mode = data[json_data_index][3]
 		var src_azimuth_span = data[json_data_index][4]
 		var src_elevation_span = data[json_data_index][5]
+		var src = sources_scenes[i]
 		
-		sources_scenes[i].src_number = src_number
+		src.src_number = src_number
 		# SG is XZ-Y, Godot is XYZ. Let's fix this here.
-		sources_scenes[i].transform.origin = Vector3(src_position[0], src_position[2], -src_position[1]) * speakerview_node.SG_SCALE
-		sources_scenes[i].src_color = Color(src_color[0], src_color[1], src_color[2])
+		src.transform.origin = Vector3(src_position[0], src_position[2], -src_position[1]) * speakerview_node.SG_SCALE
+		src.src_color = Color(src_color[0], src_color[1], src_color[2])
 		# Transparent is 0 in SG and 1 in Godot.
-		sources_scenes[i].src_transparency = 1.0 - src_color[3]
-		sources_scenes[i].src_hybrid_spat_mode = src_hybrid_spat_mode
-		sources_scenes[i].src_azimuth_span = src_azimuth_span
-		sources_scenes[i].src_elevation_span = src_elevation_span
+		src.src_transparency = 1.0 - src_color[3]
+		src.src_hybrid_spat_mode = src_hybrid_spat_mode
+		src.src_azimuth_span = src_azimuth_span
+		src.src_elevation_span = src_elevation_span
+		
+		# It looks like executing content of every source _process() here gives better performances
+		src.update_sphere()
+		src.update_source_number()
+		src.update_polar_coords()
+		
+		if speakerview_node.spat_mode == speakerview_node.SpatMode.DOME:
+			src.mbap_spans.visible = false
+			src.vbap_multimesh_instance3D.visible = true
+			src.update_vbap_spans()
+		elif speakerview_node.spat_mode == speakerview_node.SpatMode.CUBE:
+			src.mbap_spans.visible = true
+			src.vbap_multimesh_instance3D.visible = false
+			src.update_mbap_spans()
+		elif speakerview_node.spat_mode == speakerview_node.SpatMode.HYBRID:
+			if src.src_hybrid_spat_mode == src.HybridSpatMode.DOME:
+				src.mbap_spans.visible = false
+				src.vbap_multimesh_instance3D.visible = true
+				src.update_vbap_spans()
+			elif src.src_hybrid_spat_mode == src.HybridSpatMode.CUBE:
+				src.mbap_spans.visible = true
+				src.vbap_multimesh_instance3D.visible = false
+				src.update_mbap_spans()
 
 func render_src_scenes():
 	for inst in sources_scenes:

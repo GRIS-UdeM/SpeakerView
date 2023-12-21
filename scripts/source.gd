@@ -110,29 +110,6 @@ func _ready():
 	
 	update_polar_coords()
 
-func _process(_delta):
-	update_sphere()
-	update_source_number()
-	update_polar_coords()
-	
-	if speakerview_node.spat_mode == speakerview_node.SpatMode.DOME:
-		mbap_spans.visible = false
-		vbap_multimesh_instance3D.visible = true
-		update_vbap_spans()
-	elif speakerview_node.spat_mode == speakerview_node.SpatMode.CUBE:
-		mbap_spans.visible = true
-		vbap_multimesh_instance3D.visible = false
-		update_mbap_spans()
-	elif speakerview_node.spat_mode == speakerview_node.SpatMode.HYBRID:
-		if src_hybrid_spat_mode == HybridSpatMode.DOME:
-			mbap_spans.visible = false
-			vbap_multimesh_instance3D.visible = true
-			update_vbap_spans()
-		elif src_hybrid_spat_mode == HybridSpatMode.CUBE:
-			mbap_spans.visible = true
-			vbap_multimesh_instance3D.visible = false
-			update_mbap_spans()
-
 func update_sphere():
 	sphere.material_override.albedo_color = src_color
 	sphere.transparency = src_transparency
