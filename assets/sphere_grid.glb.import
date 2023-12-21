@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cjk1vd0a0wu1b"
-path="res://.godot/imported/shpere_grid.glb-37ec7a13907c0612700bbb9af66e4f2c.scn"
+path="res://.godot/imported/sphere_grid.glb-d790f71d7af1e51fb9114a79cb56e4d5.scn"
 
 [deps]
 
-source_file="res://assets/shpere_grid.glb"
-dest_files=["res://.godot/imported/shpere_grid.glb-37ec7a13907c0612700bbb9af66e4f2c.scn"]
+source_file="res://assets/sphere_grid.glb"
+dest_files=["res://.godot/imported/sphere_grid.glb-d790f71d7af1e51fb9114a79cb56e4d5.scn"]
 
 [params]
 
