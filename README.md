@@ -24,6 +24,17 @@ git clone git@github.com:GRIS-UdeM/SpeakerView.git
 2. Select Edit the SpeakerView project.
 3. [Export](https://docs.godotengine.org/en/stable/tutorials/export/index.html) the project to the platform of your choice.
 
+**Note for MacOS users**
+Godot for MacOS does not (yet) support "click-though" (mouse activity captured by an unfocused window). To give this functionality to SpeakerView, Godot must be patched and compiled using the following steps:
+```
+curl -L https://github.com/godotengine/godot/releases/download/4.2.1-stable/godot-4.2.1-stable.tar.xz -o godot.tar.xz
+tar xJvf godot.tar.xz
+patch godot-4.2.1-stable/platform/macos/godot_content_view.mm <path-to-macos_click_through.patch-provided-in-this-repo>
+cd godot-4.2.1-stable
+```
+Then follow the instructions to compile Godot on MacOS (https://docs.godotengine.org/en/stable/contributing/development/compiling/compiling_for_macos.html).
+Note that the export template for MacOS (macos.zip) must be built and placed in ~/Library/Application Support/Godot/export_templates/4.2.1.stable/.
+
 ## Running
 It is best to launch SpeakerView from SpatGris View menu : Show Speaker View.
 

@@ -1,0 +1,11 @@
+@@ -342,6 +342,10 @@
+ }
+ 
+ - (BOOL)acceptsFirstResponder {
++	return YES;
++}
++
++- (BOOL)acceptsFirstMouse:(NSEvent *)event {
+ 	return YES;
+ }
+ 
