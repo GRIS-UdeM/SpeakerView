@@ -2,8 +2,7 @@ extends Node3D
 
 enum SpatMode {DOME=0, CUBE=1, HYBRID=2}
 
-const APP_VERSION: String = "0.0.4.0"
-var app_version_3_digit: String
+var app_version: String = ProjectSettings.get_setting("application/config/version")
 var rendering_method: String
 var renderer: String
 
@@ -132,8 +131,7 @@ func _ready():
 		"gl_compatibility":
 			renderer = "Compatibility"
 	
-	app_version_3_digit = APP_VERSION.substr(0, APP_VERSION.length() - 2)
-	get_viewport().set_title("SpeakerView " + app_version_3_digit + " " + renderer + " - " + speaker_setup_name)
+	get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
 	
 	if platform_is_macos and is_started_by_SG:
 		should_move_SG_to_foreground = !SV_started_by_SG_for_the_first_time
@@ -264,7 +262,7 @@ func update_app_data(data: Variant):
 	
 	if old_speaker_setup_name != speaker_setup_name:
 		old_speaker_setup_name = speaker_setup_name
-		get_viewport().set_title("SpeakerView " + app_version_3_digit + " " + renderer + " - " + speaker_setup_name)
+		get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
 	
 	if SG_asked_to_kill_speakerview:
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
