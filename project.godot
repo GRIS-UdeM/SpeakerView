@@ -22,11 +22,19 @@ config/windows_native_icon="res://icon.ico"
 driver/driver="Dummy"
 driver/mix_rate=48000
 
+[autoload]
+
+DebugMenu="*res://addons/debug_menu/debug_menu.tscn"
+
 [display]
 
 window/size/viewport_width=800
 window/size/viewport_height=600
 window/subwindows/embed_subwindows=false
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
 
 [rendering]
 
