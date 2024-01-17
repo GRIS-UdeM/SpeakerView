@@ -107,6 +107,7 @@ func update_spk_scenes(data: Variant):
 		if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
 			up_vector = Vector3(0, 0, 1)
 		cube.look_at(Vector3(0, 0, 0), up_vector, true)
+		cube_edges.look_at(Vector3(0, 0, 0), up_vector, true)
 		
 		# It looks like executing content of every speaker _process() here gives better performances
 		spk.speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
