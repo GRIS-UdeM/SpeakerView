@@ -185,16 +185,16 @@ func update_settings_label() -> void:
 				scaling_3d_mode_string = "Bilinear"
 			Viewport.SCALING_3D_MODE_FSR:
 				scaling_3d_mode_string = "FSR 1.0"
-			Viewport.SCALING_3D_MODE_FSR2:
-				scaling_3d_mode_string = "FSR 2.2"
+#			Viewport.SCALING_3D_MODE_FSR2:
+#				scaling_3d_mode_string = "FSR 2.2"
 
 		var antialiasing_3d_string := ""
-		if viewport.scaling_3d_mode == Viewport.SCALING_3D_MODE_FSR2:
-			# The FSR2 scaling mode includes its own temporal antialiasing implementation.
-			antialiasing_3d_string += (" + " if not antialiasing_3d_string.is_empty() else "") + "FSR 2.2"
-		if viewport.scaling_3d_mode != Viewport.SCALING_3D_MODE_FSR2 and viewport.use_taa:
-			# Godot's own TAA is ignored when using FSR2 scaling mode, as FSR2 provides its own TAA implementation.
-			antialiasing_3d_string += (" + " if not antialiasing_3d_string.is_empty() else "") + "TAA"
+#		if viewport.scaling_3d_mode == Viewport.SCALING_3D_MODE_FSR2:
+#			# The FSR2 scaling mode includes its own temporal antialiasing implementation.
+#			antialiasing_3d_string += (" + " if not antialiasing_3d_string.is_empty() else "") + "FSR 2.2"
+#		if viewport.scaling_3d_mode != Viewport.SCALING_3D_MODE_FSR2 and viewport.use_taa:
+#			# Godot's own TAA is ignored when using FSR2 scaling mode, as FSR2 provides its own TAA implementation.
+#			antialiasing_3d_string += (" + " if not antialiasing_3d_string.is_empty() else "") + "TAA"
 		if viewport.msaa_3d >= Viewport.MSAA_2X:
 			antialiasing_3d_string += (" + " if not antialiasing_3d_string.is_empty() else "") + "%d× MSAA" % pow(2, viewport.msaa_3d)
 		if viewport.screen_space_aa == Viewport.SCREEN_SPACE_AA_FXAA:

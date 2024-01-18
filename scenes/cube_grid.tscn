@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c51kvjg8rfpuq"]
 
-[ext_resource type="PackedScene" uid="uid://cclclgr0h4fip" path="res://assets/cube_grid.glb" id="1_kppvp"]
+[ext_resource type="PackedScene" uid="uid://b3xloojxf8oh" path="res://assets/cube_grid.glb" id="1_kppvp"]
 [ext_resource type="Material" uid="uid://dhmde0jx3gybx" path="res://materials/cube_grid.tres" id="2_ebsq2"]
 
 [node name="cube_grid" instance=ExtResource("1_kppvp")]
