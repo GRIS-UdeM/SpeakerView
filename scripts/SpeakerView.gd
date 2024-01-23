@@ -6,6 +6,15 @@ var app_version: String = ProjectSettings.get_setting("application/config/versio
 var rendering_method: String
 var renderer: String
 
+# Settings
+var vsync: bool = true
+var fps_max: int = 0
+var msaa_3d = [[Viewport.MSAA_DISABLED, "Disabled"],
+			   [Viewport.MSAA_2X, "2X"],
+			   [Viewport.MSAA_4X, "4X"],
+			   [Viewport.MSAA_8X, "8X"]]
+var anti_aliasing: Viewport.MSAA = Viewport.MSAA_2X
+
 const SG_SCALE: float = 10.0
 const MAX_ELEVATION = 89.0
 const MIN_ELEVATION = -89.0
@@ -65,6 +74,9 @@ var cube_grid
 
 # MacOS focus
 var platform_is_macos: bool = false
+
+var settings_window = preload("res://scenes/settings_window.tscn")
+var settings_window_inst
 
 var network_node
 var dome_grid_node
@@ -131,6 +143,8 @@ func _ready():
 		"gl_compatibility":
 			renderer = "Compatibility"
 	
+	load_settings()
+	
 	get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
 	
 	if platform_is_macos and is_started_by_SG:
@@ -188,8 +202,11 @@ func _input(event):
 			cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
 		
 		elif event is InputEventKey:
-			if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false and event.keycode == KEY_F:
-				handle_fullscreen()
+			if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
+				if event.keycode == KEY_F:
+					handle_fullscreen()
+				elif event.keycode == KEY_F4:
+					handle_show_settings_window()
 			# Handling quitting with CTRL or META + W
 			elif event.pressed and event.echo == false and event.keycode == KEY_W:
 				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
@@ -223,6 +240,7 @@ func _notification(what):
 			# When closing window, send info to SpatGris
 			quitting = true
 			network_node.send_UDP()
+			save_settings()
 		get_tree().quit()
 
 func update_camera_position():
@@ -388,3 +406,51 @@ func show_noSG_alert():
 	alert_label.size = win_size
 	alert_label.visible = true
 	axes.visible = false
+
+func handle_show_settings_window():
+	if settings_window_inst in get_children():
+		settings_window_inst.move_to_foreground()
+		return
+	
+	settings_window_inst = settings_window.instantiate()
+	add_child.call_deferred(settings_window_inst)
+
+func load_settings():
+	var config = ConfigFile.new()
+	var err = config.load("user://settings.cfg")
+	
+	if err != OK:
+		return
+	
+	if config.has_section("graphics"):
+		vsync = config.get_value("graphics", "vsync")
+		fps_max = config.get_value("graphics", "fps")
+		anti_aliasing = config.get_value("graphics", "anti_aliasing")
+		
+	if vsync:
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
+	else:
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	
+	Engine.max_fps = fps_max
+	
+	for msaa in msaa_3d:
+		if anti_aliasing in msaa:
+			get_viewport().set_msaa_3d(msaa[0])
+	
+	DebugMenu.update_settings_label()
+
+func save_settings():
+	var config = ConfigFile.new()
+	
+	config.set_value("graphics", "vsync", vsync)
+	config.set_value("graphics", "fps", fps_max)
+	config.set_value("graphics", "anti_aliasing", anti_aliasing)
+	
+	config.save("user://settings.cfg")
+
+func set_SV_anti_aliasing(msaa: Viewport.MSAA) -> void:
+	get_viewport().set_msaa_3d(msaa)
+	anti_aliasing = get_viewport().get_msaa_3d()
+	DebugMenu.update_settings_label()
+	
