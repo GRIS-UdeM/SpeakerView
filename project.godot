@@ -33,6 +33,10 @@ window/size/viewport_width=800
 window/size/viewport_height=600
 window/subwindows/embed_subwindows=false
 
+[editor]
+
+run/main_run_args="-- launchedBySG=true"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
