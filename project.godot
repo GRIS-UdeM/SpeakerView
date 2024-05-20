@@ -16,7 +16,7 @@ config/features=PackedStringArray("4.1", "Forward Plus")
 boot_splash/image="res://icons/SpeakerView_Logo.png"
 config/icon="res://icons/SpeakerView_Logo.png"
 config/windows_native_icon="res://icon.ico"
-config/version="0.0.5"
+config/version="0.0.6"
 
 [audio]
 
