@@ -50,6 +50,8 @@ func _on_area_3d_input_event(_camera, event, _position, _normal, _shape_idx):
 			if event_last_position == event.position:
 				set_speaker_selected_state()
 
+func reset_spk_number():
+	speaker_number_mesh.mesh.set_text(str(spk_number))
 
 func set_speaker_selected_state():
 	if spk_is_selected:

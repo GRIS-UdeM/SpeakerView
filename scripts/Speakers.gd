@@ -97,7 +97,10 @@ func update_spk_scenes(data: Variant):
 		
 		# SG is XZ-Y, Godot is XYZ
 		spk.transform.origin = Vector3(spk_position[0], spk_position[2], -spk_position[1]) * speakerview_node.SG_SCALE
-		spk.spk_number = spk_number
+		if spk.spk_number != spk_number:
+			spk.spk_number = spk_number
+			spk.reset_spk_number()
+		
 		spk.spk_is_selected = spk_is_selected
 		spk.spk_is_direct_out_only = spk_is_direct_out_only
 		
