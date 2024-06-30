@@ -14,6 +14,7 @@ var msaa_3d = [[Viewport.MSAA_DISABLED, "Disabled"],
 			   [Viewport.MSAA_4X, "4X"],
 			   [Viewport.MSAA_8X, "8X"]]
 var anti_aliasing: Viewport.MSAA = Viewport.MSAA_2X
+var spk_origin_orientation: bool = true
 
 const SG_SCALE: float = 10.0
 const MAX_ELEVATION = 89.0

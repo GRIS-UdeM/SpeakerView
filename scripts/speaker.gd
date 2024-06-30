@@ -14,6 +14,10 @@ var network_node
 var speakers_node
 var area_node
 
+var spk_origin_orientation
+
+var original_rotation
+
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
 	network_node = get_node("/root/SpeakerView/Network")
@@ -30,17 +34,15 @@ func _ready():
 	
 	add_child(speaker_number_mesh)
 
-	var spk_pos_normalized = transform.origin.normalized()
-	var up_vector = Vector3(0, 1, 0)
-	var almost_zero = 0.000001
-	if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
-		up_vector = Vector3(0, 0, 1)
-	look_at(Vector3(0, 0, 0), up_vector, true)
+	original_rotation = rotation
+	update_speaker_orientation()
 
 	speaker_number_mesh.global_position = global_position + Vector3(0, 1, 0)
 	speaker_number_mesh.scale = Vector3(3, 3, 1)
 	speaker_number_mesh.set_cast_shadows_setting(0)
 	speaker_number_mesh.mesh.set_text(str(spk_number))
+	
+	spk_origin_orientation = speakers_node.spk_origin_orientation
 
 func _on_area_3d_input_event(_camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton:
@@ -63,3 +65,20 @@ func set_speaker_selected_state():
 	speakerview_node.spk_is_selected_with_mouse = true
 	network_node.send_UDP()
 	speakerview_node.spk_is_selected_with_mouse = false
+	
+func update_speaker_orientation():
+	if spk_origin_orientation:
+		var spk_pos_normalized = transform.origin.normalized()
+		var up_vector = Vector3(0, 1, 0)
+		var almost_zero = 0.000001
+		if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
+			up_vector = Vector3(0, 0, 1)
+		look_at(Vector3(0, 0, 0), up_vector, true)
+	else :
+		rotation = original_rotation
+	
+func toggle_speaker_orientation(button_pressed):
+	spk_origin_orientation = button_pressed
+	update_speaker_orientation()
+	
+	

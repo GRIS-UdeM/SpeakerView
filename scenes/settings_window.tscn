@@ -41,6 +41,12 @@ Higher values affect performance"
 mouse_filter = 1
 text = "Anti-Aliasing"
 
+[node name="SpeakerOrientation_label" type="Label" parent="columns/labels_row"]
+layout_mode = 2
+tooltip_text = "If enabled, orients the speakers towards the origin"
+mouse_filter = 1
+text = "Speaker origin orientation"
+
 [node name="options_row" type="VBoxContainer" parent="columns"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -61,8 +67,14 @@ layout_mode = 2
 tooltip_text = "Multisample antialiasing
 Higher values affect performance"
 
+[node name="SpeakerOrientation" type="CheckBox" parent="columns/options_row"]
+layout_mode = 2
+tooltip_text = "If enabled, synchronizes the GPU's frame rate to the 
+refresh rate of the monitor to prevent screen tearing"
+
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="size_changed" from="." to="." method="_on_size_changed"]
 [connection signal="toggled" from="columns/options_row/Vsync" to="." method="_on_vsync_toggled"]
 [connection signal="value_changed" from="columns/options_row/FPS" to="." method="_on_fps_value_changed"]
 [connection signal="item_selected" from="columns/options_row/MSAA" to="." method="_on_msaa_item_selected"]
+[connection signal="toggled" from="columns/options_row/SpeakerOrientation" to="." method="_on_speaker_orientation_toggled"]
