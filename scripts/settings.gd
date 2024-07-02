@@ -71,7 +71,6 @@ func _on_msaa_item_selected(index):
 	speakerview_node.set_SV_anti_aliasing(msaa_selected)
 
 func _on_speaker_orientation_toggled(button_pressed):
-	print('_on_speaker_orientation_toggled')
 	spk_orientation_node.button_pressed = button_pressed
 	speakerview_node.spk_origin_orientation = button_pressed
 	speakers_node.toggle_spk_orientation(button_pressed)

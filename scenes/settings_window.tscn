@@ -11,8 +11,8 @@ theme = SubResource("Theme_kfuv4")
 script = ExtResource("1_jo22h")
 
 [node name="columns" type="HBoxContainer" parent="."]
-offset_right = 262.0
-offset_bottom = 119.0
+offset_right = 419.0
+offset_bottom = 160.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -21,6 +21,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="VSync_label" type="Label" parent="columns/labels_row"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 tooltip_text = "If enabled, synchronizes the GPU's frame rate to the 
 refresh rate of the monitor to prevent screen tearing"
@@ -28,6 +29,7 @@ mouse_filter = 1
 text = "V-Sync"
 
 [node name="FPS_label" type="Label" parent="columns/labels_row"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 tooltip_text = "Sets GPU refresh rate
 By setting it to 0 and deactivating V-Sync, the GPU will run as fast as possible"
@@ -35,6 +37,7 @@ mouse_filter = 1
 text = "FPS Limit"
 
 [node name="MSAA_label" type="Label" parent="columns/labels_row"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 tooltip_text = "Multisample antialiasing
 Higher values affect performance"
@@ -42,6 +45,7 @@ mouse_filter = 1
 text = "Anti-Aliasing"
 
 [node name="SpeakerOrientation_label" type="Label" parent="columns/labels_row"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 tooltip_text = "If enabled, orients the speakers towards the origin"
 mouse_filter = 1
@@ -52,22 +56,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Vsync" type="CheckBox" parent="columns/options_row"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 tooltip_text = "If enabled, synchronizes the GPU's frame rate to the 
 refresh rate of the monitor to prevent screen tearing"
 
 [node name="FPS" type="SpinBox" parent="columns/options_row"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 tooltip_text = "Sets GPU refresh rate
 By setting it to 0 and deactivating V-Sync, the GPU will run as fast as possible"
 max_value = 1000.0
 
 [node name="MSAA" type="OptionButton" parent="columns/options_row"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 tooltip_text = "Multisample antialiasing
 Higher values affect performance"
 
 [node name="SpeakerOrientation" type="CheckBox" parent="columns/options_row"]
+custom_minimum_size = Vector2(2.08165e-12, 30)
 layout_mode = 2
 tooltip_text = "If enabled, synchronizes the GPU's frame rate to the 
 refresh rate of the monitor to prevent screen tearing"

@@ -152,7 +152,6 @@ func update_speaker_orientation(spk):
 		cube_edges.rotation = original_cube_edges_rotation
 
 func toggle_spk_orientation(button_pressed):
-	print('toggle_spk_orientation')
 	spk_origin_orientation = button_pressed
 	for i in range(speakers_scenes.size()):
 		var spk = speakers_scenes[i]
