@@ -77,8 +77,4 @@ func update_speaker_orientation():
 	else :
 		rotation = original_rotation
 	
-func toggle_speaker_orientation(button_pressed):
-	spk_origin_orientation = button_pressed
-	update_speaker_orientation()
-	
 	

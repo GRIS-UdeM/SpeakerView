@@ -151,12 +151,11 @@ func update_speaker_orientation(spk):
 		cube.rotation = original_cube_rotation
 		cube_edges.rotation = original_cube_edges_rotation
 
-func toggle_spk_orientation(button_pressed):
-	spk_origin_orientation = button_pressed
+func toggle_spk_orientation(keep_speakers_origin_orientated):
+	spk_origin_orientation = keep_speakers_origin_orientated
 	for i in range(speakers_scenes.size()):
 		var spk = speakers_scenes[i]
 		update_speaker_orientation(spk)
-		spk.toggle_spk_orientation(button_pressed)
 	
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")

@@ -37,6 +37,7 @@ var SV_keep_on_top_last: bool = false
 var show_hall_last: bool = false
 var SV_should_grab_focus_last: bool = false
 var spk_is_selected_with_mouse: bool = false
+var keep_speakers_origin_orientated_last: bool = true
 
 var window_position: Vector2i
 var window_size: Vector2i
@@ -63,6 +64,7 @@ var show_source_activity: bool
 var show_speaker_level: bool
 var show_sphere_or_cube: bool
 var spk_triplets: Array 
+var keep_speakers_origin_orientated
 
 var cam_radius = 20.0
 var rotation_speed = 0.1
@@ -272,6 +274,7 @@ func update_app_data(data: Variant):
 	show_speaker_level = data.showSpeakerLevel
 	show_sphere_or_cube = data.showSphereOrCube
 	spk_triplets = data.spkTriplets
+	keep_speakers_origin_orientated = data.keepSpeakersOriginOriented
 	
 	if show_speaker_triplets and !spk_triplets.is_empty() and show_speakers:
 		triplets_node.visible = true
@@ -307,6 +310,11 @@ func update_app_data(data: Variant):
 	if !SV_has_received_SG_data_at_least_once:
 		network_node.send_UDP()
 		SV_has_received_SG_data_at_least_once = true
+		
+	if keep_speakers_origin_orientated != keep_speakers_origin_orientated_last:
+		speakers_node.toggle_spk_orientation(keep_speakers_origin_orientated)
+		keep_speakers_origin_orientated_last = keep_speakers_origin_orientated
+		pass
 
 func render_spk_triplets():
 	var vertices = PackedVector3Array()
