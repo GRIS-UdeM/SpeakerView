@@ -11,7 +11,7 @@ var columns_node
 
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
-	
+		
 	var new_scale_factor: float = 1.0
 	
 	visible = true
@@ -28,7 +28,7 @@ func _on_close_requested():
 
 func _on_size_changed():
 	speakerview_node = get_node("/root/SpeakerView")
-	
+		
 	vsync_node = $columns/options_row/Vsync
 	fps_node = $columns/options_row/FPS
 	msaa_node = $columns/options_row/MSAA
@@ -62,3 +62,4 @@ func _on_vsync_toggled(button_pressed):
 func _on_msaa_item_selected(index):
 	var msaa_selected: Viewport.MSAA = speakerview_node.msaa_3d[index][0]
 	speakerview_node.set_SV_anti_aliasing(msaa_selected)
+	
