@@ -61,7 +61,8 @@ var show_speaker_triplets: bool
 var show_source_activity: bool
 var show_speaker_level: bool
 var show_sphere_or_cube: bool
-var spk_triplets: Array 
+var spk_triplets: Array
+var SG_is_muted: bool = false
 
 var cam_radius = 20.0
 var rotation_speed = 0.1
@@ -231,6 +232,8 @@ func _input(event):
 					handle_show_speaker_level()
 				elif event.keycode == KEY_O:
 					handle_show_sphere_or_cube()
+				elif event.keycode == KEY_Q:
+					handle_general_mute()
 				if event.keycode == KEY_R:
 					toggle_reset_sources_positions()
 
@@ -271,6 +274,7 @@ func update_app_data(data: Variant):
 	show_speaker_level = data.showSpeakerLevel
 	show_sphere_or_cube = data.showSphereOrCube
 	spk_triplets = data.spkTriplets
+	SG_is_muted = data.genMute
 	
 	if show_speaker_triplets and !spk_triplets.is_empty() and show_speakers:
 		triplets_node.visible = true
@@ -396,6 +400,10 @@ func handle_show_speaker_level():
 
 func handle_show_sphere_or_cube():
 	show_sphere_or_cube = !show_sphere_or_cube
+	network_node.send_UDP()
+
+func handle_general_mute():
+	SG_is_muted = !SG_is_muted
 	network_node.send_UDP()
 
 func show_noSG_alert():
