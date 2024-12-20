@@ -53,7 +53,8 @@ func send_UDP():
 								"showSrcActivity":speakerview_node.show_source_activity,
 								"showSpkLevel":speakerview_node.show_speaker_level,
 								"showSphereCube":speakerview_node.show_sphere_or_cube,
-								"resetSrcPos":speakerview_node.reset_sources_position}
+								"resetSrcPos":speakerview_node.reset_sources_position,
+								"genMute":speakerview_node.SG_is_muted}
 		var json_string = JSON.stringify(json_dict_to_send, "\t")
 		udp_peer.put_packet(json_string.to_ascii_buffer())
 

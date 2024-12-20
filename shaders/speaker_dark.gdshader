@@ -13,7 +13,7 @@ varying vec3 normal;
 
 void vertex(){
 	VERTEX += sign(VERTEX) * (scale - 1.0) * 0.5;
-	
+
 	vert = VERTEX;
 	normal = abs(NORMAL);
 }
@@ -22,7 +22,7 @@ void fragment(){
 	vec3 fv = fract(vec3(vert.x, vert.y * -1.0, vert.z));
 	vec3 vs = abs(vert) - scale * 0.5;
 	float ws = width * sharpness;
-	
+
 	ALBEDO = (texture(tex, fv.zy).rgb * normal.x + texture(tex, fv.xz).rgb * normal.y + texture(tex, fv.xy).rgb * normal.z) * float(width < length(vs.xy)) * float(width < length(vs.yz)) * float(width < length(vs.xz));
 	EMISSION = (1.0 - smoothstep(ws, width, length(vs.xy)) * smoothstep(ws, width, length(vs.yz)) * smoothstep(ws, width, length(vs.xz))) * color.rgb * glow;
 }
