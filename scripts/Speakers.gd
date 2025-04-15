@@ -41,6 +41,8 @@ func populate_speakers(data: Variant):
 		var instance = spk_scn.instantiate()
 		var cube = instance.get_node("cube")
 		var cube_edges = instance.get_node("cube_edges")
+		cube.scale = Vector3(.2, .2, .2)
+		cube_edges.scale = Vector3(.2, .2, .2)
 		var cube_edges_mesh = cube_edges.get_node("Cube")
 		
 		if spk_is_selected:
