@@ -48,26 +48,12 @@ func _input(event):
 	# Receives key input
 	if event is InputEventKey:
 		match event.keycode:
-			KEY_W:
-				_w = event.pressed
-			KEY_S:
-				_s = event.pressed
-			KEY_A:
-				_a = event.pressed
-			KEY_D:
-				_d = event.pressed
-			KEY_Q:
-				_q = event.pressed
-			KEY_E:
-				_e = event.pressed
-			KEY_SHIFT:
-				_shift = event.pressed
-			KEY_ALT:
-				_alt = event.pressed
 			KEY_C:
 				if event.pressed:
 					look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
 
+func _process(delta):
+	_update_mouselook()
 
 # Updates camera movement
 func _update_movement(delta):
