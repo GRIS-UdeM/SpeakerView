@@ -44,7 +44,7 @@ func populate_speakers(data: Variant):
 		var cube_edges_mesh = cube_edges.get_node("Cube")
 		cube.scale = Vector3(.2, .2, .2)
 		cube_edges.scale = Vector3(.2, .2, .2)
-		cube_edges_mesh.scale = Vector3(.2, .2, .2)
+		#cube_edges_mesh.scale = Vector3(.2, .2, .2)
 		
 		if spk_is_selected:
 			cube.material_override = spk_cube_mat_selected
