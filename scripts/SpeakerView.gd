@@ -319,10 +319,9 @@ func update_camera_position(delta):
 
 	# Modify elevation and azimuth for vertical and horizontal input
 	camera_elevation += _velocity.y * speed_multi * delta
-	camera_elevation = clamp(camera_elevation, -89.0, 89.0) # Prevent flip-over
-
+	camera_elevation = clamp(camera_elevation, -45, 45)
 	camera_azimuth += _velocity.x * speed_multi * delta
-	camera_azimuth = fmod(camera_azimuth, 360.0) # Keep azimuth in [0, 360)
+	camera_azimuth = clamp(camera_azimuth, 45.0, 135.0)
 
 	# Mouse rotation affects azimuth/elevation
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
