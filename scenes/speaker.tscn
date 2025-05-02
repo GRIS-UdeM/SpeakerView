@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://ckysy30g2fd55"]
 
-[ext_resource type="Script" path="res://scripts/speaker.gd" id="1_q6jf0"]
+[ext_resource type="Script" uid="uid://o746u5mclrc4" path="res://scripts/speaker.gd" id="1_q6jf0"]
 [ext_resource type="PackedScene" uid="uid://mhtxww22xdau" path="res://scenes/cube_edges.tscn" id="2_yyxc8"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5xs8x"]

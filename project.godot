@@ -13,7 +13,7 @@ config_version=5
 config/name="SpeakerView"
 config/version="0.0.7"
 run/main_scene="res://scenes/speakerview.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/image="res://icons/SpeakerView_Logo.png"
 config/icon="res://icons/SpeakerView_Logo.png"
 config/windows_native_icon="res://icon.ico"
@@ -44,5 +44,5 @@ enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
 [rendering]
 
 textures/vram_compression/import_etc2_astc=true
-environment/defaults/default_clear_color=Color(0.431373, 0.447059, 0.466667, 1)
 anti_aliasing/quality/msaa_3d=1
+environment/defaults/default_clear_color=Color(0.431373, 0.447059, 0.466667, 1)

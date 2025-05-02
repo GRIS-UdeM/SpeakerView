@@ -1,13 +1,13 @@
 [gd_scene load_steps=66 format=3 uid="uid://dgx85am3uu7o7"]
 
-[ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
-[ext_resource type="Script" path="res://scripts/Camera.gd" id="2_gy427"]
-[ext_resource type="Script" path="res://scripts/axes.gd" id="5_2k5yi"]
+[ext_resource type="Script" uid="uid://j8vprwmi22id" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
+[ext_resource type="Script" uid="uid://dvqilwqgdbvuo" path="res://scripts/Camera.gd" id="2_gy427"]
+[ext_resource type="Script" uid="uid://b4ssp283b5gso" path="res://scripts/axes.gd" id="5_2k5yi"]
 [ext_resource type="PackedScene" uid="uid://byo0lrwh1rug6" path="res://scenes/sphere_grid.tscn" id="6_5uwtl"]
 [ext_resource type="PackedScene" uid="uid://c51kvjg8rfpuq" path="res://scenes/cube_grid.tscn" id="7_mddiq"]
-[ext_resource type="Script" path="res://scripts/Network.gd" id="8_ntmpu"]
-[ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
-[ext_resource type="Script" path="res://scripts/Speakers.gd" id="10_0gnjq"]
+[ext_resource type="Script" uid="uid://wqivnlpkb7to" path="res://scripts/Network.gd" id="8_ntmpu"]
+[ext_resource type="Script" uid="uid://dmlcqm2jitf3d" path="res://scripts/Sources.gd" id="9_376al"]
+[ext_resource type="Script" uid="uid://1dgooccdrwo6" path="res://scripts/Speakers.gd" id="10_0gnjq"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_8vjol"]
 font_size = 54
