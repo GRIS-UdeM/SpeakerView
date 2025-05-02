@@ -66,7 +66,7 @@ var SG_is_muted: bool = false
 
 var cam_radius = 20.0
 var rotation_speed = 0.1
-var camera_azimuth: float = 70.0
+var camera_azimuth: float = 90#70.0
 var camera_elevation: float = 35.0
 var camera_zoom_velocity: float = 0.0
 

@@ -64,11 +64,10 @@ func _input(event):
 				_shift = event.pressed
 			KEY_ALT:
 				_alt = event.pressed
+			KEY_C:
+				if event.pressed:
+					look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
 
-# Updates mouselook and movement every frame
-func _process(delta):
-	_update_mouselook()
-	_update_movement(delta)
 
 # Updates camera movement
 func _update_movement(delta):
