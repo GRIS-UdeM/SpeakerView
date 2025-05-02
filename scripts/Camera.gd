@@ -1,4 +1,4 @@
-class_name FreeLookCamera extends Camera3D
+extends Camera3D
 
 const CAMERA_MIN_RADIUS: float = 6.0
 const CAMERA_MAX_RADIUS: float = 70.0
@@ -7,7 +7,7 @@ const CAMERA_MAX_RADIUS: float = 70.0
 const SHIFT_MULTIPLIER = 2.5
 const ALT_MULTIPLIER = 1.0 / SHIFT_MULTIPLIER
 
-@export_range(0.0, 1.0) var sensitivity: float = 0.25
+var sensitivity: float = 0.5
 
 # Mouse state
 var _mouse_position = Vector2(0.0, 0.0)
@@ -31,11 +31,9 @@ var _shift = false
 var _alt = false
 
 func _input(event):
-	# Receives mouse motion
 	if event is InputEventMouseMotion:
 		_mouse_position = event.relative
 	
-	# Receives mouse button input
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_RIGHT: # Only allows rotation if right click down
