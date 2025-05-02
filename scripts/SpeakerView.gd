@@ -298,10 +298,10 @@ func _notification(what):
 
 func update_camera_position(delta):
 	# Apply input-based directional movement to camera angles or radius
-	_direction = Vector3((_a as float) - (_d as float), (_q as float) - (_e as float), (_w as float) - (_s as float))
+	_direction = Vector3((_a as float) - (_d as float), (_e as float) - (_q as float), (_w as float) - (_s as float))
 	var offset = _direction.normalized() * _acceleration * _vel_multiplier * delta + _velocity.normalized() * _deceleration * _vel_multiplier * delta
 
-	var speed_multi = 5
+	var speed_multi = 3
 	if _shift: speed_multi *= SHIFT_MULTIPLIER
 	if _alt: speed_multi *= ALT_MULTIPLIER
 
@@ -315,7 +315,7 @@ func update_camera_position(delta):
 
 	# Modify cam_radius for forward/backward input
 	cam_radius += -_velocity.z * speed_multi * delta
-	cam_radius = clamp(cam_radius, 1.0, 100.0) # Adjust min/max radius as needed
+	cam_radius = clamp(cam_radius, 1.0, 30.0) # Adjust min/max radius as needed
 
 	# Modify elevation and azimuth for vertical and horizontal input
 	camera_elevation += _velocity.y * speed_multi * delta
