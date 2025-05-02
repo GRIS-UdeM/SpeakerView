@@ -164,7 +164,7 @@ func _process(delta):
 	
 	if is_started_by_SG:
 		# update_camera_position has to be called here if launched by SpatGris
-		update_camera_position()
+		#update_camera_position()
 		
 		sphere_grid.visible = ((spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
 		cube_grid.visible = ((spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube

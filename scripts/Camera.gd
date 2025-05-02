@@ -20,6 +20,16 @@ var _acceleration = 30
 var _deceleration = -10
 var _vel_multiplier = 4
 
+# Keyboard state
+var _w = false
+var _s = false
+var _a = false
+var _d = false
+var _q = false
+var _e = false
+var _shift = false
+var _alt = false
+
 func _input(event):
 	# Receives mouse motion
 	if event is InputEventMouseMotion:
@@ -38,13 +48,60 @@ func _input(event):
 	# Receives key input
 	if event is InputEventKey:
 		match event.keycode:
+			KEY_W:
+				_w = event.pressed
+			KEY_S:
+				_s = event.pressed
+			KEY_A:
+				_a = event.pressed
+			KEY_D:
+				_d = event.pressed
+			KEY_Q:
+				_q = event.pressed
+			KEY_E:
+				_e = event.pressed
+			KEY_SHIFT:
+				_shift = event.pressed
+			KEY_ALT:
+				_alt = event.pressed
 			KEY_C:
 				if event.pressed:
 					look_at(Vector3(0.0, 0.0, 0.0))
 
 func _process(delta):
 	_update_mouselook()
+	_update_movement(delta)
 
+# Updates camera movement
+func _update_movement(delta):
+	# Computes desired direction from key states
+	_direction = Vector3((_d as float) - (_a as float), 
+						 (_e as float) - (_q as float),
+						 (_s as float) - (_w as float))
+
+	# Computes the change in velocity due to desired direction and "drag"
+	# The "drag" is a constant acceleration on the camera to bring it's velocity to 0
+	var offset = _direction.normalized() * _acceleration * _vel_multiplier * delta \
+			+ _velocity.normalized() * _deceleration * _vel_multiplier * delta
+
+	# Compute modifiers' speed multiplier
+	var speed_multi = 1
+	if _shift: speed_multi *= SHIFT_MULTIPLIER
+	if _alt: speed_multi *= ALT_MULTIPLIER
+
+	# Checks if we should bother translating the camera
+	if _direction == Vector3.ZERO and offset.length_squared() > _velocity.length_squared():
+		# Sets the velocity to 0 to prevent jittering due to imperfect deceleration
+		_velocity = Vector3.ZERO
+	else:
+		# Clamps speed to stay within maximum value (_vel_multiplier)
+		_velocity.x = clamp(_velocity.x + offset.x, -_vel_multiplier, _vel_multiplier)
+		_velocity.y = clamp(_velocity.y + offset.y, -_vel_multiplier, _vel_multiplier)
+		_velocity.z = clamp(_velocity.z + offset.z, -_vel_multiplier, _vel_multiplier)
+
+		translate(_velocity * delta * speed_multi)
+
+# Updates mouse look 
 func _update_mouselook():
 	# Only rotates mouse if the mouse is captured
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
