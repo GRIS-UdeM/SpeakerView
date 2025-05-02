@@ -25,6 +25,32 @@ const ZOOM_CURVE: float = 0.7
 const INVERSE_ZOOM_CURVE: float = 1.0 / ZOOM_CURVE
 const MOUSE_DRAG_SPEED: float = 0.1
 
+# Modifier keys' speed multiplier
+const SHIFT_MULTIPLIER = 2.5
+const ALT_MULTIPLIER = 1.0 / SHIFT_MULTIPLIER
+var rotationSensitivity: float = 0.5
+
+# Mouse state
+var _mouse_position = Vector2(0.0, 0.0)
+var _total_pitch = 0.0
+
+# Movement state
+var _direction = Vector3(0.0, 0.0, 0.0)
+var _velocity = Vector3(0.0, 0.0, 0.0)
+var _acceleration = 30
+var _deceleration = -10
+var _vel_multiplier = 8
+
+# Keyboard state
+var _w = false
+var _s = false
+var _a = false
+var _d = false
+var _q = false
+var _e = false
+var _shift = false
+var _alt = false
+
 var selected_speaker_number: int = 0
 var reset_sources_position: bool = false
 var quitting: bool = false
@@ -164,7 +190,7 @@ func _process(delta):
 	
 	if is_started_by_SG:
 		# update_camera_position has to be called here if launched by SpatGris
-		update_camera_position()
+		update_camera_position(delta)
 		
 		sphere_grid.visible = ((spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
 		cube_grid.visible = ((spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
@@ -191,12 +217,16 @@ func _input(event):
 				camera_zoom_velocity -= (camera_zoom_velocity + 2.0) * 0.1
 			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				camera_zoom_velocity += (camera_zoom_velocity + 1.0) * 0.1
-		
-		elif event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			camera_azimuth += event.relative.x * MOUSE_DRAG_SPEED
-			camera_elevation += event.relative.y * MOUSE_DRAG_SPEED
-			camera_elevation = clamp(camera_elevation, MIN_ELEVATION, MAX_ELEVATION)
-		
+			elif event.button_index == MOUSE_BUTTON_RIGHT: # right click down = rotation
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if event.pressed else Input.MOUSE_MODE_VISIBLE)
+
+		elif event is InputEventMouseMotion:
+			_mouse_position = event.relative
+			if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+				camera_azimuth += event.relative.x * MOUSE_DRAG_SPEED
+				camera_elevation += event.relative.y * MOUSE_DRAG_SPEED
+				camera_elevation = clamp(camera_elevation, MIN_ELEVATION, MAX_ELEVATION)
+
 		# trackpad on MacOS
 		elif event is InputEventPanGesture:
 			cam_radius += event.delta.y
@@ -204,10 +234,8 @@ func _input(event):
 		
 		elif event is InputEventKey:
 			if event.pressed and event.keycode == KEY_C:
-				print ("c")
 				camera_azimuth = 90.0
 				camera_elevation = 35.0
-				#look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
 			elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
 				if event.keycode == KEY_F:
 					handle_fullscreen()
@@ -241,6 +269,24 @@ func _input(event):
 					handle_general_mute()
 				if event.keycode == KEY_R:
 					toggle_reset_sources_positions()
+			else:
+				match event.keycode:
+					KEY_W:
+						_w = event.pressed
+					KEY_S:
+						_s = event.pressed
+					KEY_A:
+						_a = event.pressed
+					KEY_D:
+						_d = event.pressed
+					KEY_Q:
+						_q = event.pressed
+					KEY_E:
+						_e = event.pressed
+					KEY_SHIFT:
+						_shift = event.pressed
+					KEY_ALT:
+						_alt = event.pressed
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -251,12 +297,47 @@ func _notification(what):
 			save_settings()
 		get_tree().quit()
 
-func update_camera_position():
+func update_camera_position(delta):
 	var x = cam_radius * cos(deg_to_rad(camera_azimuth)) * cos(deg_to_rad(camera_elevation))
 	var y = cam_radius * sin(deg_to_rad(camera_elevation))
 	var z = cam_radius * sin(deg_to_rad(camera_azimuth)) * cos(deg_to_rad(camera_elevation))
 	
-	#camera_node.global_position = Vector3(x, y, z)
+	_direction = Vector3((_d as float) - (_a as float),  (_e as float) - (_q as float), (_s as float) - (_w as float))
+	var offset = _direction.normalized() * _acceleration * _vel_multiplier * delta + _velocity.normalized() * _deceleration * _vel_multiplier * delta
+
+	# Compute modifiers' speed multiplier
+	var speed_multi = 1
+	if _shift: speed_multi *= SHIFT_MULTIPLIER
+	if _alt: speed_multi *= ALT_MULTIPLIER
+
+	# Checks if we should bother translating the camera
+	if _direction == Vector3.ZERO and offset.length_squared() > _velocity.length_squared():
+		# Sets the velocity to 0 to prevent jittering due to imperfect deceleration
+		_velocity = Vector3.ZERO
+	else:
+		# Clamps speed to stay within maximum value (_vel_multiplier)
+		_velocity.x = clamp(_velocity.x + offset.x, -_vel_multiplier, _vel_multiplier)
+		_velocity.y = clamp(_velocity.y + offset.y, -_vel_multiplier, _vel_multiplier)
+		_velocity.z = clamp(_velocity.z + offset.z, -_vel_multiplier, _vel_multiplier)
+		camera_node.translate(_velocity * delta * speed_multi)
+		#x = camera_node.global_position.x
+		#y = camera_node.global_position.y
+		#z = camera_node.global_position.z
+	
+	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		_mouse_position *= rotationSensitivity
+		var yaw = _mouse_position.x
+		var pitch = _mouse_position.y
+		_mouse_position = Vector2(0, 0)
+		
+		# Prevents looking up/down too far
+		pitch = clamp(pitch, -90 - _total_pitch, 90 - _total_pitch)
+		_total_pitch += pitch
+	
+		camera_node.rotate_y(deg_to_rad(-yaw))
+		camera_node.rotate_object_local(Vector3(1,0,0), deg_to_rad(-pitch))
+
+	camera_node.global_position = Vector3(x, y, z)
 
 func toggle_reset_sources_positions():
 	reset_sources_position = true
