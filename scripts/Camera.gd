@@ -40,7 +40,7 @@ func _input(event):
 		match event.keycode:
 			KEY_C:
 				if event.pressed:
-					look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
+					look_at(Vector3(0.0, 0.0, 0.0))
 
 func _process(delta):
 	_update_mouselook()

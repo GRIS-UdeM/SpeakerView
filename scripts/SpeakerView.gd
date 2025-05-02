@@ -66,8 +66,8 @@ var SG_is_muted: bool = false
 
 var cam_radius = 20.0
 var rotation_speed = 0.1
-var camera_azimuth: float = 90#70.0
-var camera_elevation: float = 35.0
+var camera_azimuth: float = 90.0
+var camera_elevation: float = 15.0
 var camera_zoom_velocity: float = 0.0
 
 var sphere_grid
@@ -203,7 +203,12 @@ func _input(event):
 			cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
 		
 		elif event is InputEventKey:
-			if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
+			if event.pressed and event.keycode == KEY_C:
+				print ("c")
+				camera_azimuth = 90.0
+				camera_elevation = 35.0
+				#look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
+			elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
 				if event.keycode == KEY_F:
 					handle_fullscreen()
 				elif event.keycode == KEY_F4:
