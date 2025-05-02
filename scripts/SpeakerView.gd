@@ -233,10 +233,27 @@ func _input(event):
 			cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
 		
 		elif event is InputEventKey:
-			if event.pressed and event.keycode == KEY_C:
-				camera_azimuth = 90.0
-				camera_elevation = 35.0
-			elif event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
+			match event.keycode:
+					KEY_W:
+						_w = event.pressed
+					KEY_S:
+						_s = event.pressed
+					KEY_A:
+						_a = event.pressed
+					KEY_D:
+						_d = event.pressed
+					KEY_Q:
+						_q = event.pressed
+					KEY_E:
+						_e = event.pressed
+					KEY_SHIFT:
+						_shift = event.pressed
+					KEY_ALT:
+						_alt = event.pressed
+					KEY_C:
+						camera_azimuth = 90.0
+						camera_elevation = 35.0
+			if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
 				if event.keycode == KEY_F:
 					handle_fullscreen()
 				elif event.keycode == KEY_F4:
@@ -269,24 +286,6 @@ func _input(event):
 					handle_general_mute()
 				if event.keycode == KEY_R:
 					toggle_reset_sources_positions()
-			else:
-				match event.keycode:
-					KEY_W:
-						_w = event.pressed
-					KEY_S:
-						_s = event.pressed
-					KEY_A:
-						_a = event.pressed
-					KEY_D:
-						_d = event.pressed
-					KEY_Q:
-						_q = event.pressed
-					KEY_E:
-						_e = event.pressed
-					KEY_SHIFT:
-						_shift = event.pressed
-					KEY_ALT:
-						_alt = event.pressed
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
