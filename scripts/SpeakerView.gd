@@ -298,45 +298,50 @@ func _notification(what):
 		get_tree().quit()
 
 func update_camera_position(delta):
-	var x = cam_radius * cos(deg_to_rad(camera_azimuth)) * cos(deg_to_rad(camera_elevation))
-	var y = cam_radius * sin(deg_to_rad(camera_elevation))
-	var z = cam_radius * sin(deg_to_rad(camera_azimuth)) * cos(deg_to_rad(camera_elevation))
-	
-	_direction = Vector3((_d as float) - (_a as float),  (_e as float) - (_q as float), (_s as float) - (_w as float))
+	# Apply input-based directional movement to camera angles or radius
+	_direction = Vector3((_a as float) - (_d as float), (_q as float) - (_e as float), (_w as float) - (_s as float))
 	var offset = _direction.normalized() * _acceleration * _vel_multiplier * delta + _velocity.normalized() * _deceleration * _vel_multiplier * delta
 
-	# Compute modifiers' speed multiplier
-	var speed_multi = 1
+	var speed_multi = 5
 	if _shift: speed_multi *= SHIFT_MULTIPLIER
 	if _alt: speed_multi *= ALT_MULTIPLIER
 
-	# Checks if we should bother translating the camera
+	# Dampen velocity
 	if _direction == Vector3.ZERO and offset.length_squared() > _velocity.length_squared():
-		# Sets the velocity to 0 to prevent jittering due to imperfect deceleration
 		_velocity = Vector3.ZERO
 	else:
-		# Clamps speed to stay within maximum value (_vel_multiplier)
 		_velocity.x = clamp(_velocity.x + offset.x, -_vel_multiplier, _vel_multiplier)
 		_velocity.y = clamp(_velocity.y + offset.y, -_vel_multiplier, _vel_multiplier)
 		_velocity.z = clamp(_velocity.z + offset.z, -_vel_multiplier, _vel_multiplier)
-		camera_node.translate(_velocity * delta * speed_multi)
-		#x = camera_node.global_position.x
-		#y = camera_node.global_position.y
-		#z = camera_node.global_position.z
-	
+
+	# Modify cam_radius for forward/backward input
+	cam_radius += -_velocity.z * speed_multi * delta
+	cam_radius = clamp(cam_radius, 1.0, 100.0) # Adjust min/max radius as needed
+
+	# Modify elevation and azimuth for vertical and horizontal input
+	camera_elevation += _velocity.y * speed_multi * delta
+	camera_elevation = clamp(camera_elevation, -89.0, 89.0) # Prevent flip-over
+
+	camera_azimuth += _velocity.x * speed_multi * delta
+	camera_azimuth = fmod(camera_azimuth, 360.0) # Keep azimuth in [0, 360)
+
+	# Mouse rotation affects azimuth/elevation
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		_mouse_position *= rotationSensitivity
 		var yaw = _mouse_position.x
 		var pitch = _mouse_position.y
 		_mouse_position = Vector2(0, 0)
-		
-		# Prevents looking up/down too far
+
 		pitch = clamp(pitch, -90 - _total_pitch, 90 - _total_pitch)
 		_total_pitch += pitch
-	
-		camera_node.rotate_y(deg_to_rad(-yaw))
-		camera_node.rotate_object_local(Vector3(1,0,0), deg_to_rad(-pitch))
 
+		camera_azimuth -= yaw
+		camera_elevation = clamp(camera_elevation - pitch, -89.0, 89.0)
+
+	# Calculate new camera position
+	var x = cam_radius * cos(deg_to_rad(camera_azimuth)) * cos(deg_to_rad(camera_elevation))
+	var y = cam_radius * sin(deg_to_rad(camera_elevation))
+	var z = cam_radius * sin(deg_to_rad(camera_azimuth)) * cos(deg_to_rad(camera_elevation))
 	camera_node.global_position = Vector3(x, y, z)
 
 func toggle_reset_sources_positions():
