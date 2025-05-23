@@ -42,7 +42,7 @@ func send_UDP():
 		var json_dict_to_send = {"quitting":speakerview_node.quitting,
 								"winPos":get_viewport().position,
 								"winSize":get_viewport().size,
-								"camPos":str(-speakerview_node.camera_azimuth, ",", speakerview_node.camera_elevation, ",", speakerview_node.cam_radius),
+								"camPos":str(-speakerview_node.camera_node.camera_azimuth, ",", speakerview_node.camera_node.camera_elevation, ",", speakerview_node.camera_node.cam_radius),
 								"selSpkNum":str(speakerview_node.selected_speaker_number, ",", speakerview_node.spk_is_selected_with_mouse),
 								"keepSVTop":speakerview_node.SV_keep_on_top,
 								"showHall":speakerview_node.show_hall,
