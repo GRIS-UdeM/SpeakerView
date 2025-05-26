@@ -71,7 +71,6 @@ var dome_grid_node
 var cube_grid_node
 var triplets_node
 var speakers_node
-var camera_node
 var hall_node
 
 func _ready():
@@ -80,7 +79,6 @@ func _ready():
 	cube_grid_node = get_node("origin_grid/cube")
 	triplets_node = get_node("triplets")
 	speakers_node = get_node("Speakers")
-	camera_node = get_node("Center/Camera")
 	hall_node = get_node("hall")
 	
 	sphere_grid = $sphere_grid
@@ -111,6 +109,7 @@ func _ready():
 			var values = arg.get_slice('=', 1)
 			var split_values = values.split(",", false, 3)
 			
+			var camera_node = get_viewport().get_camera_3d()
 			camera_node.camera_azimuth = float(split_values[0])
 			camera_node.camera_elevation = float(split_values[1])
 			var cam_radius = float(split_values[2])
@@ -170,6 +169,11 @@ func _input(event):
 					handle_fullscreen()
 				elif event.keycode == KEY_F4:
 					handle_show_settings_window()
+				elif event.keycode == KEY_C:
+					if get_viewport().get_camera_3d() == %OrbitCamera:
+						%FreeCamera.current = true
+					else:
+						%OrbitCamera.current = true
 			# Handling quitting with CTRL or META + W
 			elif event.pressed and event.echo == false and event.keycode == KEY_W:
 				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
