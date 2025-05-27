@@ -1,8 +1,10 @@
-[gd_scene load_steps=67 format=3 uid="uid://dgx85am3uu7o7"]
+[gd_scene load_steps=69 format=3 uid="uid://dgx85am3uu7o7"]
 
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
 [ext_resource type="Script" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
 [ext_resource type="Script" path="res://scripts/FreeCamera.gd" id="2_iqjbo"]
+[ext_resource type="Texture2D" uid="uid://pasb43352uxo" path="res://assets/camera.png" id="4_pruru"]
+[ext_resource type="Script" path="res://scripts/switch_camera_button.gd" id="4_yakyd"]
 [ext_resource type="Script" path="res://scripts/axes.gd" id="5_2k5yi"]
 [ext_resource type="PackedScene" uid="uid://byo0lrwh1rug6" path="res://scenes/sphere_grid.tscn" id="6_5uwtl"]
 [ext_resource type="PackedScene" uid="uid://c51kvjg8rfpuq" path="res://scenes/cube_grid.tscn" id="7_mddiq"]
@@ -288,6 +290,41 @@ offset_top = 57.0
 offset_right = 468.0
 offset_bottom = 83.0
 text = "DEBUG"
+
+[node name="CurrentCamera" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 17.0
+offset_top = 12.0
+offset_right = 57.0
+offset_bottom = 52.0
+mouse_filter = 1
+
+[node name="SwitchCameraButton" type="Button" parent="CurrentCamera"]
+layout_mode = 0
+offset_left = -10.0
+offset_top = -5.0
+offset_right = 34.0
+offset_bottom = 28.0
+script = ExtResource("4_yakyd")
+
+[node name="CameraIcon" type="TextureRect" parent="CurrentCamera/SwitchCameraButton"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 5.0
+offset_right = 38.0
+offset_bottom = 28.0
+texture = ExtResource("4_pruru")
+expand_mode = 1
+
+[node name="CurrentCameraName" type="Label" parent="CurrentCamera"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 40.0
+offset_top = -2.0
+offset_right = 145.0
+offset_bottom = 21.0
+text = "Orbit Camera"
 
 [node name="hall" type="Node3D" parent="."]
 

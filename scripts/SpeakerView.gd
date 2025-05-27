@@ -160,6 +160,13 @@ func _process(delta):
 		cube_grid_node.visible = (spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)
 		
 
+func switch_cameras():
+	if get_viewport().get_camera_3d() == %OrbitCamera:
+		%FreeCamera.current = true
+		%CurrentCameraName.text = "Free Camera"
+	else:
+		%OrbitCamera.current = true
+		%CurrentCameraName.text = "Orbit Camera"
 
 func _input(event):
 	if is_started_by_SG:		
@@ -170,10 +177,7 @@ func _input(event):
 				elif event.keycode == KEY_F4:
 					handle_show_settings_window()
 				elif event.keycode == KEY_C:
-					if get_viewport().get_camera_3d() == %OrbitCamera:
-						%FreeCamera.current = true
-					else:
-						%OrbitCamera.current = true
+					switch_cameras()
 			# Handling quitting with CTRL or META + W
 			elif event.pressed and event.echo == false and event.keycode == KEY_W:
 				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
