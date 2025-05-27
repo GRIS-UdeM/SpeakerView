@@ -19,6 +19,8 @@ var camera_elevation: float = 35.0
 var camera_zoom_velocity: float = 0.0
 
 func _input(event):
+	if not current:
+		return
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			camera_zoom_velocity -= (camera_zoom_velocity + 2.0) * 0.1
