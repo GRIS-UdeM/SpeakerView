@@ -301,6 +301,7 @@ text = "DEBUG"
 
 [node name="HelpPannel" type="MarginContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -345,8 +346,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 7
 
-[node name="Label" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+[node name="Spacer" type="Control" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+custom_minimum_size = Vector2(0, 9.615)
 layout_mode = 2
+
+[node name="GlobalControlsTitle" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 4
 text = "Global Controls"
 
 [node name="KeybindingHelp" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
@@ -409,8 +416,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 7
 
-[node name="Label" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+[node name="Spacer2" type="Control" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 9.615)
 layout_mode = 2
+
+[node name="OrbitCameraControlsTitle" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 40.005)
+layout_mode = 2
+size_flags_horizontal = 4
 text = "Orbit Camera Controls"
 
 [node name="KeybindingHelp" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
@@ -419,12 +432,19 @@ keybinding_text = "Left Click"
 help_text = "Rotate camera"
 
 [node name="KeybindingHelp2" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+custom_minimum_size = Vector2(0, 0.83)
 layout_mode = 2
 keybinding_text = "Scroll Wheel"
 help_text = "Zoom in and out"
 
-[node name="Label2" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+[node name="Spacer" type="Control" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 9.615)
 layout_mode = 2
+
+[node name="FreeCameraControlsTitle" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 40.005)
+layout_mode = 2
+size_flags_horizontal = 4
 text = "Free Camera Controls"
 
 [node name="KeybindingHelp3" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
