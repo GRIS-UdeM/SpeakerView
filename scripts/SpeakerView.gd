@@ -139,7 +139,7 @@ func _ready():
 	if platform_is_macos and is_started_by_SG:
 		should_move_SG_to_foreground = !SV_started_by_SG_for_the_first_time
 
-func _process(delta):
+func _process(_delta):
 #	$FrameRate.text = str("FPS : ", Engine.get_frames_per_second())
 	if !is_started_by_SG:
 		show_noSG_alert()

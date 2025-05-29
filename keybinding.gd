@@ -15,9 +15,9 @@ func _ready():
 		get_tree().current_scene.ready.connect(_on_scenetree_ready)
 
 func update_label() -> void:
-	if $keymargin/keytext:
+	if get_node_or_null("keymargin/keytext"):
 		$keymargin/keytext.text = " " +keybinding_text + " "
-	if $Label:
+	if get_node_or_null("Label"):
 		$Label.text = help_text
 
 func _on_scenetree_ready():
