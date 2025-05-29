@@ -428,7 +428,6 @@ func set_SV_anti_aliasing(msaa: Viewport.MSAA) -> void:
 
 
 func _on_help_panel_button_pressed() -> void:
-	print("aaaaaa")
 	%HelpPannel.visible = not %HelpPannel.visible
 
 
