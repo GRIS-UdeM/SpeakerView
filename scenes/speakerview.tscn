@@ -1,8 +1,9 @@
-[gd_scene load_steps=69 format=3 uid="uid://dgx85am3uu7o7"]
+[gd_scene load_steps=71 format=3 uid="uid://dgx85am3uu7o7"]
 
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
 [ext_resource type="Script" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
 [ext_resource type="Script" path="res://scripts/FreeCamera.gd" id="2_iqjbo"]
+[ext_resource type="PackedScene" uid="uid://pxj0p1qnd7u3" path="res://scenes/keybinding.tscn" id="4_b1xjj"]
 [ext_resource type="Texture2D" uid="uid://pasb43352uxo" path="res://assets/camera.png" id="4_pruru"]
 [ext_resource type="Script" path="res://scripts/switch_camera_button.gd" id="4_yakyd"]
 [ext_resource type="Script" path="res://scripts/axes.gd" id="5_2k5yi"]
@@ -16,6 +17,13 @@
 font_size = 54
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6didg"]
+bg_color = Color(0.24, 0.24, 0.24, 0.4)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vny03"]
 albedo_color = Color(0.254902, 0.247059, 0.231373, 1)
@@ -291,12 +299,101 @@ offset_right = 468.0
 offset_bottom = 83.0
 text = "DEBUG"
 
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6didg")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 7
+
+[node name="Label" type="Label" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Global controls"
+
+[node name="KeybindingHelp" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " F "
+help_text = "Toggle fullscreen"
+
+[node name="KeybindingHelp2" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "f4"
+help_text = "Show performance window"
+
+[node name="KeybindingHelp3" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " C "
+help_text = "Switch camera"
+
+[node name="KeybindingHelp4" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Ctrl+W"
+help_text = "Close SpeakerView"
+
+[node name="KeybindingHelp5" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+H"
+help_text = "Show hall"
+
+[node name="KeybindingHelp6" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+N"
+help_text = "Show source numbers"
+
+[node name="KeybindingHelp7" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+S"
+help_text = "Show speaker numbers"
+
+[node name="KeybindingHelp8" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+T"
+help_text = "Show speaker triplets (only in Dome)"
+
+[node name="KeybindingHelp9" parent="MarginContainer/Panel/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+A"
+help_text = "Show speaker activity"
+
 [node name="UIOverlay" type="HBoxContainer" parent="."]
 offset_left = 17.0
 offset_top = 12.0
 offset_right = 201.0
 offset_bottom = 45.0
 size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="UIOverlay"]
+custom_minimum_size = Vector2(35.69, 0)
+layout_mode = 2
+text = "?"
 
 [node name="CameraButton" type="Button" parent="UIOverlay"]
 custom_minimum_size = Vector2(35.69, 0)
