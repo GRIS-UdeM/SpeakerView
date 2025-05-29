@@ -58,9 +58,9 @@ func _unhandled_input(event):
 				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if event.pressed else Input.MOUSE_MODE_VISIBLE)
 				_left_click_pressed = event.pressed
 			MOUSE_BUTTON_WHEEL_DOWN:
-				_wheel_impulse +=1
+				_wheel_impulse +=5
 			MOUSE_BUTTON_WHEEL_UP:
-				_wheel_impulse -=1
+				_wheel_impulse -=5
 	elif event is InputEventPanGesture:
 		_wheel_impulse += event.delta.y
 
