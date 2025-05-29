@@ -18,7 +18,7 @@ var camera_azimuth: float = 70.0
 var camera_elevation: float = 35.0
 var camera_zoom_velocity: float = 0.0
 
-func _input(event):
+func _unhandled_input(event):
 	if not current:
 		return
 	if event is InputEventMouseButton:

@@ -291,39 +291,30 @@ offset_right = 468.0
 offset_bottom = 83.0
 text = "DEBUG"
 
-[node name="CurrentCamera" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
+[node name="UIOverlay" type="HBoxContainer" parent="."]
 offset_left = 17.0
 offset_top = 12.0
-offset_right = 57.0
-offset_bottom = 52.0
-mouse_filter = 1
+offset_right = 201.0
+offset_bottom = 45.0
+size_flags_horizontal = 3
 
-[node name="SwitchCameraButton" type="Button" parent="CurrentCamera"]
-layout_mode = 0
-offset_left = -10.0
-offset_top = -5.0
-offset_right = 34.0
-offset_bottom = 28.0
+[node name="CameraButton" type="Button" parent="UIOverlay"]
+custom_minimum_size = Vector2(35.69, 0)
+layout_mode = 2
 script = ExtResource("4_yakyd")
 
-[node name="CameraIcon" type="TextureRect" parent="CurrentCamera/SwitchCameraButton"]
+[node name="CameraIcon" type="TextureRect" parent="UIOverlay/CameraButton"]
 layout_mode = 0
-offset_left = 7.0
-offset_top = 5.0
-offset_right = 38.0
-offset_bottom = 28.0
+offset_left = 5.0
+offset_top = 7.0
+offset_right = 31.0
+offset_bottom = 26.0
 texture = ExtResource("4_pruru")
 expand_mode = 1
 
-[node name="CurrentCameraName" type="Label" parent="CurrentCamera"]
+[node name="CurrentCameraName" type="Label" parent="UIOverlay"]
 unique_name_in_owner = true
 layout_mode = 2
-offset_left = 40.0
-offset_top = -2.0
-offset_right = 145.0
-offset_bottom = 21.0
 text = "Orbit Camera"
 
 [node name="hall" type="Node3D" parent="."]

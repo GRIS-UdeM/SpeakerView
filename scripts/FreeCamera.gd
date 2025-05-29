@@ -37,7 +37,7 @@ var _wheel_impulse = 0
 func _ready():
 	look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
 
-func _input(event):
+func _unhandled_input(event):
 	if not current:
 		return
 	# Receives mouse motion
@@ -57,6 +57,8 @@ func _input(event):
 				_wheel_impulse +=1
 			MOUSE_BUTTON_WHEEL_UP:
 				_wheel_impulse -=1
+	elif event is InputEventPanGesture:
+		_wheel_impulse += event.delta.y
 
 
 	# Receives key input
