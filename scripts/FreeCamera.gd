@@ -62,7 +62,7 @@ func _unhandled_input(event):
 
 
 	# Receives key input
-	if event is InputEventKey:
+	if event is InputEventKey and not event.alt_pressed:
 		match event.keycode:
 			KEY_W:
 				_w = event.pressed
