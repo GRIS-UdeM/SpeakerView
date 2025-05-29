@@ -107,6 +107,7 @@ func _update_movement(delta):
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED and _left_click_pressed:
 		_mouse_position *= sensitivity
 		offset.x += _mouse_position[0]
+		offset.y -= _mouse_position[1]
 	# Compute modifiers' speed multiplier
 	var speed_multi = 1
 	if _shift: speed_multi *= SHIFT_MULTIPLIER
