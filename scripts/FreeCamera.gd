@@ -36,6 +36,10 @@ var _wheel_impulse = 0
 
 func _ready():
 	look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
+	
+func reset_position():
+	global_position = Vector3(4,6,15.865)
+	look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
 
 func _unhandled_input(event):
 	if not current:
@@ -80,6 +84,9 @@ func _unhandled_input(event):
 				_shift = event.pressed
 			KEY_ALT:
 				_alt = event.pressed
+			KEY_R:
+				reset_position()
+				
 
 # Updates mouselook and movement every frame
 func _process(delta):
