@@ -425,3 +425,12 @@ func set_SV_anti_aliasing(msaa: Viewport.MSAA) -> void:
 	anti_aliasing = get_viewport().get_msaa_3d()
 	DebugMenu.update_settings_label()
 	
+
+
+func _on_help_panel_button_pressed() -> void:
+	print("aaaaaa")
+	%HelpPannel.visible = not %HelpPannel.visible
+
+
+func _on_help_panel_close_button_pressed() -> void:
+	%HelpPannel.visible = false

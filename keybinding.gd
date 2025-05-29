@@ -11,7 +11,8 @@ extends HBoxContainer
 		update_label()
 	
 func _ready():
-	get_tree().current_scene.ready.connect(_on_scenetree_ready)
+	if get_tree().current_scene:
+		get_tree().current_scene.ready.connect(_on_scenetree_ready)
 
 func update_label() -> void:
 	if $keymargin/keytext:
