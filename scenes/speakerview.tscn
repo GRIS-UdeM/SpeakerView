@@ -334,17 +334,18 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HelpPannel/Panel/MarginContainer/ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 17
 
 [node name="CloseButton" type="Button" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 0
 size_flags_vertical = 0
 text = " X "
 
 [node name="GlobalControis" type="VBoxContainer" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 6
 theme_override_constants/separation = 7
 
 [node name="Spacer" type="Control" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
@@ -414,7 +415,8 @@ help_text = "Show sphere or cube"
 
 [node name="CameraControls" type="VBoxContainer" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 6
+size_flags_vertical = 0
 theme_override_constants/separation = 4
 
 [node name="Spacer2" type="Control" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
