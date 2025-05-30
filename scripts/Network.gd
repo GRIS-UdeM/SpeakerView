@@ -38,8 +38,6 @@ func _physics_process(_delta):
 		listen_to_UDP()
 
 func send_UDP():
-	# I'm not sure why we send the camera's azimuth and elevation to spatgris ...
-	# This does not make sense with the addition of the free camera.
 	var camera_node = %OrbitCamera
 	if speakerview_node.is_started_by_SG:
 		var json_dict_to_send = {"quitting":speakerview_node.quitting,
