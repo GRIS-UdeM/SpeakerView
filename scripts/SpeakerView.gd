@@ -178,6 +178,8 @@ func _input(event):
 					handle_show_settings_window()
 				elif event.keycode == KEY_C:
 					switch_cameras()
+				elif event.keycode == KEY_ESCAPE:
+					%HelpPannel.visible = false
 			# Handling quitting with CTRL or META + W
 			elif event.pressed and event.echo == false and event.keycode == KEY_W:
 				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
@@ -426,10 +428,8 @@ func set_SV_anti_aliasing(msaa: Viewport.MSAA) -> void:
 	DebugMenu.update_settings_label()
 	
 
-
 func _on_help_panel_button_pressed() -> void:
 	%HelpPannel.visible = not %HelpPannel.visible
-
 
 func _on_help_panel_close_button_pressed() -> void:
 	%HelpPannel.visible = false
