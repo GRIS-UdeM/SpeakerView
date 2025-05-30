@@ -1,7 +1,10 @@
-[gd_scene load_steps=66 format=3 uid="uid://dgx85am3uu7o7"]
+[gd_scene load_steps=69 format=3 uid="uid://dgx85am3uu7o7"]
 
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
-[ext_resource type="Script" path="res://scripts/Camera.gd" id="2_gy427"]
+[ext_resource type="Script" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
+[ext_resource type="Script" path="res://scripts/FreeCamera.gd" id="2_iqjbo"]
+[ext_resource type="Texture2D" uid="uid://pasb43352uxo" path="res://assets/camera.png" id="4_pruru"]
+[ext_resource type="Script" path="res://scripts/switch_camera_button.gd" id="4_yakyd"]
 [ext_resource type="Script" path="res://scripts/axes.gd" id="5_2k5yi"]
 [ext_resource type="PackedScene" uid="uid://byo0lrwh1rug6" path="res://scenes/sphere_grid.tscn" id="6_5uwtl"]
 [ext_resource type="PackedScene" uid="uid://c51kvjg8rfpuq" path="res://scenes/cube_grid.tscn" id="7_mddiq"]
@@ -244,11 +247,22 @@ script = ExtResource("1_ov2dc")
 [node name="Center" type="Node3D" parent="."]
 transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
-[node name="Camera" type="Camera3D" parent="Center"]
+[node name="OrbitCamera" type="Camera3D" parent="Center"]
+unique_name_in_owner = true
 transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 2, 3, 7.93245)
 script = ExtResource("2_gy427")
 
-[node name="cam_light" type="DirectionalLight3D" parent="Center/Camera"]
+[node name="cam_light" type="DirectionalLight3D" parent="Center/OrbitCamera"]
+transform = Transform3D(1, 3.48787e-16, -3.48787e-16, -3.48787e-16, 1, 3.48787e-16, 3.48787e-16, -3.48787e-16, 1, 0, 0, 0)
+light_energy = 0.8
+
+[node name="FreeCamera" type="Camera3D" parent="Center"]
+unique_name_in_owner = true
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 4, 6, 15.8649)
+script = ExtResource("2_iqjbo")
+sensitivity = 0.619
+
+[node name="cam_light" type="DirectionalLight3D" parent="Center/FreeCamera"]
 transform = Transform3D(1, 3.48787e-16, -3.48787e-16, -3.48787e-16, 1, 3.48787e-16, 3.48787e-16, -3.48787e-16, 1, 0, 0, 0)
 light_energy = 0.8
 
@@ -276,6 +290,32 @@ offset_top = 57.0
 offset_right = 468.0
 offset_bottom = 83.0
 text = "DEBUG"
+
+[node name="UIOverlay" type="HBoxContainer" parent="."]
+offset_left = 17.0
+offset_top = 12.0
+offset_right = 201.0
+offset_bottom = 45.0
+size_flags_horizontal = 3
+
+[node name="CameraButton" type="Button" parent="UIOverlay"]
+custom_minimum_size = Vector2(35.69, 0)
+layout_mode = 2
+script = ExtResource("4_yakyd")
+
+[node name="CameraIcon" type="TextureRect" parent="UIOverlay/CameraButton"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 7.0
+offset_right = 31.0
+offset_bottom = 26.0
+texture = ExtResource("4_pruru")
+expand_mode = 1
+
+[node name="CurrentCameraName" type="Label" parent="UIOverlay"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Orbit Camera"
 
 [node name="hall" type="Node3D" parent="."]
 

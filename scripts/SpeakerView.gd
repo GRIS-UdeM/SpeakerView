@@ -16,14 +16,6 @@ var msaa_3d = [[Viewport.MSAA_DISABLED, "Disabled"],
 var anti_aliasing: Viewport.MSAA = Viewport.MSAA_2X
 
 const SG_SCALE: float = 10.0
-const MAX_ELEVATION = 89.0
-const MIN_ELEVATION = -89.0
-const MIN_ZOOM: float = 4.0
-const MAX_ZOOM: float = 70.0
-const ZOOM_RANGE: float = MAX_ZOOM - MIN_ZOOM
-const ZOOM_CURVE: float = 0.7
-const INVERSE_ZOOM_CURVE: float = 1.0 / ZOOM_CURVE
-const MOUSE_DRAG_SPEED: float = 0.1
 
 var selected_speaker_number: int = 0
 var reset_sources_position: bool = false
@@ -64,11 +56,6 @@ var show_sphere_or_cube: bool
 var spk_triplets: Array
 var SG_is_muted: bool = false
 
-var cam_radius = 20.0
-var rotation_speed = 0.1
-var camera_azimuth: float = 70.0
-var camera_elevation: float = 35.0
-var camera_zoom_velocity: float = 0.0
 
 var sphere_grid
 var cube_grid
@@ -84,7 +71,6 @@ var dome_grid_node
 var cube_grid_node
 var triplets_node
 var speakers_node
-var camera_node
 var hall_node
 
 func _ready():
@@ -93,7 +79,6 @@ func _ready():
 	cube_grid_node = get_node("origin_grid/cube")
 	triplets_node = get_node("triplets")
 	speakers_node = get_node("Speakers")
-	camera_node = get_node("Center/Camera")
 	hall_node = get_node("hall")
 	
 	sphere_grid = $sphere_grid
@@ -123,10 +108,13 @@ func _ready():
 		elif arg.contains("camPos="):
 			var values = arg.get_slice('=', 1)
 			var split_values = values.split(",", false, 3)
-			camera_azimuth = float(split_values[0])
-			camera_elevation = float(split_values[1])
-			cam_radius = float(split_values[2])
+			
+			var camera_node = get_viewport().get_camera_3d()
+			camera_node.camera_azimuth = float(split_values[0])
+			camera_node.camera_elevation = float(split_values[1])
+			var cam_radius = float(split_values[2])
 			clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
+			camera_node.cam_radius = cam_radius
 		dbgArgs += arg + " "
 	$Debug.text = dbgArgs
 	
@@ -164,7 +152,6 @@ func _process(delta):
 	
 	if is_started_by_SG:
 		# update_camera_position has to be called here if launched by SpatGris
-		update_camera_position()
 		
 		sphere_grid.visible = ((spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
 		cube_grid.visible = ((spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
@@ -172,42 +159,25 @@ func _process(delta):
 		dome_grid_node.visible = (spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)
 		cube_grid_node.visible = (spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)
 		
-		# camera zoom
-		var zoom_to_add = delta * camera_zoom_velocity
-		var current_zoom = (camera_node.global_position.length() - MIN_ZOOM) / ZOOM_RANGE
-		var scaled_zoom = pow(current_zoom, ZOOM_CURVE)
-		var scaled_target_zoom = max(scaled_zoom + zoom_to_add, 0.0)
-		var unclipped_target_zoom = pow(scaled_target_zoom, INVERSE_ZOOM_CURVE) * ZOOM_RANGE + MIN_ZOOM
-		var target_zoom = clamp(unclipped_target_zoom, MIN_ZOOM, MAX_ZOOM)
-		
-		camera_zoom_velocity *= pow(0.5, delta*8)
-		cam_radius = target_zoom
-		cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
+
+func switch_cameras():
+	if get_viewport().get_camera_3d() == %OrbitCamera:
+		%FreeCamera.current = true
+		%CurrentCameraName.text = "Free Camera"
+	else:
+		%OrbitCamera.current = true
+		%CurrentCameraName.text = "Orbit Camera"
 
 func _input(event):
-	if is_started_by_SG:
-		if event is InputEventMouseButton:
-			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				camera_zoom_velocity -= (camera_zoom_velocity + 2.0) * 0.1
-			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				camera_zoom_velocity += (camera_zoom_velocity + 1.0) * 0.1
-		
-		elif event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			camera_azimuth += event.relative.x * MOUSE_DRAG_SPEED
-			camera_elevation += event.relative.y * MOUSE_DRAG_SPEED
-			camera_elevation = clamp(camera_elevation, MIN_ELEVATION, MAX_ELEVATION)
-		
-		# trackpad on MacOS
-		elif event is InputEventPanGesture:
-			cam_radius += event.delta.y
-			cam_radius = clampf(cam_radius, camera_node.CAMERA_MIN_RADIUS, camera_node.CAMERA_MAX_RADIUS)
-		
-		elif event is InputEventKey:
+	if is_started_by_SG:		
+		if event is InputEventKey:
 			if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
 				if event.keycode == KEY_F:
 					handle_fullscreen()
 				elif event.keycode == KEY_F4:
 					handle_show_settings_window()
+				elif event.keycode == KEY_C:
+					switch_cameras()
 			# Handling quitting with CTRL or META + W
 			elif event.pressed and event.echo == false and event.keycode == KEY_W:
 				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
@@ -245,13 +215,6 @@ func _notification(what):
 			network_node.send_UDP()
 			save_settings()
 		get_tree().quit()
-
-func update_camera_position():
-	var x = cam_radius * cos(deg_to_rad(camera_azimuth)) * cos(deg_to_rad(camera_elevation))
-	var y = cam_radius * sin(deg_to_rad(camera_elevation))
-	var z = cam_radius * sin(deg_to_rad(camera_azimuth)) * cos(deg_to_rad(camera_elevation))
-	
-	camera_node.global_position = Vector3(x, y, z)
 
 func toggle_reset_sources_positions():
 	reset_sources_position = true
