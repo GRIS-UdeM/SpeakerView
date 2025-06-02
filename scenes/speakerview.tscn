@@ -501,6 +501,9 @@ layout_mode = 2
 keybinding_text = " R "
 help_text = "Reset camera position"
 
+[node name="ScrollContainer" type="ScrollContainer" parent="HelpPannel"]
+layout_mode = 2
+
 [node name="UIOverlay" type="HBoxContainer" parent="."]
 offset_left = 17.0
 offset_top = 12.0
