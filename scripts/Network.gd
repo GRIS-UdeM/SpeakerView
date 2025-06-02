@@ -19,18 +19,18 @@ var sources_node
 var speakers_node
 
 func _ready():
-	
+
 	speakerview_node = get_node("/root/SpeakerView")
 	sources_node = get_node("/root/SpeakerView/Sources")
 	speakers_node = get_node("/root/SpeakerView/Speakers")
-	
+
 	# Listen to SpatGris
 	udp_peer = PacketPeerUDP.new()
 	udp_peer.connect_to_host(SG_IP, SG_port)
 	# Send to SpatGris
 	udp_server = PacketPeerUDP.new()
 	udp_server.bind(speakerview_port, speakerview_IP)
-	
+
 	json_data = JSON.new()
 
 func _physics_process(_delta):
@@ -63,12 +63,12 @@ func listen_to_UDP():
 	# for some reason the server does not always bind...
 	if not udp_server.is_bound():
 		udp_server.bind(speakerview_port, speakerview_IP)
-	
+
 	num_of_udp_packets = udp_server.get_available_packet_count()
 	while udp_server.get_available_packet_count() > 0:
 		packet = udp_server.get_packet()
 		message = packet.get_string_from_ascii()
-		
+
 		# Parse JSON data
 		json_data.data = null
 		if json_data.parse(message) == OK:

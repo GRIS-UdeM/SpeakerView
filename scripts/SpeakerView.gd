@@ -139,7 +139,7 @@ func _ready():
 	if platform_is_macos and is_started_by_SG:
 		should_move_SG_to_foreground = !SV_started_by_SG_for_the_first_time
 
-func _process(delta):
+func _process(_delta):
 #	$FrameRate.text = str("FPS : ", Engine.get_frames_per_second())
 	if !is_started_by_SG:
 		show_noSG_alert()
@@ -178,6 +178,8 @@ func _input(event):
 					handle_show_settings_window()
 				elif event.keycode == KEY_C:
 					switch_cameras()
+				elif event.keycode == KEY_ESCAPE:
+					%HelpPannel.visible = false
 			# Handling quitting with CTRL or META + W
 			elif event.pressed and event.echo == false and event.keycode == KEY_W:
 				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
@@ -206,6 +208,8 @@ func _input(event):
 					handle_general_mute()
 				if event.keycode == KEY_R:
 					toggle_reset_sources_positions()
+				# force display update after user input
+				update_app_data(null)
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -222,22 +226,23 @@ func toggle_reset_sources_positions():
 	reset_sources_position = false
 
 func update_app_data(data: Variant):
-	SG_asked_to_kill_speakerview = data.killSV
-	speaker_setup_name = data.spkStpName
-	SG_has_focus = data.SGHasFocus
-	SV_keep_on_top = data.KeepSVOnTop
-	SV_should_grab_focus = data.SVGrabFocus
-	show_hall = data.showHall
-	spat_mode = data.spatMode
-	show_source_numbers = data.showSourceNumber
-	show_speaker_numbers = data.showSpeakerNumber
-	show_speakers = data.showSpeakers
-	show_speaker_triplets = data.showSpeakerTriplets
-	show_source_activity = data.showSourceActivity
-	show_speaker_level = data.showSpeakerLevel
-	show_sphere_or_cube = data.showSphereOrCube
-	spk_triplets = data.spkTriplets
-	SG_is_muted = data.genMute
+	if data:
+		SG_asked_to_kill_speakerview = data.killSV
+		speaker_setup_name = data.spkStpName
+		SG_has_focus = data.SGHasFocus
+		SV_keep_on_top = data.KeepSVOnTop
+		SV_should_grab_focus = data.SVGrabFocus
+		show_hall = data.showHall
+		spat_mode = data.spatMode
+		show_source_numbers = data.showSourceNumber
+		show_speaker_numbers = data.showSpeakerNumber
+		show_speakers = data.showSpeakers
+		show_speaker_triplets = data.showSpeakerTriplets
+		show_source_activity = data.showSourceActivity
+		show_speaker_level = data.showSpeakerLevel
+		show_sphere_or_cube = data.showSphereOrCube
+		spk_triplets = data.spkTriplets
+		SG_is_muted = data.genMute
 	
 	if show_speaker_triplets and !spk_triplets.is_empty() and show_speakers:
 		triplets_node.visible = true
@@ -425,3 +430,9 @@ func set_SV_anti_aliasing(msaa: Viewport.MSAA) -> void:
 	anti_aliasing = get_viewport().get_msaa_3d()
 	DebugMenu.update_settings_label()
 	
+
+func _on_help_panel_button_pressed() -> void:
+	%HelpPannel.visible = not %HelpPannel.visible
+
+func _on_help_panel_close_button_pressed() -> void:
+	%HelpPannel.visible = false

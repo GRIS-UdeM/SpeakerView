@@ -1,8 +1,9 @@
-[gd_scene load_steps=69 format=3 uid="uid://dgx85am3uu7o7"]
+[gd_scene load_steps=71 format=3 uid="uid://dgx85am3uu7o7"]
 
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
 [ext_resource type="Script" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
 [ext_resource type="Script" path="res://scripts/FreeCamera.gd" id="2_iqjbo"]
+[ext_resource type="PackedScene" path="res://scenes/keybinding.tscn" id="4_b1xjj"]
 [ext_resource type="Texture2D" uid="uid://pasb43352uxo" path="res://assets/camera.png" id="4_pruru"]
 [ext_resource type="Script" path="res://scripts/switch_camera_button.gd" id="4_yakyd"]
 [ext_resource type="Script" path="res://scripts/axes.gd" id="5_2k5yi"]
@@ -16,6 +17,13 @@
 font_size = 54
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6didg"]
+bg_color = Color(0.24, 0.24, 0.24, 0.4)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vny03"]
 albedo_color = Color(0.254902, 0.247059, 0.231373, 1)
@@ -291,12 +299,219 @@ offset_right = 468.0
 offset_bottom = 83.0
 text = "DEBUG"
 
+[node name="HelpPannel" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 85
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="Panel" type="Panel" parent="HelpPannel"]
+layout_mode = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_6didg")
+
+[node name="MarginContainer" type="MarginContainer" parent="HelpPannel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HelpPannel/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HelpPannel/Panel/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 17
+
+[node name="CloseButton" type="Button" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = " X "
+
+[node name="GlobalControis" type="VBoxContainer" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/separation = 7
+
+[node name="Spacer" type="Control" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+custom_minimum_size = Vector2(0, 9.615)
+layout_mode = 2
+
+[node name="GlobalControlsTitle" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Global Controls"
+
+[node name="KeybindingHelp" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " F "
+help_text = "Toggle fullscreen"
+
+[node name="KeybindingHelp2" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "f4"
+help_text = "Show performance window"
+
+[node name="KeybindingHelp3" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " C "
+help_text = "Switch camera"
+
+[node name="KeybindingHelp4" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Ctrl+W"
+help_text = "Close SpeakerView"
+
+[node name="KeybindingHelp5" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+H"
+help_text = "Show hall"
+
+[node name="KeybindingHelp6" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+N"
+help_text = "Show source numbers"
+
+[node name="KeybindingHelp7" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+S"
+help_text = "Show speaker numbers"
+
+[node name="KeybindingHelp8" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+T"
+help_text = "Show speaker triplets (only in Dome)"
+
+[node name="KeybindingHelp9" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+A"
+help_text = "Show speaker activity"
+
+[node name="KeybindingHelp10" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+L"
+help_text = "Show speaker level"
+
+[node name="KeybindingHelp11" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+O"
+help_text = "Show sphere or cube"
+
+[node name="CameraControls" type="VBoxContainer" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 0
+theme_override_constants/separation = 4
+
+[node name="Spacer2" type="Control" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 9.615)
+layout_mode = 2
+
+[node name="OrbitCameraControlsTitle" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 40.005)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Orbit Camera Controls"
+
+[node name="KeybindingHelp" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Left Click"
+help_text = "Rotate camera"
+
+[node name="KeybindingHelp2" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+custom_minimum_size = Vector2(0, 0.83)
+layout_mode = 2
+keybinding_text = "Scroll Wheel"
+help_text = "Zoom in and out"
+
+[node name="Spacer" type="Control" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 9.615)
+layout_mode = 2
+
+[node name="FreeCameraControlsTitle" type="Label" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 40.005)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Free Camera Controls"
+
+[node name="KeybindingHelp10" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Right Click"
+help_text = "Rotate camera"
+
+[node name="KeybindingHelp12" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Left Click"
+help_text = "Move camera"
+
+[node name="KeybindingHelp11" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+custom_minimum_size = Vector2(0, 0.83)
+layout_mode = 2
+keybinding_text = "Scroll Wheel"
+help_text = "Zoom in and out"
+
+[node name="KeybindingHelp3" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " W "
+help_text = "Go forward"
+
+[node name="KeybindingHelp4" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " A "
+help_text = "Strafe left"
+
+[node name="KeybindingHelp5" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " S "
+help_text = "Go backward"
+
+[node name="KeybindingHelp6" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " D "
+help_text = "Strafe right"
+
+[node name="KeybindingHelp7" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " Q "
+help_text = "Go up"
+
+[node name="KeybindingHelp8" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " E "
+help_text = "Go down"
+
+[node name="KeybindingHelp9" parent="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " R "
+help_text = "Reset camera position"
+
 [node name="UIOverlay" type="HBoxContainer" parent="."]
 offset_left = 17.0
 offset_top = 12.0
 offset_right = 201.0
 offset_bottom = 45.0
 size_flags_horizontal = 3
+
+[node name="HelpPannelButton" type="Button" parent="UIOverlay"]
+custom_minimum_size = Vector2(35.69, 0)
+layout_mode = 2
+text = "?"
 
 [node name="CameraButton" type="Button" parent="UIOverlay"]
 custom_minimum_size = Vector2(35.69, 0)
@@ -705,3 +920,6 @@ script = ExtResource("9_376al")
 
 [node name="Speakers" type="Node" parent="."]
 script = ExtResource("10_0gnjq")
+
+[connection signal="pressed" from="HelpPannel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CloseButton" to="." method="_on_help_panel_close_button_pressed"]
+[connection signal="pressed" from="UIOverlay/HelpPannelButton" to="." method="_on_help_panel_button_pressed"]
