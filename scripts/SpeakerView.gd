@@ -209,7 +209,7 @@ func _input(event):
 				if event.keycode == KEY_R:
 					toggle_reset_sources_positions()
 				# force display update after user input
-				update_app_data(null)
+				update_display()
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -225,25 +225,31 @@ func toggle_reset_sources_positions():
 	network_node.send_UDP()
 	reset_sources_position = false
 
-func update_app_data(data: Variant):
-	if data:
-		SG_asked_to_kill_speakerview = data.killSV
-		speaker_setup_name = data.spkStpName
-		SG_has_focus = data.SGHasFocus
-		SV_keep_on_top = data.KeepSVOnTop
-		SV_should_grab_focus = data.SVGrabFocus
-		show_hall = data.showHall
-		spat_mode = data.spatMode
-		show_source_numbers = data.showSourceNumber
-		show_speaker_numbers = data.showSpeakerNumber
-		show_speakers = data.showSpeakers
-		show_speaker_triplets = data.showSpeakerTriplets
-		show_source_activity = data.showSourceActivity
-		show_speaker_level = data.showSpeakerLevel
-		show_sphere_or_cube = data.showSphereOrCube
-		spk_triplets = data.spkTriplets
-		SG_is_muted = data.genMute
-	
+func update_app_data_from_json(data: Variant):
+	SG_asked_to_kill_speakerview = data.killSV
+	speaker_setup_name = data.spkStpName
+	SG_has_focus = data.SGHasFocus
+	SV_keep_on_top = data.KeepSVOnTop
+	SV_should_grab_focus = data.SVGrabFocus
+	show_hall = data.showHall
+	spat_mode = data.spatMode
+	show_source_numbers = data.showSourceNumber
+	show_speaker_numbers = data.showSpeakerNumber
+	show_speakers = data.showSpeakers
+	show_speaker_triplets = data.showSpeakerTriplets
+	show_source_activity = data.showSourceActivity
+	show_speaker_level = data.showSpeakerLevel
+	show_sphere_or_cube = data.showSphereOrCube
+	spk_triplets = data.spkTriplets
+	SG_is_muted = data.genMute
+	update_display()
+
+func update_app_data_from_osc(data: Dictionary):
+	update_display()
+
+func update_display():
+	## this updates the display. Should be called when the state is changed from OSC, udp JSON or
+	## user input.
 	if show_speaker_triplets and !spk_triplets.is_empty() and show_speakers:
 		triplets_node.visible = true
 		render_spk_triplets()
