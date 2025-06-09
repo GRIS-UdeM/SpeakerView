@@ -511,6 +511,7 @@ help_text = "Reset camera position"
 
 [node name="ConfigPanel" type="MarginContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1026,5 +1027,6 @@ script = ExtResource("10_0gnjq")
 [connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/HBoxContainer/TextEdit" to="Network/OSCServer" method="_on_text_edit_value_changed"]
 [connection signal="pressed" from="UIOverlay/HelpPannelButton" to="." method="_on_help_panel_button_pressed"]
 [connection signal="pressed" from="UIOverlay/SettingsButton" to="ConfigPanel" method="_on_settings_button_pressed"]
+[connection signal="control_message_received" from="Network/OSCServer" to="." method="_on_osc_server_control_message_received"]
 [connection signal="source_message_received" from="Network/OSCServer" to="Sources" method="_on_osc_server_source_message_received"]
 [connection signal="speaker_message_received" from="Network/OSCServer" to="Speakers" method="_on_osc_server_speaker_message_received"]

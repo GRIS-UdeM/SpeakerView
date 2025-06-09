@@ -444,3 +444,25 @@ func _on_help_panel_button_pressed() -> void:
 
 func _on_help_panel_close_button_pressed() -> void:
 	%HelpPanel.visible = false
+
+func _on_osc_server_control_message_received(address: String, value: Variant) -> void:
+	var components : PackedStringArray = address.split("/")
+	print(components)
+	print(value)
+	match components[2]:
+		"show_source_numbers":
+			show_source_numbers = value
+		"show_speaker_numbers":
+			show_speaker_numbers = value
+		"show_hall":
+			show_hall = value
+		"show_sphere_or_cube":
+			show_sphere_or_cube = value
+		"spat_mode":
+			match value:
+				"dome":
+					spat_mode = SpatMode.DOME
+				"cube":
+					spat_mode = SpatMode.CUBE
+	update_display()
+		

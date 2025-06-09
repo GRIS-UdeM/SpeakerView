@@ -15,6 +15,12 @@ arguments = parser.parse_args()
 osc_client = udp_client.SimpleUDPClient(arguments.osc_address, arguments.osc_out_port, allow_broadcast=True)
 
 def send_all_the_osc():
+    osc_client.send_message(f"/control/show_source_numbers", True)
+    osc_client.send_message(f"/control/show_speaker_numbers", True)
+    osc_client.send_message(f"/control/spat_mode", "cube")
+    osc_client.send_message(f"/control/show_hall", True)
+    osc_client.send_message(f"/control/show_sphere_or_cube", True)
+
     for i in range(50):
         val = i*1.2/50
         # source osc messages
