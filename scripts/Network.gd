@@ -78,4 +78,4 @@ func listen_to_UDP():
 				elif json_data.data[0] == "speakers":
 					speakers_node.set_speakers_info(json_data.data)
 			elif typeof(json_data.data) == Variant.Type.TYPE_DICTIONARY:
-				speakerview_node.update_app_data(json_data.data)
+				speakerview_node.update_app_data_from_json(json_data.data)

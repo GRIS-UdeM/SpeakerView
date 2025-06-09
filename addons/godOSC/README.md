@@ -28,6 +28,3 @@ if target_server.incoming_messages.has(osc_address):
 
 # OSCMessage
 A convenience node for creating an OSC message. This can be placed anywhere within your scene but an OSCClient must be present to work. Again, make sure to *extend* the script on the OSC message to add your own code.
-
-
-

@@ -179,7 +179,8 @@ func _input(event):
 				elif event.keycode == KEY_C:
 					switch_cameras()
 				elif event.keycode == KEY_ESCAPE:
-					%HelpPannel.visible = false
+					%HelpPanel.visible = false
+					%ConfigPanel.visible = false
 			# Handling quitting with CTRL or META + W
 			elif event.pressed and event.echo == false and event.keycode == KEY_W:
 				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
@@ -244,7 +245,7 @@ func update_app_data_from_json(data: Variant):
 	SG_is_muted = data.genMute
 	update_display()
 
-func update_app_data_from_osc(data: Dictionary):
+func update_app_data_from_osc():
 	update_display()
 
 func update_display():
@@ -438,7 +439,8 @@ func set_SV_anti_aliasing(msaa: Viewport.MSAA) -> void:
 	
 
 func _on_help_panel_button_pressed() -> void:
-	%HelpPannel.visible = not %HelpPannel.visible
+	%HelpPanel.visible = not %HelpPanel.visible
+	%ConfigPanel.visible = false
 
 func _on_help_panel_close_button_pressed() -> void:
-	%HelpPannel.visible = false
+	%HelpPanel.visible = false

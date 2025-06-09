@@ -39,7 +39,11 @@ run/main_run_args="-- launchedBySG=true"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/godOSC/plugin.cfg")
+
+[network]
+
+limits/debugger/max_chars_per_second=200000
 
 [rendering]
 

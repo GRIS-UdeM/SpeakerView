@@ -14,6 +14,12 @@ var network_node
 var speakers_node
 var area_node
 
+func _process(_delta):
+	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
+	if speaker_number_mesh.visible:
+		speaker_number_mesh.look_at(get_viewport().get_camera_3d().global_position, Vector3(0, 1, 0), true)
+
+
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
 	network_node = get_node("/root/SpeakerView/Network")
