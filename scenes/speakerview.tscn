@@ -15,7 +15,7 @@
 [ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
 [ext_resource type="Script" path="res://scripts/no_sg_panel.gd" id="9_n6adn"]
 [ext_resource type="Script" path="res://scripts/Speakers.gd" id="10_0gnjq"]
-[ext_resource type="Script" path="res://addons/godOSC/scripts/OSCServer.gd" id="11_14o1l"]
+[ext_resource type="Script" path="res://scripts/OSCServer.gd" id="11_14o1l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6didg"]
 bg_color = Color(0.24, 0.24, 0.24, 0.4)

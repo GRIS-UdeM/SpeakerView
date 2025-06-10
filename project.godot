@@ -39,7 +39,7 @@ run/main_run_args="-- launchedBySG=true"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg", "res://addons/godOSC/plugin.cfg")
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
 
 [network]
 
