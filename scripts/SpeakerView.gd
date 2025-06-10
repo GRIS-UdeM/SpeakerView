@@ -453,5 +453,7 @@ func _on_osc_server_control_message_received(address: String, value: Variant) ->
 					spat_mode = SpatMode.DOME
 				"cube":
 					spat_mode = SpatMode.CUBE
+				"hybrid":
+					spat_mode = SpatMode.HYBRID
 	update_display()
 		
