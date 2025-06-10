@@ -1,10 +1,6 @@
-@icon("res://addons/godOSC/images/OSCServer.svg")
-class_name OSCServer
 extends Node
 ## Server for recieving Open Sound Control messages over UDP.
 
-## This is a modified version of https://github.com/afarra6/godOSC/blob/main/addons/godOSC/scripts/OSCServer.gd
-## Thanks.
 
 ## The port over which to recieve messages
 @export var port = 4646
