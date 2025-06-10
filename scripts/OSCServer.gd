@@ -1,5 +1,3 @@
-@icon("res://addons/godOSC/images/OSCServer.svg")
-class_name OSCServer
 extends Node
 ## Server for recieving Open Sound Control messages over UDP.
 

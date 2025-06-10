@@ -15,7 +15,7 @@
 [ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
 [ext_resource type="Script" path="res://scripts/no_sg_panel.gd" id="9_n6adn"]
 [ext_resource type="Script" path="res://scripts/Speakers.gd" id="10_0gnjq"]
-[ext_resource type="Script" path="res://addons/godOSC/scripts/OSCServer.gd" id="11_14o1l"]
+[ext_resource type="Script" path="res://scripts/OSCServer.gd" id="14_7bw8e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6didg"]
 bg_color = Color(0.24, 0.24, 0.24, 0.4)
@@ -1057,7 +1057,7 @@ material_override = SubResource("StandardMaterial3D_0akp0")
 script = ExtResource("8_ntmpu")
 
 [node name="OSCServer" type="Node" parent="Network"]
-script = ExtResource("11_14o1l")
+script = ExtResource("14_7bw8e")
 
 [node name="Sources" type="Node" parent="."]
 script = ExtResource("9_376al")
@@ -1067,7 +1067,6 @@ script = ExtResource("10_0gnjq")
 
 [connection signal="pressed" from="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CloseButton" to="." method="_on_help_panel_close_button_pressed"]
 [connection signal="pressed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer2/CloseButton" to="ConfigPanel" method="_on_settings_button_pressed"]
-[connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/HBoxContainer/TextEdit" to="Network/OSCServer" method="_on_text_edit_value_changed"]
 [connection signal="pressed" from="UIOverlay/HelpPannelButton" to="." method="_on_help_panel_button_pressed"]
 [connection signal="pressed" from="UIOverlay/SettingsButton" to="ConfigPanel" method="_on_settings_button_pressed"]
 [connection signal="pressed" from="NoSGPanel/Panel/MarginContainer/VBoxContainer/Button" to="NoSGPanel" method="_on_button_pressed"]
