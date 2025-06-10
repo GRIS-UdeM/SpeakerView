@@ -46,6 +46,8 @@ func _unhandled_input(event):
 		return
 	# Receives mouse motion
 	if event is InputEventMouseMotion:
+		if _left_click_pressed:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		_mouse_position = event.relative
 	
 	# Receives mouse button input
@@ -55,8 +57,9 @@ func _unhandled_input(event):
 				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if event.pressed else Input.MOUSE_MODE_VISIBLE)
 				_right_click_pressed = event.pressed
 			MOUSE_BUTTON_LEFT:
-				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if event.pressed else Input.MOUSE_MODE_VISIBLE)
 				_left_click_pressed = event.pressed
+				if not event.pressed:
+					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			MOUSE_BUTTON_WHEEL_DOWN:
 				_wheel_impulse +=5
 			MOUSE_BUTTON_WHEEL_UP:
