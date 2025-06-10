@@ -136,28 +136,26 @@ func _ready():
 	
 	get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
 	
+	if !is_started_by_SG:
+		%NoSGPanel.visible = true
 	if platform_is_macos and is_started_by_SG:
 		should_move_SG_to_foreground = !SV_started_by_SG_for_the_first_time
 
 func _process(_delta):
 #	$FrameRate.text = str("FPS : ", Engine.get_frames_per_second())
-	if !is_started_by_SG:
-		show_noSG_alert()
-		return
 	
 	if window_position != get_viewport().position or window_size != get_viewport().size:
 		window_position = get_viewport().position
 		window_size = get_viewport().size
 		network_node.send_UDP()
 	
-	if is_started_by_SG:
-		# update_camera_position has to be called here if launched by SpatGris
+	# update_camera_position has to be called here if launched by SpatGris
 		
-		sphere_grid.visible = ((spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
-		cube_grid.visible = ((spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
+	sphere_grid.visible = ((spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
+	cube_grid.visible = ((spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)) and show_sphere_or_cube
 		
-		dome_grid_node.visible = (spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)
-		cube_grid_node.visible = (spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)
+	dome_grid_node.visible = (spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)
+	cube_grid_node.visible = (spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)
 		
 
 func switch_cameras():
@@ -169,48 +167,48 @@ func switch_cameras():
 		%CurrentCameraName.text = "Orbit Camera"
 
 func _input(event):
-	if is_started_by_SG:		
-		if event is InputEventKey:
-			if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
-				if event.keycode == KEY_F:
-					handle_fullscreen()
-				elif event.keycode == KEY_F4:
-					handle_show_settings_window()
-				elif event.keycode == KEY_C:
-					switch_cameras()
-				elif event.keycode == KEY_ESCAPE:
-					%HelpPanel.visible = false
-					%ConfigPanel.visible = false
-			# Handling quitting with CTRL or META + W
-			elif event.pressed and event.echo == false and event.keycode == KEY_W:
-				if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
-					get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
-			elif event.pressed and event.echo == false and event.alt_pressed and event.shift_pressed:
-				handle_keep_SV_on_top()
-			elif event.pressed and event.echo == false and event.alt_pressed:
-				if event.keycode == KEY_H:
-					handle_show_hall()
-				elif event.keycode == KEY_N:
-					handle_show_source_numbers()
-				elif event.keycode == KEY_Z:
-					handle_show_speaker_numbers()
-				elif event.keycode == KEY_S:
-					handle_show_speakers()
-				elif event.keycode == KEY_T:
-					if spat_mode != SpatMode.CUBE and show_speakers:
-						handle_show_speaker_triplets()
-				elif event.keycode == KEY_A:
-					handle_show_source_activity()
-				elif event.keycode == KEY_L:
-					handle_show_speaker_level()
-				elif event.keycode == KEY_O:
-					handle_show_sphere_or_cube()
-				elif event.keycode == KEY_Q:
-					handle_general_mute()
-				if event.keycode == KEY_R:
-					toggle_reset_sources_positions()
-				# force display update after user input
-				update_display()
+	if event is InputEventKey:
+		if event.pressed and event.get_modifiers_mask() == 0 and event.echo == false:
+			if event.keycode == KEY_F:
+				handle_fullscreen()
+			elif event.keycode == KEY_F4:
+				handle_show_settings_window()
+			elif event.keycode == KEY_C:
+				switch_cameras()
+			elif event.keycode == KEY_ESCAPE:
+				%HelpPanel.visible = false
+				%ConfigPanel.visible = false
+				%NoSGPanel.visible = false
+		# Handling quitting with CTRL or META + W
+		elif event.pressed and event.echo == false and event.keycode == KEY_W:
+			if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
+				get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+		elif event.pressed and event.echo == false and event.alt_pressed and event.shift_pressed:
+			handle_keep_SV_on_top()
+		elif event.pressed and event.echo == false and event.alt_pressed:
+			if event.keycode == KEY_H:
+				handle_show_hall()
+			elif event.keycode == KEY_N:
+				handle_show_source_numbers()
+			elif event.keycode == KEY_Z:
+				handle_show_speaker_numbers()
+			elif event.keycode == KEY_S:
+				handle_show_speakers()
+			elif event.keycode == KEY_T:
+				if spat_mode != SpatMode.CUBE and show_speakers:
+					handle_show_speaker_triplets()
+			elif event.keycode == KEY_A:
+				handle_show_source_activity()
+			elif event.keycode == KEY_L:
+				handle_show_speaker_level()
+			elif event.keycode == KEY_O:
+				handle_show_sphere_or_cube()
+			elif event.keycode == KEY_Q:
+				handle_general_mute()
+			if event.keycode == KEY_R:
+				toggle_reset_sources_positions()
+			# force display update after user input
+			update_display()
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -380,15 +378,6 @@ func handle_show_sphere_or_cube():
 func handle_general_mute():
 	SG_is_muted = !SG_is_muted
 	network_node.send_UDP()
-
-func show_noSG_alert():
-	var alert_label = $AlertNoSGLabel
-	var axes = $axes
-	var win_size = get_window().size
-	
-	alert_label.size = win_size
-	alert_label.visible = true
-	axes.visible = false
 
 func handle_show_settings_window():
 	if settings_window_inst in get_children():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://dgx85am3uu7o7"]
+[gd_scene load_steps=76 format=3 uid="uid://dgx85am3uu7o7"]
 
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
 [ext_resource type="Script" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
@@ -13,13 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://c51kvjg8rfpuq" path="res://scenes/cube_grid.tscn" id="7_mddiq"]
 [ext_resource type="Script" path="res://scripts/Network.gd" id="8_ntmpu"]
 [ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
+[ext_resource type="Script" path="res://scripts/no_sg_panel.gd" id="9_n6adn"]
 [ext_resource type="Script" path="res://scripts/Speakers.gd" id="10_0gnjq"]
 [ext_resource type="Script" path="res://addons/godOSC/scripts/OSCServer.gd" id="11_14o1l"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_8vjol"]
-font_size = 54
-outline_size = 8
-outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6didg"]
 bg_color = Color(0.24, 0.24, 0.24, 0.4)
@@ -27,6 +23,11 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpma7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_t7apa"]
+font_size = 22
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vny03"]
 albedo_color = Color(0.254902, 0.247059, 0.231373, 1)
@@ -283,16 +284,6 @@ offset_left = 2.0
 offset_top = 32.0
 offset_right = 142.0
 offset_bottom = 58.0
-
-[node name="AlertNoSGLabel" type="Label" parent="."]
-visible = false
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Please close this window and start SpeakerView from the SpatGris View menu"
-label_settings = SubResource("LabelSettings_8vjol")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
 
 [node name="Debug" type="Label" parent="."]
 visible = false
@@ -629,6 +620,58 @@ expand_mode = 1
 unique_name_in_owner = true
 layout_mode = 2
 text = "Orbit Camera"
+
+[node name="NoSGPanel" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("9_n6adn")
+
+[node name="Panel" type="Panel" parent="NoSGPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qpma7")
+
+[node name="MarginContainer" type="MarginContainer" parent="NoSGPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 95
+theme_override_constants/margin_top = 71
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 145
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NoSGPanel/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="AlertNoSGLabel" type="Label" parent="NoSGPanel/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 0
+text = "You have started SpeakerView in standalone mode. If you intend to use SpeakerView with SpatGRIS on the same computer,  you can close this window and open SpatGRIS.
+
+If you intend to use SpeakerView's OSC integration, click the Ok button !"
+label_settings = SubResource("LabelSettings_t7apa")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="NoSGPanel/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_override_font_sizes/font_size = 25
+text = "Ok !"
 
 [node name="hall" type="Node3D" parent="."]
 
@@ -1027,6 +1070,7 @@ script = ExtResource("10_0gnjq")
 [connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/HBoxContainer/TextEdit" to="Network/OSCServer" method="_on_text_edit_value_changed"]
 [connection signal="pressed" from="UIOverlay/HelpPannelButton" to="." method="_on_help_panel_button_pressed"]
 [connection signal="pressed" from="UIOverlay/SettingsButton" to="ConfigPanel" method="_on_settings_button_pressed"]
+[connection signal="pressed" from="NoSGPanel/Panel/MarginContainer/VBoxContainer/Button" to="NoSGPanel" method="_on_button_pressed"]
 [connection signal="control_message_received" from="Network/OSCServer" to="." method="_on_osc_server_control_message_received"]
 [connection signal="source_message_received" from="Network/OSCServer" to="Sources" method="_on_osc_server_source_message_received"]
 [connection signal="speaker_message_received" from="Network/OSCServer" to="Speakers" method="_on_osc_server_speaker_message_received"]

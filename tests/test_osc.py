@@ -36,6 +36,8 @@ def send_all_the_osc():
             osc_client.send_message(f"/speaker/{i}/is_selected", True)
         if i%10 == 0:
             osc_client.send_message(f"/speaker/{i}/is_direct_out_only", True)
+        # Godot's PeerUDP thingy has a fixed size circular buffer. If python sends osc as fast as it can,
+        # messages are lost before being processed.
         sleep(0.005)
 
 print("sending osc")
