@@ -1,7 +1,7 @@
 # SpeakerView Tests
 
 ## OSC Communication Test
-This test is written in python and sends all the OSC messages that SpeakerView understands. Its not really a proper tests with pass or fail but if you see the right output theres a good chance that everything is working fine.
+This test is written in python and sends all the OSC messages that SpeakerView understands. It's not really a proper test with pass or fail but if you see the right output there's a good chance that everything is working fine.
 
 ### Installing the Eequirements
 
