@@ -1,5 +1,8 @@
 extends Node
-## Server for recieving Open Sound Control messages over UDP.
+## This file is taken and slightly modified from https://github.com/afarra6/godOSC/blob/main/addons/godOSC/scripts/OSCServer.gd
+## Thanks !
+
+## Server for receiving Open Sound Control messages over UDP.
 
 
 ## The port over which to recieve messages
@@ -9,7 +12,7 @@ extends Node
 ## but require more calculations per frame. The default rate should work for most use cases.
 ## A simple way to determine
 ## a reasonable parse rate would be to use the following equation:
-## amount of recieved messages * average message rate / 60.
+## amount of received messages * average message rate / 60.
 #@export var parse_rate = 10 deprecated
 var server = UDPServer.new()
 var peers: Array[PacketPeerUDP] = []
@@ -111,22 +114,15 @@ func parse_bundle(packet: PackedByteArray):
 
 		elif packet[i*4+1] == 47 and packet[i*4 - 2] <= 0 and packet.slice(i*4 - 4, i*4) != PackedByteArray([1, 0, 0, 0]):
 			mess_num.append(i*4-4)
-
-
 		pass
 
 	# Add messages to an array
 	for i in range(len(mess_num)):
-
 		if i  < len(mess_num) - 1:
 			messages.append(packet.slice(mess_num[i]+4, mess_num[i+1]+1))
 		else:
 			var pack = packet.slice(mess_num[i]+4)
-
 			messages.append(pack)
-
-
-
 
 	# Iterate and parse the messages
 	for bund_packet in messages:
@@ -138,7 +134,6 @@ func parse_bundle(packet: PackedByteArray):
 		var args = bund_packet.slice(comma_index, packet.size())
 		var tags = args.get_string_from_ascii()
 		var vals = []
-
 
 		args = args.slice(ceili((tags.length() + 1) / 4.0) * 4, args.size())
 
