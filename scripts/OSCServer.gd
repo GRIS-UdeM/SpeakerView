@@ -173,5 +173,4 @@ func parse_bundle(packet: PackedByteArray):
 
 
 func _on_text_edit_value_changed(value: float) -> void:
-	print(value)
 	listen(value)
