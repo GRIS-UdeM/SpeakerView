@@ -41,6 +41,10 @@ run/main_run_args="-- launchedBySG=true"
 
 enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
 
+[network]
+
+limits/debugger/max_chars_per_second=200000
+
 [rendering]
 
 textures/vram_compression/import_etc2_astc=true
