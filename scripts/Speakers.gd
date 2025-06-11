@@ -108,8 +108,8 @@ func update_speaker_display(speaker, spk_alpha=null):
 
 
 func update_single_speaker(speaker_number, prop_name, prop_value):
-	## This should be called when a single attribute of a speaker is changed by
-	## an osc message.
+	## This should be called when a single attribute of a speaker is changed.
+	## Right now this only happens when we receive an osc message.
 	var matching_speaker = speakers_scenes.filter(func(speaker): return speaker.spk_number == int(speaker_number))
 	if matching_speaker.is_empty():
 		var instance = spk_scn.instantiate()
