@@ -21,6 +21,9 @@ var spk_num_mat: StandardMaterial3D
 var speakerview_node
 var spk_scn = load("res://scenes/speaker.tscn")
 
+var MIN_SPEAKER_SCALE: float = 0.4
+var AUTO_SCALE_INCREMENT = 0.02
+
 func set_speakers_info(data: Variant):
 	if project_num_speakers != data.size() - 1 or speakers_scenes.size() != data.size() - 1:
 		project_num_speakers = data.size() - 1
@@ -78,7 +81,7 @@ func update_speaker_display(speaker, spk_alpha=null):
 	else:
 		transparency = 1.0 - spk_alpha
 
-	var cube_edges = speaker.get_node("cube_edges")
+	var cube_edges = speaker.get_node("cube/cube_edges")
 	var cube_edges_mesh = cube_edges.get_node("Cube")
 
 	if speaker.spk_is_selected:
@@ -105,7 +108,54 @@ func update_speaker_display(speaker, spk_alpha=null):
 		cube.look_at(Vector3(0, 0, 0), up_vector, true)
 	if cube_edges.is_inside_tree():
 		cube_edges.look_at(Vector3(0, 0, 0), up_vector, true)
+	should_autoscale = true
 
+var should_autoscale = false
+
+func decrement_scale(cube:MeshInstance3D):
+	if cube == null:
+		return
+	var old_scale = cube.transform.basis.get_scale()[0]
+	var new_scale = max(MIN_SPEAKER_SCALE, old_scale - AUTO_SCALE_INCREMENT)
+	if not is_equal_approx(new_scale, old_scale):
+		should_autoscale = true
+		cube.scale = Vector3(new_scale, new_scale, new_scale)
+		var speaker_number_mesh = cube.get_parent().speaker_number_mesh
+		speaker_number_mesh.global_position = cube.get_parent().global_position + Vector3(0, 1*new_scale, 0)
+		speaker_number_mesh.scale = Vector3(3*new_scale, 3*new_scale, 1*new_scale)
+
+
+func autoscale_speakers():
+	## This iterates over all of the speakers and tries to determine whether or not
+	## they should be rescaled. This algorithm finds a speaker that is not yet scaled
+	## as small as possible and that is overlapping with at least another speaker's mesh.
+	## It then finds all the neighbouring speakers that are also overlapping with another speaker's mesh.
+	## It finaly decreases the scale of each one of these speakers and of their displayed text by a small increment.
+	## Calling this function will set the "should_autoscale" boolean to true if it did any scaling work,
+	## meaning another call to this function may potentially decrease the scale further.
+	should_autoscale = false
+	for speaker in speakers_scenes:
+		var cube:MeshInstance3D = speaker.get_node("cube")
+		if is_equal_approx(cube.transform.basis.get_scale()[0], MIN_SPEAKER_SCALE):
+			continue
+		if speaker.get_node_or_null("cube/Area3D"):
+			var overlapping_speakers = speaker.get_node("cube/Area3D").get_overlapping_areas()
+			if overlapping_speakers.size() == 0:
+				continue
+			should_autoscale = true
+			var neighbouring_areas = speaker.get_node("Neighbourhood").get_overlapping_areas()
+			# we should only scale neighbours that actually overlap with something.
+			var neighbours_area_we_should_scale = neighbouring_areas.filter(func(n_a): n_a.get_overlapping_areas())
+			decrement_scale(cube)
+			for n_area in neighbours_area_we_should_scale:
+				var n_cube:MeshInstance3D = n_area.get_parent()
+				decrement_scale(n_cube)
+
+func _physics_process(delta: float) -> void:
+	## we need to autoscale_speakers() here because since we rely on collisions,
+	## we need to wait a physic tick for them to be updated.
+	if should_autoscale:
+		autoscale_speakers()
 
 func update_single_speaker(speaker_number, prop_name, prop_value):
 	## This should be called when a single attribute of a speaker is changed.
