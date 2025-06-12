@@ -57,11 +57,18 @@ func update_spk_scenes(data: Variant):
 		var spk_is_selected = data[index][2]
 		var spk_is_direct_out_only = data[index][3]
 		var spk_alpha = data[index][4]
+		var spk_center_pos
+		
+		if data[index].size() > 5:
+			
+			spk_center_pos = data[index][5]
+		else:
+			spk_center_pos = [0,0,0]
 		spk.spk_is_selected = spk_is_selected
 		spk.spk_is_direct_out_only = spk_is_direct_out_only
-		spk.transform.origin = Vector3(spk_position[0], spk_position[2], -spk_position[1]) * speakerview_node.SG_SCALE
-
 		# SG is XZ-Y, Godot is XYZ
+		spk.transform.origin = Vector3(spk_position[0], spk_position[2], -spk_position[1]) * speakerview_node.SG_SCALE
+		spk.center_position = Vector3(spk_center_pos[0], spk_center_pos[2], -spk_center_pos[1])
 		if spk.spk_number != spk_number:
 			spk.spk_number = spk_number
 			spk.reset_spk_number()
@@ -102,9 +109,12 @@ func update_speaker_display(speaker, spk_alpha=null):
 	if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
 		up_vector = Vector3(0, 0, 1)
 	if cube.is_inside_tree():
-		cube.look_at(Vector3(0, 0, 0), up_vector, true)
+		cube.look_at(speaker.center_position, up_vector, true)
 	if cube_edges.is_inside_tree():
-		cube_edges.look_at(Vector3(0, 0, 0), up_vector, true)
+		print(speaker.center_position)
+		cube_edges.look_at(speaker.center_position, up_vector, true)
+	if speaker.is_inside_tree():
+		speaker.look_at(speaker.center_position, up_vector, true)
 
 
 func update_single_speaker(speaker_number, prop_name, prop_value):

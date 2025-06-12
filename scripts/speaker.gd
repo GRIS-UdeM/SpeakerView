@@ -13,6 +13,7 @@ var speakerview_node
 var network_node
 var speakers_node
 var area_node
+var center_position: Vector3
 
 func _process(_delta):
 	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
