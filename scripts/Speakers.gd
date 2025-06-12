@@ -126,7 +126,7 @@ func decrement_scale(cube:MeshInstance3D):
 
 
 func autoscale_speakers():
-	## This iterates over all of the speakers and tries to determine wether or not
+	## This iterates over all of the speakers and tries to determine whether or not
 	## they should be rescaled. This algorithm finds a speaker that is not yet scaled
 	## as small as possible and that is overlapping with at least another speaker's mesh.
 	## It then finds all the neighbouring speakers that are also overlapping with another speaker's mesh.
