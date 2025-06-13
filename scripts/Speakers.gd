@@ -102,12 +102,6 @@ func update_speaker_display(speaker, spk_alpha=null):
 	var spk_pos_normalized = speaker.transform.origin.normalized()
 	var up_vector = Vector3(0, 1, 0)
 	var almost_zero = 0.000001
-	if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
-		up_vector = Vector3(0, 0, 1)
-	if cube.is_inside_tree():
-		cube.look_at(Vector3(0, 0, 0), up_vector, true)
-	if cube_edges.is_inside_tree():
-		cube_edges.look_at(Vector3(0, 0, 0), up_vector, true)
 	should_autoscale = true
 
 var should_autoscale = false

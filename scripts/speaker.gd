@@ -16,6 +16,8 @@ var area_node
 
 func _process(_delta):
 	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
+	if not global_position.is_equal_approx(Vector3(0,0,0)):
+		look_at(Vector3(0,0,0), Vector3.UP)
 	if speaker_number_mesh.visible:
 		speaker_number_mesh.look_at(get_viewport().get_camera_3d().global_position, Vector3(0, 1, 0), true)
 
