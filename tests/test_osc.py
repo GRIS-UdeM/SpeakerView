@@ -32,7 +32,6 @@ def send_all_the_osc():
         # speaker osc messages
         osc_client.send_message(f"/speaker/{i}/alpha", val)
         osc_client.send_message(f"/speaker/{i}/center_position", [-1 + (2*i%5),-1,-1])
-        # osc_client.send_message(f"/speaker/{i}/center_position", [0,0,0])
         osc_client.send_message(f"/speaker/{i}/position", [val * (i%2 - 1) + 0.1, val * ((i+1)%2 - 1) + 0.1, val + 0.1])
         if i == 40:
             osc_client.send_message(f"/speaker/{i}/is_selected", True)

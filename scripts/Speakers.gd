@@ -65,6 +65,7 @@ func update_spk_scenes(data: Variant):
 	for i in range(speakers_scenes.size()):
 		var index = i + 1
 		var spk = speakers_scenes[i]
+		set_speaker_properties_from_data(spk, data[index])
 		var spk_number = data[index][0]
 		var spk_alpha = data[index][4]
 		# SG is XZ-Y, Godot is XYZ
