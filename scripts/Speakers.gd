@@ -106,9 +106,6 @@ func update_speaker_display(speaker, spk_alpha=null):
 		cube_edges_mesh.material_override = spk_cube_edges_mat
 		# Transparent is 0 in SG and 1 in Godot.
 		cube.transparency = transparency
-	var spk_pos_normalized = speaker.transform.origin.normalized()
-	var up_vector = Vector3(0, 1, 0)
-	var almost_zero = 0.000001
 	should_autoscale = true
 
 var should_autoscale = false
