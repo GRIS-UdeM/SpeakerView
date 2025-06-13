@@ -110,7 +110,7 @@ func _ready():
 
 func _process(_delta):
 	var camera = get_viewport().get_camera_3d()
-	source_number_mesh.look_at(camera.global_position, Vector3(0, 1, 0), true)
+	Utils.safe_look_at(source_number_mesh, camera.global_position)
 	source_number_mesh.visible = speakerview_node.show_source_numbers
 
 func update_sphere():

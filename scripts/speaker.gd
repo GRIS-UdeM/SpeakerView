@@ -17,13 +17,9 @@ var center_position: Vector3 = Vector3(0,0,0)
 
 func _process(_delta):
 	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
-	if not global_position.is_equal_approx(center_position):
-		look_at(center_position, Vector3.UP)
+	Utils.safe_look_at(self, center_position)
 	if speaker_number_mesh.visible:
-		var camera_position = get_viewport().get_camera_3d().global_position
-		if not speaker_number_mesh.position.is_equal_approx(camera_position):
-			speaker_number_mesh.look_at(camera_position, Vector3(0, 1, 0), true)
-
+		Utils.safe_look_at(speaker_number_mesh, get_viewport().get_camera_3d().global_position)
 
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
