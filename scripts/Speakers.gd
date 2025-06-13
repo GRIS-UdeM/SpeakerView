@@ -33,20 +33,30 @@ func set_speakers_info(data: Variant):
 	elif speakerview_node.show_speakers:
 		update_spk_scenes(data)
 
+func set_speaker_properties_from_data(speaker:Node3D, data: Variant):
+	var spk_position = data[1]
+	var spk_is_selected = data[2]
+	var spk_is_direct_out_only = data[3]
+	var spk_center_pos
+
+	if data.size() > 5:
+		spk_center_pos = data[5]
+	else:
+		spk_center_pos = [0,0,0]
+	# SG is XZ-Y, Godot is XYZ. Let's fix this here.
+	speaker.center_position = Vector3(spk_center_pos[0], spk_center_pos[2], -spk_center_pos[1]) * speakerview_node.SG_SCALE
+
+	speaker.transform.origin = Vector3(spk_position[0], spk_position[2], -spk_position[1]) * speakerview_node.SG_SCALE
+	speaker.spk_is_selected = spk_is_selected
+	speaker.spk_is_direct_out_only = spk_is_direct_out_only
+
 func populate_speakers(data: Variant):
 	for i in range(1, project_num_speakers + 1):
-		var spk_number = data[i][0]
-		var spk_position = data[i][1]
-		var spk_is_selected = data[i][2]
-		var spk_is_direct_out_only = data[i][3]
-		var spk_alpha = data[i][4]
 		var instance = spk_scn.instantiate()
+		set_speaker_properties_from_data(instance, data[i])
+		var spk_number = data[i][0]
+		var spk_alpha = data[i][4]
 		instance.spk_number = spk_number
-		# SG is XZ-Y, Godot is XYZ. Let's fix this here.
-		instance.transform.origin = Vector3(spk_position[0], spk_position[2], -spk_position[1]) * speakerview_node.SG_SCALE
-		instance.spk_is_selected = spk_is_selected
-		instance.spk_is_direct_out_only = spk_is_direct_out_only
-
 		update_speaker_display(instance, spk_alpha)
 		speakers_scenes.append(instance)
 
@@ -56,26 +66,11 @@ func update_spk_scenes(data: Variant):
 		var index = i + 1
 		var spk = speakers_scenes[i]
 		var spk_number = data[index][0]
-		var spk_position = data[index][1]
-		var spk_is_selected = data[index][2]
-		var spk_is_direct_out_only = data[index][3]
 		var spk_alpha = data[index][4]
-		var spk_center_pos
-
-		if data[index].size() > 5:
-
-			spk_center_pos = data[index][5]
-		else:
-			spk_center_pos = [0,0,0]
-		spk.spk_is_selected = spk_is_selected
-		spk.spk_is_direct_out_only = spk_is_direct_out_only
 		# SG is XZ-Y, Godot is XYZ
-		spk.transform.origin = Vector3(spk_position[0], spk_position[2], -spk_position[1]) * speakerview_node.SG_SCALE
-		spk.center_position = Vector3(spk_center_pos[0], spk_center_pos[2], -spk_center_pos[1]) * speakerview_node.SG_SCALE
 		if spk.spk_number != spk_number:
 			spk.spk_number = spk_number
 			spk.reset_spk_number()
-
 		update_speaker_display(spk, spk_alpha)
 
 func update_speaker_display(speaker, spk_alpha=null):
