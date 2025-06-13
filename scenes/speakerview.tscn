@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
 [ext_resource type="Script" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
 [ext_resource type="Script" path="res://scripts/FreeCamera.gd" id="2_iqjbo"]
-[ext_resource type="PackedScene" path="res://scenes/keybinding.tscn" id="4_b1xjj"]
+[ext_resource type="PackedScene" uid="uid://b3fqg2yxxrwcg" path="res://scenes/keybinding.tscn" id="4_b1xjj"]
 [ext_resource type="Texture2D" uid="uid://pasb43352uxo" path="res://assets/camera.png" id="4_pruru"]
 [ext_resource type="Script" path="res://scripts/switch_camera_button.gd" id="4_yakyd"]
 [ext_resource type="Texture2D" uid="uid://dho24jkqupif5" path="res://assets/cog.png" id="5_0kivh"]

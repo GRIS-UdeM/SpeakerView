@@ -14,23 +14,19 @@ var network_node
 var speakers_node
 var area_node
 
-func are_colinear(v1:Vector3, v2:Vector3):
-	return v1.cross(v2).is_equal_approx(Vector3.ZERO)
-
 func _process(_delta):
 	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
-	if not global_position.is_equal_approx(Vector3.ZERO) and not are_colinear(global_position, Vector3.UP):
-		look_at(Vector3.ZERO, Vector3.UP)
+	Utils.safe_look_at(self, Vector3.ZERO)
 	if speaker_number_mesh.visible:
-		speaker_number_mesh.look_at(get_viewport().get_camera_3d().global_position, Vector3(0, 1, 0), true)
-
+		Utils.safe_look_at(speaker_number_mesh, get_viewport().get_camera_3d().global_position)
+		
 
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
 	network_node = get_node("/root/SpeakerView/Network")
 	speakers_node = get_parent()
 	area_node = get_node("cube/Area3D")
-	
+
 	# speaker number
 	var spk_num_new_mesh_3d = MeshInstance3D.new()
 	var text_mesh = TextMesh.new()
@@ -38,7 +34,7 @@ func _ready():
 	spk_num_new_mesh_3d.mesh = text_mesh
 	spk_num_new_mesh_3d.material_override = speakers_node.spk_num_mat
 	speaker_number_mesh = spk_num_new_mesh_3d
-	
+
 	add_child(speaker_number_mesh)
 
 	var spk_pos_normalized = transform.origin.normalized()
@@ -70,7 +66,7 @@ func set_speaker_selected_state():
 		speakerview_node.selected_speaker_number = 0
 	else:
 		speakerview_node.selected_speaker_number = spk_number
-	
+
 	speakerview_node.spk_is_selected_with_mouse = true
 	network_node.send_UDP()
 	speakerview_node.spk_is_selected_with_mouse = false
