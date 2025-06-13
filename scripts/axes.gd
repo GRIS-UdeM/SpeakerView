@@ -13,6 +13,6 @@ func _ready():
 
 func _process(_delta):
 	var camera = get_viewport().get_camera_3d()
-	text_x_axis.look_at(Vector3(camera.global_position.x, 0.0, camera.global_position.z), Vector3(0, 1, 0), true)
-	text_y_axis.look_at(Vector3(camera.global_position.x, 0.0, camera.global_position.z), Vector3(0, 1, 0), true)
-	text_z_axis.look_at(Vector3(camera.global_position.x, camera.global_position.y, camera.global_position.z), Vector3(0, 1, 0), true)
+	Utils.safe_look_at(text_x_axis, Vector3(camera.global_position.x, 0.0, camera.global_position.z))
+	Utils.safe_look_at(text_y_axis, Vector3(camera.global_position.x, 0.0, camera.global_position.z))
+	Utils.safe_look_at(text_z_axis, Vector3(camera.global_position.x, camera.global_position.y, camera.global_position.z))
