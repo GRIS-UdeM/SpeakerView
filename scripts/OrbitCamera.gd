@@ -57,6 +57,6 @@ func _process(_delta):
 	camera_zoom_velocity *= pow(0.5, _delta*8)
 	cam_radius = target_zoom
 	cam_radius = clampf(cam_radius, CAMERA_MIN_RADIUS, CAMERA_MAX_RADIUS)
-	# no need for Utils.safe_look_at here since are position can't be problematic.
+	# no need for Utils.safe_look_at here since our position can't be problematic.
 	look_at(Vector3(0.0, 1.0, 0.0), Vector3(0, 1, 0))
 	cam_light.look_at(Vector3(0, 0, 0), Vector3(0, 1, 0))
