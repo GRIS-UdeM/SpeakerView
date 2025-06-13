@@ -42,7 +42,7 @@ func _ready():
 	var almost_zero = 0.000001
 	if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
 		up_vector = Vector3(0, 0, 1)
-	look_at(Vector3(0, 0, 0), up_vector, true)
+	Utils.safe_look_at(self, center_position)
 
 	speaker_number_mesh.global_position = global_position + Vector3(0, 1, 0)
 	speaker_number_mesh.scale = Vector3(3, 3, 1)
