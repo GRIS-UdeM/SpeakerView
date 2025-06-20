@@ -117,7 +117,6 @@ func _on_udpin_spin_box_value_changed(udp_in_port: float) -> void:
 	var success: Error = reconnect_udp_input(udp_in_port)
 	if success == OK:
 		current_input_port = udp_in_port
-		print(udp_server.get_local_port())
 	else:
 		reconnect_udp_input(current_input_port)
 		update_settings_boxes()
