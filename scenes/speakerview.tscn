@@ -706,7 +706,7 @@ layout_mode = 2
 size_flags_vertical = 0
 text = "You have started SpeakerView in standalone mode. If you intend to use SpeakerView with SpatGRIS on the same computer,  you can close this window and open SpatGRIS.
 
-If you intend to use SpeakerView's OSC integration, click the Ok button !"
+If you intend to monitor a remote SpatGRIS or to use SpeakerView's OSC integration, click the Ok button !"
 label_settings = SubResource("LabelSettings_t7apa")
 horizontal_alignment = 1
 vertical_alignment = 1
