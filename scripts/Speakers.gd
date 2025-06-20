@@ -145,7 +145,7 @@ func autoscale_speakers():
 				var n_cube:MeshInstance3D = n_area.get_parent()
 				decrement_scale(n_cube)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	## we need to autoscale_speakers() here because since we rely on collisions,
 	## we need to wait a physic tick for them to be updated.
 	if should_autoscale:

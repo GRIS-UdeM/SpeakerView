@@ -563,19 +563,65 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 7
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+[node name="OSCInputPortConfig" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/HBoxContainer"]
+[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/OSCInputPortConfig"]
 layout_mode = 2
 text = "OSC input port "
 
-[node name="TextEdit" type="SpinBox" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/HBoxContainer"]
+[node name="SpinBox" type="SpinBox" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/OSCInputPortConfig"]
 layout_mode = 2
+size_flags_horizontal = 3
 min_value = 1024.0
-max_value = 99999.0
+max_value = 65535.0
 value = 4646.0
 rounded = true
+
+[node name="UDPInputPortConfig" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPInputPortConfig"]
+layout_mode = 2
+text = "UDP input port"
+
+[node name="UDPINSpinBox" type="SpinBox" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPInputPortConfig"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1024.0
+max_value = 65535.0
+value = 18022.0
+rounded = true
+
+[node name="UDPOutputPortConfig" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputPortConfig"]
+layout_mode = 2
+text = "UDP output port"
+
+[node name="UDPOUTSpinBox" type="SpinBox" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputPortConfig"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1024.0
+max_value = 65535.0
+value = 18023.0
+rounded = true
+
+[node name="UDPOutputAddressConfig" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig"]
+layout_mode = 2
+text = "SpatGRIS ip address"
+
+[node name="SpatGRISIPLineEdit" type="LineEdit" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "127.0.0.1"
 
 [node name="UIOverlay" type="HBoxContainer" parent="."]
 offset_left = 17.0
@@ -1067,6 +1113,11 @@ script = ExtResource("10_0gnjq")
 
 [connection signal="pressed" from="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CloseButton" to="." method="_on_help_panel_close_button_pressed"]
 [connection signal="pressed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer2/CloseButton" to="ConfigPanel" method="_on_settings_button_pressed"]
+[connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/OSCInputPortConfig/SpinBox" to="Network/OSCServer" method="_on_text_edit_value_changed"]
+[connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPInputPortConfig/UDPINSpinBox" to="Network" method="_on_udpin_spin_box_value_changed"]
+[connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputPortConfig/UDPOUTSpinBox" to="Network" method="_on_udpout_spin_box_value_changed"]
+[connection signal="focus_exited" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig/SpatGRISIPLineEdit" to="Network" method="_on_spat_grisip_line_edit_focus_exited"]
+[connection signal="text_submitted" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig/SpatGRISIPLineEdit" to="Network" method="_on_spat_grisip_line_edit_text_submitted"]
 [connection signal="pressed" from="UIOverlay/HelpPannelButton" to="." method="_on_help_panel_button_pressed"]
 [connection signal="pressed" from="UIOverlay/SettingsButton" to="ConfigPanel" method="_on_settings_button_pressed"]
 [connection signal="pressed" from="NoSGPanel/Panel/MarginContainer/VBoxContainer/Button" to="NoSGPanel" method="_on_button_pressed"]
