@@ -652,6 +652,7 @@ layout_mode = 2
 text = "?"
 
 [node name="SettingsButton" type="Button" parent="UIOverlay"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(35.69, 0)
 layout_mode = 2
 
@@ -1119,6 +1120,7 @@ material_override = SubResource("StandardMaterial3D_0akp0")
 script = ExtResource("8_ntmpu")
 
 [node name="OSCServer" type="Node" parent="Network"]
+unique_name_in_owner = true
 script = ExtResource("14_7bw8e")
 
 [node name="Sources" type="Node" parent="."]

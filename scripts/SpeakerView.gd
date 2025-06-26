@@ -95,6 +95,9 @@ func _ready():
 	for arg in args:
 		if arg == "launchedBySG=true":
 			is_started_by_SG = true
+			# deactivate the settings if we are launched by SpatGRIS
+			%SettingsButton.visible = false
+			%OSCServer.active = false
 		elif arg == "firstLaunchBySG=true":
 			SV_started_by_SG_for_the_first_time = true
 		elif arg.contains("winPosition="):
@@ -259,15 +262,15 @@ func update_display():
 		old_speaker_setup_name = speaker_setup_name
 		get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
 
-	if SG_asked_to_kill_speakerview:
+	if is_started_by_SG and SG_asked_to_kill_speakerview:
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 
-	if SV_keep_on_top != SV_keep_on_top_last or SG_has_focus != SG_has_focus_last_focus:
+	if is_started_by_SG and (SV_keep_on_top != SV_keep_on_top_last or SG_has_focus != SG_has_focus_last_focus):
 		get_viewport().always_on_top = SV_keep_on_top and SG_has_focus
 		SG_has_focus_last_focus = SG_has_focus
 		SV_keep_on_top_last = SV_keep_on_top
 
-	if SV_should_grab_focus != SV_should_grab_focus_last:
+	if is_started_by_SG and SV_should_grab_focus != SV_should_grab_focus_last:
 		if SV_should_grab_focus:
 			get_window().grab_focus()
 		SV_should_grab_focus_last = SV_keep_on_top_last
@@ -276,7 +279,7 @@ func update_display():
 		draw_hall()
 		show_hall_last = show_hall
 
-	if should_move_SG_to_foreground:
+	if is_started_by_SG and should_move_SG_to_foreground:
 		SG_move_to_foreground()
 		should_move_SG_to_foreground = false
 
