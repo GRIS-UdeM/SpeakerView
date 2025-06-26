@@ -606,7 +606,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig"]
 layout_mode = 2
-text = "SpatGRIS ip address"
+text = "UDP output address"
 
 [node name="SpatGRISIPLineEdit" type="LineEdit" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig"]
 unique_name_in_owner = true
