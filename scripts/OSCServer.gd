@@ -106,8 +106,6 @@ func parse_bundle(packet: PackedByteArray):
 
 	# Find beginning of messages in bundle
 	for i in range(packet.size()/4.0):
-		var bund_arr = PackedByteArray([32,0,0,0])
-		var testo = ""
 		if packet.slice(i*4, i*4+4) == PackedByteArray([1, 0, 0, 0]):
 			mess_num.append(i*4)
 			bund_ind + 1

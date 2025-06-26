@@ -3,10 +3,13 @@ extends Node
 var udp_peer: PacketPeerUDP
 var udp_server: PacketPeerUDP
 
-var SG_IP: String = "127.0.0.1"
-var SG_port: int = 18023
-var speakerview_IP: String = "127.0.0.1"
-var speakerview_port: int = 18022
+const DEFAULT_SG_IP: String = "127.0.0.1"
+const DEFAULT_OUTPUT_PORT: int = 18023
+const DEFAULT_INPUT_PORT: int = 18022
+
+var current_sg_ip: String = DEFAULT_SG_IP
+var current_output_port: int = DEFAULT_OUTPUT_PORT
+var current_input_port: int = DEFAULT_INPUT_PORT
 
 var packet: PackedByteArray
 var message: String
@@ -17,24 +20,31 @@ var num_of_udp_packets: int
 var speakerview_node
 var sources_node
 var speakers_node
+var ip_regex = RegEx.new()
 
 func _ready():
-
+	# This regex validates ip addresses. It was taken here : https://stackoverflow.com/a/36760050
+	ip_regex.compile("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$")
 	speakerview_node = get_node("/root/SpeakerView")
 	sources_node = get_node("/root/SpeakerView/Sources")
 	speakers_node = get_node("/root/SpeakerView/Speakers")
 
 	# Listen to SpatGris
 	udp_peer = PacketPeerUDP.new()
-	udp_peer.connect_to_host(SG_IP, SG_port)
+	udp_peer.set_dest_address(current_sg_ip, DEFAULT_OUTPUT_PORT)
 	# Send to SpatGris
 	udp_server = PacketPeerUDP.new()
-	udp_server.bind(speakerview_port, speakerview_IP)
-
+	udp_server.bind(DEFAULT_INPUT_PORT)
+	current_input_port = udp_server.get_local_port()
 	json_data = JSON.new()
 
-func _physics_process(_delta):
+func _physics_process(_delta: float) -> void:
 	listen_to_UDP()
+
+func reconnect_udp_input(port) -> Error:
+	udp_server.close()
+	udp_server = PacketPeerUDP.new()
+	return udp_server.bind(port)
 
 func send_UDP():
 	var camera_node = %OrbitCamera
@@ -60,7 +70,7 @@ func send_UDP():
 func listen_to_UDP():
 	# for some reason the server does not always bind...
 	if not udp_server.is_bound():
-		udp_server.bind(speakerview_port, speakerview_IP)
+		udp_server.bind(current_input_port, current_sg_ip)
 
 	num_of_udp_packets = udp_server.get_available_packet_count()
 	while udp_server.get_available_packet_count() > 0:
@@ -77,3 +87,45 @@ func listen_to_UDP():
 					speakers_node.set_speakers_info(json_data.data)
 			elif typeof(json_data.data) == Variant.Type.TYPE_DICTIONARY:
 				speakerview_node.update_app_data_from_json(json_data.data)
+
+
+func update_settings_boxes():
+	## calling this will trigger the text change signal of these
+	## three elements, which is why we need to check for identical values
+	## at the beginning of the three callbacks below.
+	%SpatGRISIPLineEdit.text = DEFAULT_SG_IP
+	%UDPINSpinBox.value = current_input_port
+	%UDPINSpinBox.value = current_input_port
+
+func _on_spat_grisip_line_edit_focus_exited() -> void:
+	_on_spat_grisip_line_edit_text_submitted(%SpatGRISIPLineEdit.text)
+
+func _on_spat_grisip_line_edit_text_submitted(spatgris_ip: String) -> void:
+	if spatgris_ip == current_sg_ip:
+		return
+	if ip_regex.search(spatgris_ip):
+		current_sg_ip = spatgris_ip
+		udp_peer.set_dest_address(spatgris_ip, current_output_port)
+	else:
+		# if the regex do not validate, replace the text with the last valid
+		# address
+		update_settings_boxes()
+
+func _on_udpin_spin_box_value_changed(udp_in_port: float) -> void:
+	if udp_in_port == current_input_port:
+		return
+	var success: Error = reconnect_udp_input(udp_in_port)
+	if success == OK:
+		current_input_port = udp_in_port
+	else:
+		reconnect_udp_input(current_input_port)
+		update_settings_boxes()
+
+
+func _on_udpout_spin_box_value_changed(udp_out_port: float) -> void:
+	var success: Error = udp_peer.set_dest_address(current_sg_ip, udp_out_port)
+	if success == OK:
+		current_output_port = udp_out_port
+	else:
+		udp_peer.set_dest_address(current_sg_ip, current_output_port)
+		update_settings_boxes()

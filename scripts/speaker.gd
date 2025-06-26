@@ -37,7 +37,6 @@ func _ready():
 
 	add_child(speaker_number_mesh)
 
-	var spk_pos_normalized = transform.origin.normalized()
 	Utils.safe_look_at(self, center_position)
 
 	speaker_number_mesh.global_position = global_position + Vector3(0, 1, 0)
