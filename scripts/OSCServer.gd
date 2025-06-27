@@ -17,21 +17,30 @@ extends Node
 var server = UDPServer.new()
 var peers: Array[PacketPeerUDP] = []
 
+## If active is false, this will not listen to OSC events.
+var active = true;
+
 signal speaker_message_received(address:String, value)
 signal source_message_received(address:String, value)
 signal control_message_received(address:String, value)
 
 func _ready():
+	if not active:
+		return
 	server.listen(port)
 	server.max_pending_connections = 10000000000000
 
 ## Sets the port for the server to listen on. Can only listen to one port at a time.
 func listen(new_port):
+	if not active:
+		return
 	server.stop()
 	port = new_port
 	server.listen(port)
 
 func _process(_delta):
+	if not active:
+		return
 	server.poll()
 	if server.is_connection_available():
 		var peer: PacketPeerUDP = server.take_connection()
