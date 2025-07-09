@@ -283,9 +283,7 @@ func update_display():
 		SG_move_to_foreground()
 		should_move_SG_to_foreground = false
 
-	if !SV_has_received_SG_data_at_least_once:
-		network_node.send_UDP()
-		SV_has_received_SG_data_at_least_once = true
+	network_node.send_UDP()
 
 func render_spk_triplets():
 	var vertices = PackedVector3Array()
