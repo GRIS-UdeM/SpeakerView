@@ -22,6 +22,12 @@ var sources_node
 var speakers_node
 var ip_regex = RegEx.new()
 
+# This is initialized as false and will be set to true as soon as
+# a packet containing application state for SpatGRIS is received, parsed and
+# the state of SpeakerView's display option is changed to match the content of
+# the packet.
+var got_valid_spatGRIS_app_data_packet = false
+
 func _ready():
 	# This regex validates ip addresses. It was taken here : https://stackoverflow.com/a/36760050
 	ip_regex.compile("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$")
@@ -47,6 +53,12 @@ func reconnect_udp_input(port) -> Error:
 	return udp_server.bind(port)
 
 func send_UDP():
+	# As long as we don't get a valid SpatGRIS application state udp
+	# packet, we should not be sending anything. Sending anything would
+	# make SpatGRIS potentially lose its application state because SpeakerView.
+	# is initialized with false for every option.
+	if not got_valid_spatGRIS_app_data_packet:
+		return
 	var camera_node = %OrbitCamera
 	var json_dict_to_send = {"quitting":speakerview_node.quitting,
 		"winPos":get_viewport().position,
@@ -87,6 +99,9 @@ func listen_to_UDP():
 					speakers_node.set_speakers_info(json_data.data)
 			elif typeof(json_data.data) == Variant.Type.TYPE_DICTIONARY:
 				speakerview_node.update_app_data_from_json(json_data.data)
+				# Now that we have updated our app data at least once we
+				# can start sending our udp packets
+				got_valid_spatGRIS_app_data_packet = true
 
 
 func update_settings_boxes():
