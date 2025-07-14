@@ -46,21 +46,15 @@ func _unhandled_input(event):
 		return
 	# Receives mouse motion
 	if event is InputEventMouseMotion:
-		if _left_click_pressed and abs(event.relative[0])+abs(event.relative[0]) >=7.0:
-
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		_mouse_impulse += event.relative
 
 	# Receives mouse button input
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_RIGHT: # Only allows rotation if right click down
-				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED if event.pressed else Input.MOUSE_MODE_VISIBLE)
 				_right_click_pressed = event.pressed
 			MOUSE_BUTTON_LEFT:
 				_left_click_pressed = event.pressed
-				if not event.pressed:
-					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			MOUSE_BUTTON_WHEEL_DOWN:
 				_wheel_impulse +=5
 			MOUSE_BUTTON_WHEEL_UP:
@@ -115,7 +109,7 @@ func _update_movement(delta):
 	if abs(_wheel_impulse) < 0.1:
 		_wheel_impulse = 0
 
-	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED and _left_click_pressed:
+	if _right_click_pressed:
 		_mouse_impulse *= sensitivity
 		offset.x += _mouse_impulse[0]
 		offset.y -= _mouse_impulse[1]
@@ -143,7 +137,7 @@ func _update_movement(delta):
 # Updates mouse look
 func _update_mouselook():
 	# Only rotates mouse if the mouse is captured
-	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED and _right_click_pressed:
+	if _left_click_pressed:
 		_mouse_impulse *= sensitivity
 		var yaw = _mouse_impulse.x
 		var pitch = _mouse_impulse.y
