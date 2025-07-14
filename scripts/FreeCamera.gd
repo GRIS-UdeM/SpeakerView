@@ -88,6 +88,8 @@ func _unhandled_input(event):
 
 # Updates mouselook and movement every frame
 func _process(delta):
+	if not _left_click_pressed and not _right_click_pressed:
+		_mouse_impulse = Vector2.ZERO
 	_update_mouselook()
 	_update_movement(delta)
 
@@ -141,7 +143,6 @@ func _update_mouselook():
 		_mouse_impulse *= sensitivity
 		var yaw = _mouse_impulse.x
 		var pitch = _mouse_impulse.y
-		_mouse_impulse = Vector2(0, 0)
 
 		# Prevents looking up/down too far
 		pitch = clamp(pitch, -90 - _total_pitch, 90 - _total_pitch)
