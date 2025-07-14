@@ -6,7 +6,8 @@ const SHIFT_MULTIPLIER = 2.5
 const ALT_MULTIPLIER = 1.0 / SHIFT_MULTIPLIER
 
 
-@export_range(0.0, 1.0) var sensitivity: float = 0.05
+var right_click_sensitivity: float = 0.4
+var left_click_sensitivity: float = 0.15
 
 # Mouse state
 var _mouse_impulse = Vector2(0.0, 0.0)
@@ -112,7 +113,7 @@ func _update_movement(delta):
 		_wheel_impulse = 0
 
 	if _right_click_pressed:
-		_mouse_impulse *= sensitivity
+		_mouse_impulse *= right_click_sensitivity
 		offset.x += _mouse_impulse[0]
 		offset.y -= _mouse_impulse[1]
 	_mouse_impulse *= 0.8
@@ -140,7 +141,7 @@ func _update_movement(delta):
 func _update_mouselook():
 	# Only rotates mouse if the mouse is captured
 	if _left_click_pressed:
-		_mouse_impulse *= sensitivity
+		_mouse_impulse *= left_click_sensitivity
 		var yaw = _mouse_impulse.x
 		var pitch = _mouse_impulse.y
 
