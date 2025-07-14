@@ -283,7 +283,6 @@ func update_display():
 		SG_move_to_foreground()
 		should_move_SG_to_foreground = false
 
-	network_node.send_UDP()
 
 func render_spk_triplets():
 	var vertices = PackedVector3Array()
