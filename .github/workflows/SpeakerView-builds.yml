@@ -62,7 +62,7 @@ jobs:
           path: build/linux
 
   export-linux-arm:
-    name: Linux Export
+    name: Linux ARM Export
     runs-on: ubuntu-24.04
     container:
       image: barichello/godot-ci:4.3
