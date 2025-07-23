@@ -54,7 +54,7 @@ jobs:
           mkdir -v -p build/linuxarm
           EXPORT_DIR="$(readlink -f build)"
           cd $PROJECT_PATH
-          godot --headless --verbose --export-release "LinuxARM" "$EXPORT_DIR/linuxarm/$EXPORT_NAME.arm64
+          godot --headless --verbose --export-release "LinuxARM" "$EXPORT_DIR/linuxarm/$EXPORT_NAME.arm64"
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
