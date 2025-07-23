@@ -35,7 +35,7 @@ jobs:
           name: windows
           path: build/windows
 
-  export-linux:
+  export-linux-arm:
     name: Linux ARM Export
     runs-on: ubuntu-24.04
     container:
@@ -51,17 +51,17 @@ jobs:
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
       - name: Linux Build
         run: |
-          mkdir -v -p build/linux
+          mkdir -v -p build/linuxarm
           EXPORT_DIR="$(readlink -f build)"
           cd $PROJECT_PATH
-          godot --headless --verbose --export-release "LinuxARM" "$EXPORT_DIR/linux/$EXPORT_NAME.arm64
+          godot --headless --verbose --export-release "LinuxARM" "$EXPORT_DIR/linuxarm/$EXPORT_NAME.arm64
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: linux
           path: build/linux
 
-  export-linux-arm:
+  export-linux:
     name: Linux Export
     runs-on: ubuntu-24.04
     container:
