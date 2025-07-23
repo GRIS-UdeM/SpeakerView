@@ -61,7 +61,7 @@ jobs:
           name: linux
           path: build/linux
 
-  export-linux:
+  export-linux-arm:
     name: Linux Export
     runs-on: ubuntu-24.04
     container:
