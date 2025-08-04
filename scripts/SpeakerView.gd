@@ -168,6 +168,10 @@ func switch_cameras():
 	else:
 		%OrbitCamera.current = true
 		%CurrentCameraName.text = "Orbit Camera"
+		
+func switch_to_fulldome_camera():
+	%FulldomeCamera.current = true
+	%CurrentCameraName.text = %FulldomeCamera.get_status_string()
 
 func _input(event):
 	if event is InputEventKey:
@@ -208,8 +212,11 @@ func _input(event):
 				handle_show_sphere_or_cube()
 			elif event.keycode == KEY_Q:
 				handle_general_mute()
-			if event.keycode == KEY_R:
+			elif event.keycode == KEY_R:
 				toggle_reset_sources_positions()
+			elif event.keycode == KEY_D:
+				switch_to_fulldome_camera()
+
 			# force display update after user input
 			update_display()
 
