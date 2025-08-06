@@ -425,7 +425,7 @@ help_text = "Show sphere or cube"
 [node name="KeybindingHelp13" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+D"
-help_text = "Secret fulldome camera mode"
+help_text = "Toggle fulldome camera"
 
 [node name="CameraControls" type="VBoxContainer" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
