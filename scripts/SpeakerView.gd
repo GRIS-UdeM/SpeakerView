@@ -160,14 +160,37 @@ func _process(_delta):
 	dome_grid_node.visible = (spat_mode == SpatMode.DOME) or (spat_mode == SpatMode.HYBRID)
 	cube_grid_node.visible = (spat_mode == SpatMode.CUBE) or (spat_mode == SpatMode.HYBRID)
 
+# Used to restore the latest "regular" camera from the fulldome one. 
+@onready
+var last_active_camera = %OrbitCamera
 
-func switch_cameras():
-	if get_viewport().get_camera_3d() == %OrbitCamera:
-		%FreeCamera.current = true
-		%CurrentCameraName.text = "Free Camera"
-	else:
+func switch_to_camera(camera):
+	if camera == %OrbitCamera:
 		%OrbitCamera.current = true
 		%CurrentCameraName.text = "Orbit Camera"
+		last_active_camera = %OrbitCamera
+	elif camera == %FreeCamera:
+		%FreeCamera.current = true
+		%CurrentCameraName.text = "Free Camera"
+		last_active_camera = %FreeCamera
+	elif camera == %FulldomeCamera:
+		%FulldomeCamera.current = true
+		%CurrentCameraName.text = %FulldomeCamera.get_status_string()
+		# Never set fulldome as the last_active_camera.
+
+func switch_cameras():
+	if %FulldomeCamera.current:
+		switch_to_camera(last_active_camera)
+	elif get_viewport().get_camera_3d() == %OrbitCamera:
+		switch_to_camera(%FreeCamera)
+	else:
+		switch_to_camera(%OrbitCamera)
+
+func switch_to_fulldome_camera():
+	if not %FulldomeCamera.current:
+		switch_to_camera(%FulldomeCamera)
+	else:
+		switch_to_camera(last_active_camera)
 
 func _input(event):
 	if event is InputEventKey:
@@ -208,8 +231,11 @@ func _input(event):
 				handle_show_sphere_or_cube()
 			elif event.keycode == KEY_Q:
 				handle_general_mute()
-			if event.keycode == KEY_R:
+			elif event.keycode == KEY_R:
 				toggle_reset_sources_positions()
+			elif event.keycode == KEY_D:
+				switch_to_fulldome_camera()
+
 			# force display update after user input
 			update_display()
 
