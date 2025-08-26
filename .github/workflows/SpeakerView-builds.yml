@@ -157,7 +157,7 @@ jobs:
           set -x
       - name: Notarize and Sign
         env:
-          MACOSX_SIGNATURE_IDENTITY: "Developer ID Installer: Gael Lane Lepine (62PMMWH49Z)"
+          MACOSX_SIGNATURE_IDENTITY: "Gael Lane Lepine"
           MACOSX_BUNDLE_ID: "ca.umontreal.musique.gris.speakerview"
           MACOSX_APPLE_ID: "glanelepine@gmail.com"
           MACOSX_APPLE_PASSWORD: ${{ secrets.GLL_APPLE_APP_PASSWORD }}
