@@ -173,4 +173,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mac-signed-and-notarized
-          path: "$GITHUB_WORKSPACE/artifact
+          path: artifact
