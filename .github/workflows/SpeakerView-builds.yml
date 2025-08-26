@@ -126,7 +126,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: mac
-          path:$GITHUB_WORKSPACE/artifact
+          path: artifact
       - name: Setup codesigning
         env:
           GLL_APPLE_DEVELOPER_ID_APPLICATION: ${{ secrets.GLL_APPLE_DEVELOPER_ID_APPLICATION }}
