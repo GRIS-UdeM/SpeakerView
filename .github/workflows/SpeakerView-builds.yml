@@ -112,3 +112,65 @@ jobs:
         with:
           name: mac
           path: build/mac
+
+  sign-and-notarize-mac:
+    needs: export-mac
+    name: Sign and Notarize Mac
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: dl artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: mac
+          path:$GITHUB_WORKSPACE/artifact
+      - name: Setup codesigning
+        env:
+          GLL_APPLE_DEVELOPER_ID_APPLICATION: ${{ secrets.GLL_APPLE_DEVELOPER_ID_APPLICATION }}
+          GLL_APPLE_DEVELOPER_ID_INSTALLER: ${{ secrets.GLL_APPLE_DEVELOPER_ID_INSTALLER }}
+          GLL_APPLE_DEVELOPER_ID_PASSWORD: ${{ secrets.GLL_APPLE_DEVELOPER_ID_PASSWORD }}
+        run: |
+          set +x
+          if [[ -n "$GLL_APPLE_DEVELOPER_ID_APPLICATION" ]]; then
+            echo "$GLL_APPLE_DEVELOPER_ID_APPLICATION" | base64 --decode > spatgris-app-cert.p12
+            export CODESIGN_APP_SECUREFILEPATH=$PWD/spatgris-app-cert.p12
+          fi
+          if [[ -n "$GLL_APPLE_DEVELOPER_ID_INSTALLER" ]]; then
+            echo "$GLL_APPLE_DEVELOPER_ID_INSTALLER" | base64 --decode > spatgris-installer-cert.p12
+            export CODESIGN_INSTALLER_SECUREFILEPATH=$PWD/spatgris-installer-cert.p12
+          fi
+          KEY_CHAIN=build.keychain
+          security create-keychain -p github "$KEY_CHAIN"
+          security default-keychain -s "$KEY_CHAIN"
+          security unlock-keychain -p github "$KEY_CHAIN"
+          if [[ -f "$CODESIGN_APP_SECUREFILEPATH" ]]; then
+            security import "$CODESIGN_APP_SECUREFILEPATH" -A -k "$KEY_CHAIN" -P "$GLL_APPLE_DEVELOPER_ID_PASSWORD" -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/pkgbuild  > /dev/null 2>&1
+          fi
+          if [[ -f "$CODESIGN_INSTALLER_SECUREFILEPATH" ]]; then
+            security import "$CODESIGN_INSTALLER_SECUREFILEPATH" -A -k "$KEY_CHAIN" -P "$GLL_APPLE_DEVELOPER_ID_PASSWORD" -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/pkgbuild  > /dev/null 2>&1
+          fi
+          security set-key-partition-list -S apple-tool:,apple: -s -k github "$KEY_CHAIN"
+          rm -f "$CODESIGN_APP_SECUREFILEPATH" "$CODESIGN_INSTALLER_SECUREFILEPATH"
+          set -x
+      - name: Notarize and Sign
+        env:
+          MACOSX_SIGNATURE_IDENTITY: "Developer ID Installer: Gael Lane Lepine (62PMMWH49Z)"
+          MACOSX_BUNDLE_ID: "ca.umontreal.musique.gris.speakerview"
+          MACOSX_APPLE_ID: "glanelepine@gmail.com"
+          MACOSX_APPLE_PASSWORD: ${{ secrets.GLL_APPLE_APP_PASSWORD }}
+        run: |
+          # apparently necessary or else some state is lost
+          security unlock-keychain -p github build.keychain
+          # unzip the zip file to get to the .app
+          (unzip -a $GITHUB_WORKSPACE/artifact/$EXPORT_NAME.zip -d $GITHUB_WORKSPACE/artifact && rm $GITHUB_WORKSPACE/artifact/$EXPORT_NAME.zip)
+          # sign and notarize the .app
+          $GITHUB_WORKSPACE/.github/macosx-notarize.sh "$GITHUB_WORKSPACE/artifact/$EXPORT_NAME.app;
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-signed-and-notarized
+          path: "$GITHUB_WORKSPACE/artifact
