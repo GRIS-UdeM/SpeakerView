@@ -134,6 +134,7 @@ jobs:
           apple-dev-id-installer: ${{ secrets.GLL_APPLE_DEVELOPER_ID_INSTALLER }}
           apple-dev-password: ${{ secrets.GLL_APPLE_DEVELOPER_ID_PASSWORD }}
       - name: Sign and Notarize
+        id: sign
         uses: GRIS-UdeM/actions/sign-and-notarize@main
         with:
           apple-dev-identity: "Gael Lane Lepine"
@@ -145,4 +146,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mac-signed-and-notarized
-          path: artifact
+          path: ${{ steps.sign.outputs.notarized-app-folder }}
