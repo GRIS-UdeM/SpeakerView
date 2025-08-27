@@ -155,7 +155,7 @@ jobs:
           apple-dev-email: "glanelepine@gmail.com"
           apple-dev-team: "62PMMWH49Z"
           apple-app-password: ${{ secrets.GLL_APPLE_APP_PASSWORD }}
-          app-path-name: ${{format("artifact/{0}", env.EXPORT_NAME)}}
+          app-path-name: ${{format('artifact/{0}', env.EXPORT_NAME)}}
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
