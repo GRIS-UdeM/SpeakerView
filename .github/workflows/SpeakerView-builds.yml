@@ -147,18 +147,25 @@ jobs:
           apple-application-cert: ${{ env.app_cert_path }}
           apple-installer-cert: ${{ env.installer_cert_path }}
           apple-dev-password: ${{ secrets.GLL_APPLE_DEVELOPER_ID_PASSWORD }}
-      - name: Sign and Notarize
+
+      - name: Sign
         id: sign
-        uses: GRIS-UdeM/actions/sign-and-notarize@main
+        uses: GRIS-UdeM/actions/sign@main
         with:
           apple-dev-identity: "Gael Lane Lepine"
+          path-to-sign: ${{ format('artifact/{0}.app', env.EXPORT_NAME}}
+      - name: Notarize
+        id: notarize
+        uses: GRIS-UdeM/actions/notarize@main
+        with:
           apple-dev-email: "glanelepine@gmail.com"
           apple-dev-team: "62PMMWH49Z"
           apple-app-password: ${{ secrets.GLL_APPLE_APP_PASSWORD }}
           app-path: "artifact/"
           app-name: ${{ env.EXPORT_NAME }}
+          app-file-suffix: ".app"
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: mac-signed-and-notarized
-          path: ${{ steps.sign.outputs.notarized-app-folder }}
+          path: ${{ steps.notarize.outputs.notarized-app-folder }}
