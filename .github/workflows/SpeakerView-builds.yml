@@ -153,7 +153,7 @@ jobs:
         uses: GRIS-UdeM/actions/sign@main
         with:
           apple-dev-identity: "Gael Lane Lepine"
-          path-to-sign: ${{ format('artifact/{0}.app', env.EXPORT_NAME}}
+          path-to-sign: ${{ format('artifact/{0}.app', env.EXPORT_NAME)}}
       - name: Notarize
         id: notarize
         uses: GRIS-UdeM/actions/notarize@main
