@@ -147,7 +147,9 @@ jobs:
           apple-application-cert: ${{ env.app_cert_path }}
           apple-installer-cert: ${{ env.installer_cert_path }}
           apple-dev-password: ${{ secrets.GLL_APPLE_DEVELOPER_ID_PASSWORD }}
-
+      - name: Unzip
+        run: |
+          (unzip -a artifact/$EXPORT_NAME.zip -d artifact/ && rm artifact/$EXPORT_NAME.zip)
       - name: Sign
         id: sign
         uses: GRIS-UdeM/actions/sign@main
