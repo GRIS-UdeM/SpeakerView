@@ -112,3 +112,62 @@ jobs:
         with:
           name: mac
           path: build/mac
+
+  sign-and-notarize-mac:
+    needs: export-mac
+    name: Sign and Notarize Mac
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: dl artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: mac
+          path: artifact
+      # It would be very nice to have this as part of the external composite actions but it looks like there are limitations around long inputs.
+      - name: Setup certificate files
+        env:
+          GLL_APPLE_DEVELOPER_ID_APPLICATION: ${{ secrets.GLL_APPLE_DEVELOPER_ID_APPLICATION }}
+          GLL_APPLE_DEVELOPER_ID_INSTALLER: ${{ secrets.GLL_APPLE_DEVELOPER_ID_INSTALLER }}
+        run: |
+          echo "$GLL_APPLE_DEVELOPER_ID_APPLICATION" | base64 --decode > spatgris-app-cert.p12
+          export CODESIGN_APP_SECUREFILEPATH=$PWD/spatgris-app-cert.p12
+          echo "app_cert_path=$CODESIGN_APP_SECUREFILEPATH" >> $GITHUB_ENV
+
+          echo "$GLL_APPLE_DEVELOPER_ID_INSTALLER" | base64 --decode > spatgris-installer-cert.p12
+          export CODESIGN_INSTALLER_SECUREFILEPATH=$PWD/spatgris-installer-cert.p12
+          echo "installer_cert_path=$CODESIGN_INSTALLER_SECUREFILEPATH" >> $GITHUB_ENV
+
+      - name: Setup codesigning
+        uses: GRIS-UdeM/actions/setup-codesign@main
+        with:
+          apple-application-cert: ${{ env.app_cert_path }}
+          apple-installer-cert: ${{ env.installer_cert_path }}
+          apple-dev-password: ${{ secrets.GLL_APPLE_DEVELOPER_ID_PASSWORD }}
+      - name: Unzip
+        run: |
+          (unzip -a artifact/$EXPORT_NAME.zip -d artifact/ && rm artifact/$EXPORT_NAME.zip)
+      - name: Sign
+        id: sign
+        uses: GRIS-UdeM/actions/sign@main
+        with:
+          apple-dev-identity: "Gael Lane Lepine"
+          path-to-sign: 'artifact/'
+      - name: Notarize
+        id: notarize
+        uses: GRIS-UdeM/actions/notarize@main
+        with:
+          apple-dev-email: "glanelepine@gmail.com"
+          apple-dev-team: "62PMMWH49Z"
+          apple-app-password: ${{ secrets.GLL_APPLE_APP_PASSWORD }}
+          app-path: "artifact/"
+          app-name: ${{ env.EXPORT_NAME }}
+          app-file-suffix: ".app"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-signed-and-notarized
+          path: ${{ steps.notarize.outputs.notarized-app-folder }}
