@@ -5,14 +5,14 @@ env:
   GODOT_VERSION: 4.5
   EXPORT_NAME: SpeakerView
   PROJECT_PATH: .
-  GODOT_IMAGE: "barichello/godot-ci:4.5-stable"
 
 jobs:
   export-windows:
     name: Windows Export
     runs-on: ubuntu-24.04
     container:
-      image: ${{ env.GODOT_IMAGE }}
+      # there is no way to access the env namespace in image. don't even try to deduplicate this.
+      image: barichello/godot-ci:4.5-stable
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
     name: Linux ARM Export
     runs-on: ubuntu-24.04
     container:
-      image: ${{ env.GODOT_IMAGE }}
+      image: barichello/godot-ci:4.5-stable
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,7 +66,7 @@ jobs:
     name: Linux Export
     runs-on: ubuntu-24.04
     container:
-      image: ${{ env.GODOT_IMAGE }}
+      image: barichello/godot-ci:4.5-stable
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,7 +92,7 @@ jobs:
     name: Mac Export
     runs-on: ubuntu-24.04
     container:
-      image: ${{ env.GODOT_IMAGE }}
+      image: barichello/godot-ci:4.5-stable
     steps:
       - name: Checkout
         uses: actions/checkout@v4
