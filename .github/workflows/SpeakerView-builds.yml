@@ -105,7 +105,7 @@ jobs:
       - name: dl artifact
         uses: actions/download-artifact@v5
         with:
-          name: mac
+          name: ${{ env.EXPORT_NAME }}-mac
           path: artifact
       # It would be very nice to have this as part of the external composite actions but it looks like there are limitations around long inputs.
       - name: Setup certificate files
