@@ -15,7 +15,7 @@ config/version="1.0.0"
 run/main_scene="res://scenes/speakerview.tscn"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/image="uid://bqaq0ue2wtkqe"
-config/icon="uid://bqaq0ue2wtkqe"
+config/icon="res://icon.ico"
 config/windows_native_icon="res://icon.ico"
 
 [audio]
