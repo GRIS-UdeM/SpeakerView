@@ -35,10 +35,10 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	super(delta)
-	var rotation = 0
+	var rotation_direction = 0
 	if _a:
-		rotation = -1
+		rotation_direction = -1
 	elif _d:
-		rotation = 1
+		rotation_direction = 1
 		
-	self.rotation.z += delta * rotation
+	self.rotation.z += delta * rotation_direction

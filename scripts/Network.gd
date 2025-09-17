@@ -131,16 +131,16 @@ func _on_udpin_spin_box_value_changed(udp_in_port: float) -> void:
 		return
 	var success: Error = reconnect_udp_input(udp_in_port)
 	if success == OK:
-		current_input_port = udp_in_port
+		current_input_port = int(udp_in_port)
 	else:
 		reconnect_udp_input(current_input_port)
 		update_settings_boxes()
 
 
 func _on_udpout_spin_box_value_changed(udp_out_port: float) -> void:
-	var success: Error = udp_peer.set_dest_address(current_sg_ip, udp_out_port)
+	var success: Error = udp_peer.set_dest_address(current_sg_ip, int(udp_out_port))
 	if success == OK:
-		current_output_port = udp_out_port
+		current_output_port = int(udp_out_port)
 	else:
 		udp_peer.set_dest_address(current_sg_ip, current_output_port)
 		update_settings_boxes()
