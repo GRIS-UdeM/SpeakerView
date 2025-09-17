@@ -89,7 +89,7 @@ jobs:
       - name: Archive Windows executable
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.EXPORT_NAME }}-mac
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned
           path: build/mac
           if-no-files-found: error
 
@@ -105,7 +105,7 @@ jobs:
       - name: dl artifact
         uses: actions/download-artifact@v5
         with:
-          name: ${{ env.EXPORT_NAME }}-mac
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned
           path: artifact
       # It would be very nice to have this as part of the external composite actions but it looks like there are limitations around long inputs.
       - name: Setup certificate files
@@ -151,3 +151,7 @@ jobs:
         with:
           name: mac-signed-and-notarized
           path: ${{ steps.notarize.outputs.notarized-app-folder }}
+      # delete the unsigned mac artifact once we are done with it.
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned
