@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bvyqopiijpond"]
 
-[ext_resource type="Script" path="res://scripts/source.gd" id="1_ie8li"]
+[ext_resource type="Script" uid="uid://d1x32u578vlsf" path="res://scripts/source.gd" id="1_ie8li"]
 
 [node name="source" type="Node3D"]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)

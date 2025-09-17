@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b3fqg2yxxrwcg"]
 
-[ext_resource type="Script" path="res://keybinding.gd" id="1_2cofx"]
+[ext_resource type="Script" uid="uid://d05snlip4r0nl" path="res://keybinding.gd" id="1_2cofx"]
 
 [node name="KeybindingHelp" type="HBoxContainer"]
 script = ExtResource("1_2cofx")
