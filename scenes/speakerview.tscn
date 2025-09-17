@@ -1,22 +1,22 @@
 [gd_scene load_steps=77 format=3 uid="uid://dgx85am3uu7o7"]
 
-[ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
-[ext_resource type="Script" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
-[ext_resource type="Script" path="res://scripts/FreeCamera.gd" id="2_iqjbo"]
+[ext_resource type="Script" uid="uid://dsvxve8njqdxf" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
+[ext_resource type="Script" uid="uid://ddhye7ukns6tk" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
+[ext_resource type="Script" uid="uid://bciuxu5h0ifdg" path="res://scripts/FreeCamera.gd" id="2_iqjbo"]
 [ext_resource type="PackedScene" uid="uid://b3fqg2yxxrwcg" path="res://scenes/keybinding.tscn" id="4_b1xjj"]
 [ext_resource type="Texture2D" uid="uid://pasb43352uxo" path="res://assets/camera.png" id="4_pruru"]
-[ext_resource type="Script" path="res://scripts/fulldome_camera.gd" id="4_qw51s"]
-[ext_resource type="Script" path="res://scripts/switch_camera_button.gd" id="4_yakyd"]
+[ext_resource type="Script" uid="uid://bywsgof8jmrae" path="res://scripts/fulldome_camera.gd" id="4_qw51s"]
+[ext_resource type="Script" uid="uid://lc00j8tf71jd" path="res://scripts/switch_camera_button.gd" id="4_yakyd"]
 [ext_resource type="Texture2D" uid="uid://dho24jkqupif5" path="res://assets/cog.png" id="5_0kivh"]
-[ext_resource type="Script" path="res://scripts/axes.gd" id="5_2k5yi"]
-[ext_resource type="Script" path="res://scripts/config_panel.gd" id="5_2pnwc"]
+[ext_resource type="Script" uid="uid://c2kwpqyo4slvs" path="res://scripts/axes.gd" id="5_2k5yi"]
+[ext_resource type="Script" uid="uid://lb4xcloninmc" path="res://scripts/config_panel.gd" id="5_2pnwc"]
 [ext_resource type="PackedScene" uid="uid://byo0lrwh1rug6" path="res://scenes/sphere_grid.tscn" id="6_5uwtl"]
 [ext_resource type="PackedScene" uid="uid://c51kvjg8rfpuq" path="res://scenes/cube_grid.tscn" id="7_mddiq"]
-[ext_resource type="Script" path="res://scripts/Network.gd" id="8_ntmpu"]
-[ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
-[ext_resource type="Script" path="res://scripts/no_sg_panel.gd" id="9_n6adn"]
-[ext_resource type="Script" path="res://scripts/Speakers.gd" id="10_0gnjq"]
-[ext_resource type="Script" path="res://scripts/OSCServer.gd" id="14_7bw8e"]
+[ext_resource type="Script" uid="uid://1gqei31kuvvn" path="res://scripts/Network.gd" id="8_ntmpu"]
+[ext_resource type="Script" uid="uid://c12bucfjw6enh" path="res://scripts/Sources.gd" id="9_376al"]
+[ext_resource type="Script" uid="uid://ervq7xryun60" path="res://scripts/no_sg_panel.gd" id="9_n6adn"]
+[ext_resource type="Script" uid="uid://cjugv7u1dv38f" path="res://scripts/Speakers.gd" id="10_0gnjq"]
+[ext_resource type="Script" uid="uid://tatenvifa7rf" path="res://scripts/OSCServer.gd" id="14_7bw8e"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6didg"]
 bg_color = Color(0.24, 0.24, 0.24, 0.4)
@@ -274,10 +274,6 @@ unique_name_in_owner = true
 transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 4, 6, 15.8649)
 script = ExtResource("2_iqjbo")
 
-[node name="cam_light" type="DirectionalLight3D" parent="Center/FreeCamera"]
-transform = Transform3D(1, 3.48787e-16, -3.48787e-16, -3.48787e-16, 1, 3.48787e-16, 3.48787e-16, -3.48787e-16, 1, 0, 0, 0)
-light_energy = 0.8
-
 [node name="FulldomeCamera" type="Camera3D" parent="Center" node_paths=PackedStringArray("subviewport")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, -1.12238e-23, -1.21652e-31, -4.37114e-08, -1, 0, 1, -4.37114e-08, -2.08165e-12, -2.08165e-12, -2.08165e-12)
@@ -287,6 +283,10 @@ lens = 7
 subviewport = NodePath("SubViewport")
 
 [node name="SubViewport" type="SubViewport" parent="Center/FulldomeCamera"]
+
+[node name="cam_light" type="DirectionalLight3D" parent="Center/FulldomeCamera"]
+transform = Transform3D(1, 3.48787e-16, -3.48787e-16, 3.4878702e-16, -4.37114e-08, 1, 3.4878697e-16, -1, -4.37114e-08, 4, 15.8649, -6.0000005)
+light_energy = 0.8
 
 [node name="FrameRate" type="Label" parent="."]
 visible = false

@@ -2,116 +2,96 @@ name: "SpeakerView builds"
 on: push
 
 env:
-  GODOT_VERSION: 4.3
+  GODOT_VERSION: 4.5
   EXPORT_NAME: SpeakerView
   PROJECT_PATH: .
 
+
 jobs:
   export-windows:
-    name: Windows Export
-    runs-on: ubuntu-24.04
-    container:
-      image: barichello/godot-ci:4.3
+    runs-on: ubuntu-latest
+    container: dunkelgrau/godot:4.5
     steps:
-      - name: Checkout
+      - name: Create symbolic link for export templates
+        run: ln -s /root/.local /github/home/.local
+      - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          lfs: true
-      - name: Setup
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mkdir -v -p ~/.config/
-          mv /root/.config/godot ~/.config/godot
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-      - name: Windows Build
-        run: |
-          mkdir -v -p build/windows
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "Windows Desktop" "$EXPORT_DIR/windows/$EXPORT_NAME.exe"
-      - name: Upload Artifact
+      - name: Import Godot project
+        run: godot --headless --import
+      - name: Create build folder
+        run: mkdir -p build/windows
+      - name: Export Windows executable
+        run: godot --headless --export-release "Windows Desktop" build/windows/${EXPORT_NAME}.exe
+      - name: Archive Windows executable
         uses: actions/upload-artifact@v4
         with:
-          name: windows
+          name: ${{ env.EXPORT_NAME }}-windows
           path: build/windows
+          if-no-files-found: error
 
   export-linux-arm:
-    name: Linux ARM Export
-    runs-on: ubuntu-24.04
-    container:
-      image: barichello/godot-ci:4.3
+    runs-on: ubuntu-latest
+    container: dunkelgrau/godot:4.5
     steps:
-      - name: Checkout
+      - name: Create symbolic link for export templates
+        run: ln -s /root/.local /github/home/.local
+      - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          lfs: true
-      - name: Setup
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-      - name: Linux Build
-        run: |
-          mkdir -v -p build/linuxarm
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "LinuxARM" "$EXPORT_DIR/linuxarm/$EXPORT_NAME.arm64"
-      - name: Upload Artifact
+      - name: Import Godot project
+        run: godot --headless --import
+      - name: Create build folder
+        run: mkdir -p build/linux-arm
+      - name: Export Windows executable
+        run: godot --headless --export-release "LinuxARM" build/linux-arm/${EXPORT_NAME}.arm64
+      - name: Archive Windows executable
         uses: actions/upload-artifact@v4
         with:
-          name: linuxARM
-          path: build/linuxarm
+          name: ${{ env.EXPORT_NAME }}-linux-arm
+          path: build/linux-arm
+          if-no-files-found: error
+
 
   export-linux:
-    name: Linux Export
-    runs-on: ubuntu-24.04
-    container:
-      image: barichello/godot-ci:4.3
+    runs-on: ubuntu-latest
+    container: dunkelgrau/godot:4.5
     steps:
-      - name: Checkout
+      - name: Create symbolic link for export templates
+        run: ln -s /root/.local /github/home/.local
+      - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          lfs: true
-      - name: Setup
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-      - name: Linux Build
-        run: |
-          mkdir -v -p build/linux
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "Linux" "$EXPORT_DIR/linux/$EXPORT_NAME.x86_64"
-      - name: Upload Artifact
+      - name: Import Godot project
+        run: godot --headless --import
+      - name: Create build folder
+        run: mkdir -p build/linux
+      - name: Export Windows executable
+        run: godot --headless --export-release "LinuxARM" build/linux/${EXPORT_NAME}.x86_64
+      - name: Archive Windows executable
         uses: actions/upload-artifact@v4
         with:
-          name: linux
+          name: ${{ env.EXPORT_NAME }}-linux
           path: build/linux
+          if-no-files-found: error
 
   export-mac:
-    name: Mac Export
-    runs-on: ubuntu-24.04
-    container:
-      image: barichello/godot-ci:4.3
+    runs-on: ubuntu-latest
+    container: dunkelgrau/godot:4.5
     steps:
-      - name: Checkout
+      - name: Create symbolic link for export templates
+        run: ln -s /root/.local /github/home/.local
+      - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          lfs: true
-      - name: Setup
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-      - name: Mac Build
-        run: |
-          mkdir -v -p build/mac
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "macOS" "$EXPORT_DIR/mac/$EXPORT_NAME.zip"
-      - name: Upload Artifact
+      - name: Import Godot project
+        run: godot --headless --import
+      - name: Create build folder
+        run: mkdir -p build/mac
+      - name: Export Windows executable
+        run: godot --headless --export-release "macOS" build/mac/${EXPORT_NAME}.zip
+      - name: Archive Windows executable
         uses: actions/upload-artifact@v4
         with:
-          name: mac
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned
           path: build/mac
+          if-no-files-found: error
 
   sign-and-notarize-mac:
     needs: export-mac
@@ -125,7 +105,7 @@ jobs:
       - name: dl artifact
         uses: actions/download-artifact@v5
         with:
-          name: mac
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned
           path: artifact
       # It would be very nice to have this as part of the external composite actions but it looks like there are limitations around long inputs.
       - name: Setup certificate files
@@ -169,5 +149,9 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mac-signed-and-notarized
+          name: ${{ env.EXPORT_NAME }}-mac-signed-and-notarized
           path: ${{ steps.notarize.outputs.notarized-app-folder }}
+      # delete the unsigned mac artifact once we are done with it.
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned
