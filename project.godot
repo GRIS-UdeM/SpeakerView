@@ -14,8 +14,8 @@ config/name="SpeakerView"
 config/version="1.0.0"
 run/main_scene="res://scenes/speakerview.tscn"
 config/features=PackedStringArray("4.5", "Forward Plus")
-boot_splash/image="res://icons/SpeakerView_Logo.png"
-config/icon="res://icons/SpeakerView_Logo.png"
+boot_splash/image="uid://bqaq0ue2wtkqe"
+config/icon="uid://bqaq0ue2wtkqe"
 config/windows_native_icon="res://icon.ico"
 
 [audio]
