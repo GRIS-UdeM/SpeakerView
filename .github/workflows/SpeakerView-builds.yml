@@ -1,0 +1,157 @@
+name: "SpeakerView builds"
+on: push
+
+env:
+  GODOT_VERSION: 4.5
+  EXPORT_NAME: SpeakerView
+  PROJECT_PATH: .
+
+
+jobs:
+  export-windows:
+    runs-on: ubuntu-latest
+    container: dunkelgrau/godot:4.5
+    steps:
+      - name: Create symbolic link for export templates
+        run: ln -s /root/.local /github/home/.local
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Import Godot project
+        run: godot --headless --import
+      - name: Create build folder
+        run: mkdir -p build/windows
+      - name: Export Windows executable
+        run: godot --headless --export-release "Windows Desktop" build/windows/${EXPORT_NAME}.exe
+      - name: Archive Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXPORT_NAME }}-windows
+          path: build/windows
+          if-no-files-found: error
+
+  export-linux-arm:
+    runs-on: ubuntu-latest
+    container: dunkelgrau/godot:4.5
+    steps:
+      - name: Create symbolic link for export templates
+        run: ln -s /root/.local /github/home/.local
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Import Godot project
+        run: godot --headless --import
+      - name: Create build folder
+        run: mkdir -p build/linux-arm
+      - name: Export Windows executable
+        run: godot --headless --export-release "LinuxARM" build/linux-arm/${EXPORT_NAME}.arm64
+      - name: Archive Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXPORT_NAME }}-linux-arm
+          path: build/linux-arm
+          if-no-files-found: error
+
+
+  export-linux:
+    runs-on: ubuntu-latest
+    container: dunkelgrau/godot:4.5
+    steps:
+      - name: Create symbolic link for export templates
+        run: ln -s /root/.local /github/home/.local
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Import Godot project
+        run: godot --headless --import
+      - name: Create build folder
+        run: mkdir -p build/linux
+      - name: Export Windows executable
+        run: godot --headless --export-release "LinuxARM" build/linux/${EXPORT_NAME}.x86_64
+      - name: Archive Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXPORT_NAME }}-linux
+          path: build/linux
+          if-no-files-found: error
+
+  export-mac:
+    runs-on: ubuntu-latest
+    container: dunkelgrau/godot:4.5
+    steps:
+      - name: Create symbolic link for export templates
+        run: ln -s /root/.local /github/home/.local
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Import Godot project
+        run: godot --headless --import
+      - name: Create build folder
+        run: mkdir -p build/mac
+      - name: Export Windows executable
+        run: godot --headless --export-release "macOS" build/mac/${EXPORT_NAME}.zip
+      - name: Archive Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned
+          path: build/mac
+          if-no-files-found: error
+
+  sign-and-notarize-mac:
+    needs: export-mac
+    name: Sign and Notarize Mac
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: dl artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned
+          path: artifact
+      # It would be very nice to have this as part of the external composite actions but it looks like there are limitations around long inputs.
+      - name: Setup certificate files
+        env:
+          GLL_APPLE_DEVELOPER_ID_APPLICATION: ${{ secrets.GLL_APPLE_DEVELOPER_ID_APPLICATION }}
+          GLL_APPLE_DEVELOPER_ID_INSTALLER: ${{ secrets.GLL_APPLE_DEVELOPER_ID_INSTALLER }}
+        run: |
+          echo "$GLL_APPLE_DEVELOPER_ID_APPLICATION" | base64 --decode > spatgris-app-cert.p12
+          export CODESIGN_APP_SECUREFILEPATH=$PWD/spatgris-app-cert.p12
+          echo "app_cert_path=$CODESIGN_APP_SECUREFILEPATH" >> $GITHUB_ENV
+
+          echo "$GLL_APPLE_DEVELOPER_ID_INSTALLER" | base64 --decode > spatgris-installer-cert.p12
+          export CODESIGN_INSTALLER_SECUREFILEPATH=$PWD/spatgris-installer-cert.p12
+          echo "installer_cert_path=$CODESIGN_INSTALLER_SECUREFILEPATH" >> $GITHUB_ENV
+
+      - name: Setup codesigning
+        uses: GRIS-UdeM/actions/setup-codesign@main
+        with:
+          apple-application-cert: ${{ env.app_cert_path }}
+          apple-installer-cert: ${{ env.installer_cert_path }}
+          apple-dev-password: ${{ secrets.GLL_APPLE_DEVELOPER_ID_PASSWORD }}
+      - name: Unzip
+        run: |
+          (unzip -a artifact/$EXPORT_NAME.zip -d artifact/ && rm artifact/$EXPORT_NAME.zip)
+      - name: Sign
+        id: sign
+        uses: GRIS-UdeM/actions/sign@main
+        with:
+          apple-dev-identity: "Gael Lane Lepine"
+          path-to-sign: 'artifact/'
+      - name: Notarize
+        id: notarize
+        uses: GRIS-UdeM/actions/notarize@main
+        with:
+          apple-dev-email: "glanelepine@gmail.com"
+          apple-dev-team: "62PMMWH49Z"
+          apple-app-password: ${{ secrets.GLL_APPLE_APP_PASSWORD }}
+          app-path: "artifact/"
+          app-name: ${{ env.EXPORT_NAME }}
+          app-file-suffix: ".app"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXPORT_NAME }}-mac-signed-and-notarized
+          path: ${{ steps.notarize.outputs.notarized-app-folder }}
+      # delete the unsigned mac artifact once we are done with it.
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: ${{ env.EXPORT_NAME }}-mac-unsigned

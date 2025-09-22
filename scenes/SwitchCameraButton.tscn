@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://4hevq6kcxsr0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ikqv"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="SwitchCameraButton" type="Panel"]
+anchors_preset = -1
+anchor_right = 0.082
+anchor_bottom = 0.078
+offset_right = -21.6
+offset_bottom = -12.8
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7ikqv")

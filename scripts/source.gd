@@ -32,7 +32,6 @@ var inverse_new_elevation: float
 var vbap_span_elevation: float
 
 var speakerview_node
-var camera_node
 var sources_node
 
 var vbap_multimesh_instance3D: MultiMeshInstance3D
@@ -42,7 +41,6 @@ var mbap_spans: MeshInstance3D
 
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
-	camera_node = get_node("/root/SpeakerView/Center/Camera")
 	mbap_spans = get_node("mbap_spans")
 	sources_node = get_parent()
 	
@@ -110,16 +108,22 @@ func _ready():
 	
 	update_polar_coords()
 
+func _process(_delta):
+	var camera = get_viewport().get_camera_3d()
+	Utils.safe_look_at(source_number_mesh, camera.global_position)
+	source_number_mesh.visible = speakerview_node.show_source_numbers
+
 func update_sphere():
+	if not sphere:
+		return
 	sphere.material_override.albedo_color = src_color
 	sphere.transparency = src_transparency
 
 func update_source_number():
 	source_number_mesh.visible = speakerview_node.show_source_numbers
-	if source_number_mesh.visible:
-		source_number_mesh.mesh.set_text(str(src_number))
-		source_number_mesh.look_at(camera_node.global_position, Vector3(0, 1, 0), true)
-		source_number_mesh.transparency = src_transparency
+	source_number_mesh.mesh.set_text(str(src_number))
+	source_number_mesh.transparency = src_transparency
+		
 
 func update_vbap_spans():
 	if src_azimuth_span == 0 and src_elevation_span == 0:
