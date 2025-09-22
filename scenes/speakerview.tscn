@@ -410,7 +410,7 @@ help_text = "Show speaker triplets (only in Dome)"
 [node name="KeybindingHelp9" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+A"
-help_text = "Show speaker activity"
+help_text = "Show source activity"
 
 [node name="KeybindingHelp10" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
