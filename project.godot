@@ -11,11 +11,11 @@ config_version=5
 [application]
 
 config/name="SpeakerView"
-config/version="0.0.7"
+config/version="1.0.0"
 run/main_scene="res://scenes/speakerview.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
-boot_splash/image="res://icons/SpeakerView_Logo.png"
-config/icon="res://icons/SpeakerView_Logo.png"
+config/features=PackedStringArray("4.5", "Forward Plus")
+boot_splash/image="uid://bqaq0ue2wtkqe"
+config/icon="uid://bqaq0ue2wtkqe"
 config/windows_native_icon="res://icon.ico"
 
 [audio]
@@ -33,16 +33,16 @@ window/size/viewport_width=800
 window/size/viewport_height=600
 window/subwindows/embed_subwindows=false
 
-[editor]
-
-run/main_run_args="-- launchedBySG=true"
-
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
 
+[network]
+
+limits/debugger/max_chars_per_second=200000
+
 [rendering]
 
 textures/vram_compression/import_etc2_astc=true
-environment/defaults/default_clear_color=Color(0.431373, 0.447059, 0.466667, 1)
 anti_aliasing/quality/msaa_3d=1
+environment/defaults/default_clear_color=Color(0.431373, 0.447059, 0.466667, 1)

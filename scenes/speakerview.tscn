@@ -1,18 +1,34 @@
-[gd_scene load_steps=66 format=3 uid="uid://dgx85am3uu7o7"]
+[gd_scene load_steps=77 format=3 uid="uid://dgx85am3uu7o7"]
 
-[ext_resource type="Script" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
-[ext_resource type="Script" path="res://scripts/Camera.gd" id="2_gy427"]
-[ext_resource type="Script" path="res://scripts/axes.gd" id="5_2k5yi"]
+[ext_resource type="Script" uid="uid://dt23xwmtbclsw" path="res://scripts/SpeakerView.gd" id="1_ov2dc"]
+[ext_resource type="Script" uid="uid://dregoekocefre" path="res://scripts/OrbitCamera.gd" id="2_gy427"]
+[ext_resource type="Script" uid="uid://cwcy7nbgl365t" path="res://scripts/FreeCamera.gd" id="2_iqjbo"]
+[ext_resource type="PackedScene" uid="uid://b3fqg2yxxrwcg" path="res://scenes/keybinding.tscn" id="4_b1xjj"]
+[ext_resource type="Texture2D" uid="uid://pasb43352uxo" path="res://assets/camera.png" id="4_pruru"]
+[ext_resource type="Script" uid="uid://bywsgof8jmrae" path="res://scripts/fulldome_camera.gd" id="4_qw51s"]
+[ext_resource type="Script" uid="uid://7gtwai4tsf4" path="res://scripts/switch_camera_button.gd" id="4_yakyd"]
+[ext_resource type="Texture2D" uid="uid://dho24jkqupif5" path="res://assets/cog.png" id="5_0kivh"]
+[ext_resource type="Script" uid="uid://ggdouqj7tgfu" path="res://scripts/axes.gd" id="5_2k5yi"]
+[ext_resource type="Script" uid="uid://c7abvhcbv1go" path="res://scripts/config_panel.gd" id="5_2pnwc"]
 [ext_resource type="PackedScene" uid="uid://byo0lrwh1rug6" path="res://scenes/sphere_grid.tscn" id="6_5uwtl"]
 [ext_resource type="PackedScene" uid="uid://c51kvjg8rfpuq" path="res://scenes/cube_grid.tscn" id="7_mddiq"]
-[ext_resource type="Script" path="res://scripts/Network.gd" id="8_ntmpu"]
-[ext_resource type="Script" path="res://scripts/Sources.gd" id="9_376al"]
-[ext_resource type="Script" path="res://scripts/Speakers.gd" id="10_0gnjq"]
+[ext_resource type="Script" uid="uid://1gqei31kuvvn" path="res://scripts/Network.gd" id="8_ntmpu"]
+[ext_resource type="Script" uid="uid://b1w443lkumxoe" path="res://scripts/Sources.gd" id="9_376al"]
+[ext_resource type="Script" uid="uid://fypgchqdic08" path="res://scripts/no_sg_panel.gd" id="9_n6adn"]
+[ext_resource type="Script" uid="uid://0bi3u5rt76nc" path="res://scripts/Speakers.gd" id="10_0gnjq"]
+[ext_resource type="Script" uid="uid://tatenvifa7rf" path="res://scripts/OSCServer.gd" id="14_7bw8e"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_8vjol"]
-font_size = 54
-outline_size = 8
-outline_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6didg"]
+bg_color = Color(0.24, 0.24, 0.24, 0.4)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpma7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_t7apa"]
+font_size = 22
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vny03"]
 albedo_color = Color(0.254902, 0.247059, 0.231373, 1)
@@ -244,12 +260,32 @@ script = ExtResource("1_ov2dc")
 [node name="Center" type="Node3D" parent="."]
 transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
-[node name="Camera" type="Camera3D" parent="Center"]
+[node name="OrbitCamera" type="Camera3D" parent="Center"]
+unique_name_in_owner = true
 transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 2, 3, 7.93245)
 script = ExtResource("2_gy427")
 
-[node name="cam_light" type="DirectionalLight3D" parent="Center/Camera"]
+[node name="cam_light" type="DirectionalLight3D" parent="Center/OrbitCamera"]
 transform = Transform3D(1, 3.48787e-16, -3.48787e-16, -3.48787e-16, 1, 3.48787e-16, 3.48787e-16, -3.48787e-16, 1, 0, 0, 0)
+light_energy = 0.8
+
+[node name="FreeCamera" type="Camera3D" parent="Center"]
+unique_name_in_owner = true
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 4, 6, 15.8649)
+script = ExtResource("2_iqjbo")
+
+[node name="FulldomeCamera" type="Camera3D" parent="Center" node_paths=PackedStringArray("subviewport")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, -1.12238e-23, -1.21652e-31, -4.37114e-08, -1, 0, 1, -4.37114e-08, -2.08165e-12, -2.08165e-12, -2.08165e-12)
+script = ExtResource("4_qw51s")
+fovx = 210.0
+lens = 7
+subviewport = NodePath("SubViewport")
+
+[node name="SubViewport" type="SubViewport" parent="Center/FulldomeCamera"]
+
+[node name="cam_light" type="DirectionalLight3D" parent="Center/FulldomeCamera"]
+transform = Transform3D(1, 3.48787e-16, -3.48787e-16, 3.4878702e-16, -4.37114e-08, 1, 3.4878697e-16, -1, -4.37114e-08, 4, 15.8649, -6.0000005)
 light_energy = 0.8
 
 [node name="FrameRate" type="Label" parent="."]
@@ -259,16 +295,6 @@ offset_top = 32.0
 offset_right = 142.0
 offset_bottom = 58.0
 
-[node name="AlertNoSGLabel" type="Label" parent="."]
-visible = false
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Please close this window and start SpeakerView from the SpatGris View menu"
-label_settings = SubResource("LabelSettings_8vjol")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
 [node name="Debug" type="Label" parent="."]
 visible = false
 offset_left = 1.0
@@ -276,6 +302,489 @@ offset_top = 57.0
 offset_right = 468.0
 offset_bottom = 83.0
 text = "DEBUG"
+
+[node name="HelpPanel" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 85
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="Panel" type="Panel" parent="HelpPanel"]
+layout_mode = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_6didg")
+
+[node name="MarginContainer" type="MarginContainer" parent="HelpPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HelpPanel/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HelpPanel/Panel/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 17
+
+[node name="CloseButton" type="Button" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = " X "
+
+[node name="GlobalControis" type="VBoxContainer" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/separation = 7
+
+[node name="Spacer" type="Control" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+custom_minimum_size = Vector2(0, 9.615)
+layout_mode = 2
+
+[node name="GlobalControlsTitle" type="Label" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Global Controls"
+
+[node name="KeybindingHelp" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " F "
+help_text = "Toggle fullscreen"
+
+[node name="KeybindingHelp2" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "f4"
+help_text = "Show performance window"
+
+[node name="KeybindingHelp3" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " C "
+help_text = "Switch camera"
+
+[node name="KeybindingHelp4" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Ctrl+W"
+help_text = "Close SpeakerView"
+
+[node name="KeybindingHelp5" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+H"
+help_text = "Show hall"
+
+[node name="KeybindingHelp6" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+N"
+help_text = "Show source numbers"
+
+[node name="KeybindingHelp7" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+Z"
+help_text = "Show speaker numbers"
+
+[node name="KeybindingHelp12" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+S"
+help_text = "Show speakers"
+
+[node name="KeybindingHelp8" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+T"
+help_text = "Show speaker triplets (only in Dome)"
+
+[node name="KeybindingHelp9" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+A"
+help_text = "Show source activity"
+
+[node name="KeybindingHelp10" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+L"
+help_text = "Show speaker level"
+
+[node name="KeybindingHelp11" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+O"
+help_text = "Show sphere or cube"
+
+[node name="KeybindingHelp13" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Alt+D"
+help_text = "Toggle fulldome camera"
+
+[node name="CameraControls" type="VBoxContainer" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 0
+theme_override_constants/separation = 4
+
+[node name="Spacer2" type="Control" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 9.615)
+layout_mode = 2
+
+[node name="OrbitCameraControlsTitle" type="Label" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 40.005)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Orbit Camera Controls"
+
+[node name="KeybindingHelp" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Left Click"
+help_text = "Rotate camera"
+
+[node name="KeybindingHelp2" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+custom_minimum_size = Vector2(0, 0.83)
+layout_mode = 2
+keybinding_text = "Scroll Wheel"
+help_text = "Zoom in and out"
+
+[node name="Spacer" type="Control" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 9.615)
+layout_mode = 2
+
+[node name="FreeCameraControlsTitle" type="Label" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 40.005)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Free Camera Controls"
+
+[node name="KeybindingHelp10" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Right Click"
+help_text = "Rotate camera"
+
+[node name="KeybindingHelp12" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = "Left Click"
+help_text = "Move camera"
+
+[node name="KeybindingHelp11" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+custom_minimum_size = Vector2(0, 0.83)
+layout_mode = 2
+keybinding_text = "Scroll Wheel"
+help_text = "Zoom in and out"
+
+[node name="KeybindingHelp3" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " W "
+help_text = "Go forward"
+
+[node name="KeybindingHelp4" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " A "
+help_text = "Strafe left"
+
+[node name="KeybindingHelp5" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " S "
+help_text = "Go backward"
+
+[node name="KeybindingHelp6" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " D "
+help_text = "Strafe right"
+
+[node name="KeybindingHelp7" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " Q "
+help_text = "Go up"
+
+[node name="KeybindingHelp8" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " E "
+help_text = "Go down"
+
+[node name="KeybindingHelp9" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " R "
+help_text = "Reset camera position"
+
+[node name="Spacer3" type="Control" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 9.615)
+layout_mode = 2
+
+[node name="Fulldome Camera Controls" type="Label" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls"]
+custom_minimum_size = Vector2(0, 40.005)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Fulldome Camera Controls"
+
+[node name="KeybindingHelp13" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " A "
+help_text = "Rotate clockwise"
+
+[node name="KeybindingHelp14" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " D "
+help_text = "Rotate anti-clockwise"
+
+[node name="KeybindingHelp15" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " R "
+help_text = "Reset rotation"
+
+[node name="KeybindingHelp16" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " + "
+help_text = "Add 10° to FOV"
+
+[node name="KeybindingHelp17" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
+layout_mode = 2
+keybinding_text = " - "
+help_text = "Remove 10° to FOV"
+
+[node name="ConfigPanel" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 165
+theme_override_constants/margin_top = 85
+theme_override_constants/margin_right = 165
+theme_override_constants/margin_bottom = 165
+script = ExtResource("5_2pnwc")
+
+[node name="Panel" type="Panel" parent="ConfigPanel"]
+layout_mode = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_6didg")
+
+[node name="MarginContainer" type="MarginContainer" parent="ConfigPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 34
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 34
+theme_override_constants/margin_bottom = 34
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ConfigPanel/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = " X "
+
+[node name="ConfigsTitle" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 0
+text = "Configurations"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Configs" type="VBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 7
+
+[node name="SGNetworkConfLabel" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+custom_minimum_size = Vector2(0, 32.395)
+layout_mode = 2
+text = "SpatGRIS Network Configs"
+horizontal_alignment = 1
+
+[node name="UDPInputPortConfig" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPInputPortConfig"]
+layout_mode = 2
+text = "UDP input port"
+
+[node name="UDPINSpinBox" type="SpinBox" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPInputPortConfig"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1024.0
+max_value = 65535.0
+value = 18022.0
+rounded = true
+
+[node name="UDPOutputPortConfig" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputPortConfig"]
+layout_mode = 2
+text = "UDP output port"
+
+[node name="UDPOUTSpinBox" type="SpinBox" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputPortConfig"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1024.0
+max_value = 65535.0
+value = 18023.0
+rounded = true
+
+[node name="UDPOutputAddressConfig" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig"]
+layout_mode = 2
+text = "UDP output address"
+
+[node name="SpatGRISIPLineEdit" type="LineEdit" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "127.0.0.1"
+
+[node name="Spacer" type="Control" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+custom_minimum_size = Vector2(0, 4.365)
+layout_mode = 2
+
+[node name="SGNetworkConfLabel2" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+custom_minimum_size = Vector2(0, 32.395)
+layout_mode = 2
+text = "External Integration Network Configs"
+horizontal_alignment = 1
+
+[node name="OSCInputPortConfig" type="HBoxContainer" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/OSCInputPortConfig"]
+layout_mode = 2
+text = "OSC input port "
+
+[node name="SpinBox" type="SpinBox" parent="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/OSCInputPortConfig"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1024.0
+max_value = 65535.0
+value = 4646.0
+rounded = true
+
+[node name="UIOverlay" type="HBoxContainer" parent="."]
+offset_left = 17.0
+offset_top = 12.0
+offset_right = 201.0
+offset_bottom = 45.0
+size_flags_horizontal = 3
+
+[node name="HelpPannelButton" type="Button" parent="UIOverlay"]
+custom_minimum_size = Vector2(35.69, 0)
+layout_mode = 2
+text = "?"
+
+[node name="SettingsButton" type="Button" parent="UIOverlay"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(35.69, 0)
+layout_mode = 2
+
+[node name="SettingsIcon" type="TextureRect" parent="UIOverlay/SettingsButton"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 2.0
+offset_right = 34.0
+offset_bottom = 31.0
+texture = ExtResource("5_0kivh")
+expand_mode = 1
+
+[node name="CameraButton" type="Button" parent="UIOverlay"]
+custom_minimum_size = Vector2(35.69, 0)
+layout_mode = 2
+script = ExtResource("4_yakyd")
+
+[node name="CameraIcon" type="TextureRect" parent="UIOverlay/CameraButton"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 7.0
+offset_right = 31.0
+offset_bottom = 26.0
+texture = ExtResource("4_pruru")
+expand_mode = 1
+
+[node name="CurrentCameraName" type="Label" parent="UIOverlay"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Orbit Camera"
+
+[node name="NoSGPanel" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("9_n6adn")
+
+[node name="Panel" type="Panel" parent="NoSGPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qpma7")
+
+[node name="MarginContainer" type="MarginContainer" parent="NoSGPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 95
+theme_override_constants/margin_top = 71
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 145
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NoSGPanel/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="AlertNoSGLabel" type="Label" parent="NoSGPanel/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 0
+text = "You have started SpeakerView in standalone mode. If you intend to use SpeakerView with SpatGRIS on the same computer,  you can close this window and open SpatGRIS.
+
+If you intend to monitor a remote SpatGRIS or to use SpeakerView's OSC integration, click the Ok button !"
+label_settings = SubResource("LabelSettings_t7apa")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="NoSGPanel/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_override_font_sizes/font_size = 25
+text = "Ok !"
 
 [node name="hall" type="Node3D" parent="."]
 
@@ -660,8 +1169,26 @@ material_override = SubResource("StandardMaterial3D_0akp0")
 [node name="Network" type="Node" parent="."]
 script = ExtResource("8_ntmpu")
 
+[node name="OSCServer" type="Node" parent="Network"]
+unique_name_in_owner = true
+script = ExtResource("14_7bw8e")
+
 [node name="Sources" type="Node" parent="."]
 script = ExtResource("9_376al")
 
 [node name="Speakers" type="Node" parent="."]
 script = ExtResource("10_0gnjq")
+
+[connection signal="pressed" from="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CloseButton" to="." method="_on_help_panel_close_button_pressed"]
+[connection signal="pressed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer2/CloseButton" to="ConfigPanel" method="_on_settings_button_pressed"]
+[connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPInputPortConfig/UDPINSpinBox" to="Network" method="_on_udpin_spin_box_value_changed"]
+[connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputPortConfig/UDPOUTSpinBox" to="Network" method="_on_udpout_spin_box_value_changed"]
+[connection signal="focus_exited" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig/SpatGRISIPLineEdit" to="Network" method="_on_spat_grisip_line_edit_focus_exited"]
+[connection signal="text_submitted" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/UDPOutputAddressConfig/SpatGRISIPLineEdit" to="Network" method="_on_spat_grisip_line_edit_text_submitted"]
+[connection signal="value_changed" from="ConfigPanel/Panel/MarginContainer/VBoxContainer/HBoxContainer/ScrollContainer/Configs/OSCInputPortConfig/SpinBox" to="Network/OSCServer" method="_on_text_edit_value_changed"]
+[connection signal="pressed" from="UIOverlay/HelpPannelButton" to="." method="_on_help_panel_button_pressed"]
+[connection signal="pressed" from="UIOverlay/SettingsButton" to="ConfigPanel" method="_on_settings_button_pressed"]
+[connection signal="pressed" from="NoSGPanel/Panel/MarginContainer/VBoxContainer/Button" to="NoSGPanel" method="_on_button_pressed"]
+[connection signal="control_message_received" from="Network/OSCServer" to="." method="_on_osc_server_control_message_received"]
+[connection signal="source_message_received" from="Network/OSCServer" to="Sources" method="_on_osc_server_source_message_received"]
+[connection signal="speaker_message_received" from="Network/OSCServer" to="Speakers" method="_on_osc_server_speaker_message_received"]

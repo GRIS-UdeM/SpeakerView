@@ -13,13 +13,20 @@ var speakerview_node
 var network_node
 var speakers_node
 var area_node
+var center_position: Vector3 = Vector3(0,0,0)
+
+func _process(_delta):
+	speaker_number_mesh.visible = speakerview_node.show_speaker_numbers
+	Utils.safe_look_at(self, center_position)
+	if speaker_number_mesh.visible:
+		Utils.safe_look_at(speaker_number_mesh, get_viewport().get_camera_3d().global_position)
 
 func _ready():
 	speakerview_node = get_node("/root/SpeakerView")
 	network_node = get_node("/root/SpeakerView/Network")
 	speakers_node = get_parent()
 	area_node = get_node("cube/Area3D")
-	
+
 	# speaker number
 	var spk_num_new_mesh_3d = MeshInstance3D.new()
 	var text_mesh = TextMesh.new()
@@ -27,15 +34,10 @@ func _ready():
 	spk_num_new_mesh_3d.mesh = text_mesh
 	spk_num_new_mesh_3d.material_override = speakers_node.spk_num_mat
 	speaker_number_mesh = spk_num_new_mesh_3d
-	
+
 	add_child(speaker_number_mesh)
 
-	var spk_pos_normalized = transform.origin.normalized()
-	var up_vector = Vector3(0, 1, 0)
-	var almost_zero = 0.000001
-	if abs(spk_pos_normalized.x) < almost_zero and abs(spk_pos_normalized.z) < almost_zero:
-		up_vector = Vector3(0, 0, 1)
-	look_at(Vector3(0, 0, 0), up_vector, true)
+	Utils.safe_look_at(self, center_position)
 
 	speaker_number_mesh.global_position = global_position + Vector3(0, 1, 0)
 	speaker_number_mesh.scale = Vector3(3, 3, 1)
@@ -59,7 +61,7 @@ func set_speaker_selected_state():
 		speakerview_node.selected_speaker_number = 0
 	else:
 		speakerview_node.selected_speaker_number = spk_number
-	
+
 	speakerview_node.spk_is_selected_with_mouse = true
 	network_node.send_UDP()
 	speakerview_node.spk_is_selected_with_mouse = false
