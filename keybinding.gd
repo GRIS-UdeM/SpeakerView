@@ -2,6 +2,8 @@
 extends HBoxContainer
 
 ## Replaces Ctrl and Alt with macos-specific symbols
+## This will need to change if we add a keybinding that specifically
+## uses Control instead of Cmd on MacOS
 func macos_keybinding_substitutions(text):
 	return text.replace("Ctrl", "⌘").replace("Alt", "⌥")
 
