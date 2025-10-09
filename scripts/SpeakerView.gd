@@ -141,6 +141,11 @@ func _ready():
 
 	if !is_started_by_SG:
 		%NoSGPanel.visible = true
+	# correctly display Cmd+W on macOS. If we ever have more controls
+	# that use Ctrl/Cmd, we should write an abstraction for this directly in
+	# the keybindings scene.
+	if platform_is_macos:
+		%CloseSpeakerViewKeyBinding.keybinding_text = "Cmd+W"
 	if platform_is_macos and is_started_by_SG:
 		should_move_SG_to_foreground = !SV_started_by_SG_for_the_first_time
 

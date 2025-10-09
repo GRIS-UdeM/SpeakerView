@@ -377,7 +377,8 @@ layout_mode = 2
 keybinding_text = " C "
 help_text = "Switch camera"
 
-[node name="KeybindingHelp4" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="CloseSpeakerViewKeyBinding" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+unique_name_in_owner = true
 layout_mode = 2
 keybinding_text = "Ctrl+W"
 help_text = "Close SpeakerView"
@@ -488,7 +489,7 @@ help_text = "Go forward"
 [node name="KeybindingHelp4" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " A "
-help_text = "Strafe left"
+help_text = "Move left"
 
 [node name="KeybindingHelp5" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
@@ -498,7 +499,7 @@ help_text = "Go backward"
 [node name="KeybindingHelp6" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " D "
-help_text = "Strafe right"
+help_text = "Move right"
 
 [node name="KeybindingHelp7" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
@@ -528,12 +529,12 @@ text = "Fulldome Camera Controls"
 [node name="KeybindingHelp13" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " A "
-help_text = "Rotate clockwise"
+help_text = "Rotate scene counterclockwise"
 
 [node name="KeybindingHelp14" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " D "
-help_text = "Rotate anti-clockwise"
+help_text = "Rotate scene clockwise"
 
 [node name="KeybindingHelp15" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
