@@ -378,7 +378,6 @@ keybinding_text = " C "
 help_text = "Switch camera"
 
 [node name="CloseSpeakerViewKeyBinding" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
-unique_name_in_owner = true
 layout_mode = 2
 keybinding_text = "Ctrl+W"
 help_text = "Close SpeakerView"
