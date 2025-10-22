@@ -146,7 +146,6 @@ func _ready():
 
 func _process(_delta):
 #	$FrameRate.text = str("FPS : ", Engine.get_frames_per_second())
-
 	if window_position != get_viewport().position or window_size != get_viewport().size:
 		window_position = get_viewport().position
 		window_size = get_viewport().size
@@ -165,6 +164,10 @@ func _process(_delta):
 var last_active_camera = %OrbitCamera
 
 func switch_to_camera(camera):
+	# corrects a strange bug where the fulldome camera's subviewport
+	# takes over the main viewport when the other cameras are lookin up.
+	# This is probably an engine bug and also happens in godot 4.3.
+	%FulldomeCamera.visible = false
 	if camera == %OrbitCamera:
 		%OrbitCamera.current = true
 		%CurrentCameraName.text = "Orbit Camera"
@@ -174,6 +177,7 @@ func switch_to_camera(camera):
 		%CurrentCameraName.text = "Free Camera"
 		last_active_camera = %FreeCamera
 	elif camera == %FulldomeCamera:
+		%FulldomeCamera.visible = true
 		%FulldomeCamera.current = true
 		%CurrentCameraName.text = %FulldomeCamera.get_status_string()
 		# Never set fulldome as the last_active_camera.
