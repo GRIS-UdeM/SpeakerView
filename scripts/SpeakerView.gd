@@ -3,8 +3,6 @@ extends Node3D
 enum SpatMode {DOME=0, CUBE=1, HYBRID=2}
 
 var app_version: String = ProjectSettings.get_setting("application/config/version")
-var rendering_method: String
-var renderer: String
 
 # Settings
 var vsync: bool = true
@@ -73,6 +71,11 @@ var triplets_node
 var speakers_node
 var hall_node
 
+func update_title():
+	var speaker_setup_display_name = " - " + speaker_setup_name if speaker_setup_name else ""
+	get_viewport().set_title("SpeakerView " + app_version + speaker_setup_display_name)
+
+
 func _ready():
 	network_node = get_node("Network")
 	dome_grid_node = get_node("origin_grid/dome")
@@ -86,7 +89,6 @@ func _ready():
 
 	platform_is_macos = OS.get_name() == "macOS"
 
-	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
 	window_position = get_viewport().position
 	window_size = get_viewport().size
 
@@ -126,18 +128,10 @@ func _ready():
 		get_viewport().position = speakerview_window_position
 	if speakerview_window_size != Vector2i(0, 0):
 		get_viewport().size = speakerview_window_size
-
-	match rendering_method:
-		"forward_plus":
-			renderer = "Forward"
-		"mobile":
-			renderer = "Mobile"
-		"gl_compatibility":
-			renderer = "Compatibility"
-
+	
+	update_title()
+	
 	load_settings()
-
-	get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
 
 	if !is_started_by_SG:
 		%NoSGPanel.visible = true
@@ -286,7 +280,7 @@ func update_display():
 
 	if old_speaker_setup_name != speaker_setup_name:
 		old_speaker_setup_name = speaker_setup_name
-		get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
+		update_title()
 
 	if is_started_by_SG and SG_asked_to_kill_speakerview:
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
