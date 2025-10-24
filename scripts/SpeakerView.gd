@@ -3,8 +3,6 @@ extends Node3D
 enum SpatMode {DOME=0, CUBE=1, HYBRID=2}
 
 var app_version: String = ProjectSettings.get_setting("application/config/version")
-var rendering_method: String
-var renderer: String
 
 # Settings
 var vsync: bool = true
@@ -73,6 +71,11 @@ var triplets_node
 var speakers_node
 var hall_node
 
+func update_title():
+	var speaker_setup_display_name = " - " + speaker_setup_name if speaker_setup_name else ""
+	get_viewport().set_title("SpeakerView " + app_version + speaker_setup_display_name)
+
+
 func _ready():
 	network_node = get_node("Network")
 	dome_grid_node = get_node("origin_grid/dome")
@@ -86,7 +89,6 @@ func _ready():
 
 	platform_is_macos = OS.get_name() == "macOS"
 
-	rendering_method = ProjectSettings.get_setting("rendering/renderer/rendering_method")
 	window_position = get_viewport().position
 	window_size = get_viewport().size
 
@@ -126,18 +128,10 @@ func _ready():
 		get_viewport().position = speakerview_window_position
 	if speakerview_window_size != Vector2i(0, 0):
 		get_viewport().size = speakerview_window_size
-
-	match rendering_method:
-		"forward_plus":
-			renderer = "Forward"
-		"mobile":
-			renderer = "Mobile"
-		"gl_compatibility":
-			renderer = "Compatibility"
-
+	
+	update_title()
+	
 	load_settings()
-
-	get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
 
 	if !is_started_by_SG:
 		%NoSGPanel.visible = true
@@ -146,7 +140,6 @@ func _ready():
 
 func _process(_delta):
 #	$FrameRate.text = str("FPS : ", Engine.get_frames_per_second())
-
 	if window_position != get_viewport().position or window_size != get_viewport().size:
 		window_position = get_viewport().position
 		window_size = get_viewport().size
@@ -165,6 +158,10 @@ func _process(_delta):
 var last_active_camera = %OrbitCamera
 
 func switch_to_camera(camera):
+	# corrects a strange bug where the fulldome camera's subviewport
+	# takes over the main viewport when the other cameras are lookin up.
+	# This is probably an engine bug and also happens in godot 4.3.
+	%FulldomeCamera.visible = false
 	if camera == %OrbitCamera:
 		%OrbitCamera.current = true
 		%CurrentCameraName.text = "Orbit Camera"
@@ -174,6 +171,7 @@ func switch_to_camera(camera):
 		%CurrentCameraName.text = "Free Camera"
 		last_active_camera = %FreeCamera
 	elif camera == %FulldomeCamera:
+		%FulldomeCamera.visible = true
 		%FulldomeCamera.current = true
 		%CurrentCameraName.text = %FulldomeCamera.get_status_string()
 		# Never set fulldome as the last_active_camera.
@@ -286,7 +284,7 @@ func update_display():
 
 	if old_speaker_setup_name != speaker_setup_name:
 		old_speaker_setup_name = speaker_setup_name
-		get_viewport().set_title("SpeakerView " + app_version + " " + renderer + " - " + speaker_setup_name)
+		update_title()
 
 	if is_started_by_SG and SG_asked_to_kill_speakerview:
 		get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
