@@ -204,7 +204,7 @@ func _input(event):
 				%ConfigPanel.visible = false
 				%NoSGPanel.visible = false
 		# Handling quitting with CTRL or META + W
-		elif event.pressed and event.echo == false and event.keycode == KEY_W:
+		elif event.pressed and event.echo == false and event.keycode == KEY_Q:
 			if (platform_is_macos and event.get_modifiers_mask() == KEY_MASK_META) or (!platform_is_macos and event.get_modifiers_mask() == KEY_MASK_CTRL):
 				get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 		elif event.pressed and event.echo == false and event.alt_pressed and event.shift_pressed:

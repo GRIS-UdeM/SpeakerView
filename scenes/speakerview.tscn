@@ -380,7 +380,7 @@ help_text = "Switch camera"
 
 [node name="CloseSpeakerViewKeyBinging" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
-keybinding_text = "Ctrl+W"
+keybinding_text = "Ctrl+Q"
 help_text = "Close SpeakerView"
 
 [node name="KeybindingHelp5" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
