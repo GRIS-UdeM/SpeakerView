@@ -381,7 +381,7 @@ help_text = "Switch camera"
 [node name="CloseSpeakerViewKeyBinging" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Ctrl+Q"
-help_text = "Close SpeakerView"
+help_text = "Quit SpeakerView"
 
 [node name="KeybindingHelp5" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
@@ -504,12 +504,12 @@ help_text = "Move right"
 [node name="KeybindingHelp7" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " Q "
-help_text = "Go up"
+help_text = "Go down"
 
 [node name="KeybindingHelp8" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " E "
-help_text = "Go down"
+help_text = "Go up"
 
 [node name="KeybindingHelp9" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2

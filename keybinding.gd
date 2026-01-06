@@ -5,7 +5,7 @@ extends HBoxContainer
 ## This will need to change if we add a keybinding that specifically
 ## uses Control instead of Cmd on MacOS
 func macos_keybinding_substitutions(text):
-	return text.replace("Ctrl", "⌘").replace("Alt", "⌥")
+	return text.replace("Ctrl+", "⌘ ").replace("Alt+", "⌥ ")
 
 ## This is the text variable that you can change in the editor. Use Windows/Linux
 ## Conventions (Ctrl, Alt, ...) and they will be translated to macOS translation
