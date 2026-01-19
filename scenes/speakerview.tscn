@@ -277,6 +277,7 @@ script = ExtResource("2_iqjbo")
 [node name="FulldomeCamera" type="Camera3D" parent="Center" node_paths=PackedStringArray("subviewport")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, -1.12238e-23, -1.21652e-31, -4.37114e-08, -1, 0, 1, -4.37114e-08, -2.08165e-12, -2.08165e-12, -2.08165e-12)
+visible = false
 script = ExtResource("4_qw51s")
 fovx = 210.0
 lens = 7
@@ -347,82 +348,82 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = " X "
 
-[node name="GlobalControis" type="VBoxContainer" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
+[node name="GlobalControls" type="VBoxContainer" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_constants/separation = 7
 
-[node name="Spacer" type="Control" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+[node name="Spacer" type="Control" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls"]
 custom_minimum_size = Vector2(0, 9.615)
 layout_mode = 2
 
-[node name="GlobalControlsTitle" type="Label" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis"]
+[node name="GlobalControlsTitle" type="Label" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Global Controls"
 
-[node name="KeybindingHelp" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " F "
 help_text = "Toggle fullscreen"
 
-[node name="KeybindingHelp2" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp2" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "f4"
 help_text = "Show performance window"
 
-[node name="KeybindingHelp3" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp3" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " C "
 help_text = "Switch camera"
 
-[node name="KeybindingHelp4" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="CloseSpeakerViewKeyBinging" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
-keybinding_text = "Ctrl+W"
-help_text = "Close SpeakerView"
+keybinding_text = "Ctrl+Q"
+help_text = "Quit SpeakerView"
 
-[node name="KeybindingHelp5" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp5" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+H"
 help_text = "Show hall"
 
-[node name="KeybindingHelp6" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp6" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+N"
 help_text = "Show source numbers"
 
-[node name="KeybindingHelp7" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp7" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+Z"
 help_text = "Show speaker numbers"
 
-[node name="KeybindingHelp12" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp12" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+S"
 help_text = "Show speakers"
 
-[node name="KeybindingHelp8" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp8" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+T"
 help_text = "Show speaker triplets (only in Dome)"
 
-[node name="KeybindingHelp9" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp9" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+A"
 help_text = "Show source activity"
 
-[node name="KeybindingHelp10" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp10" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+L"
 help_text = "Show speaker level"
 
-[node name="KeybindingHelp11" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp11" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+O"
 help_text = "Show sphere or cube"
 
-[node name="KeybindingHelp13" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControis" instance=ExtResource("4_b1xjj")]
+[node name="KeybindingHelp13" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/GlobalControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = "Alt+D"
 help_text = "Toggle fulldome camera"
@@ -488,7 +489,7 @@ help_text = "Go forward"
 [node name="KeybindingHelp4" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " A "
-help_text = "Strafe left"
+help_text = "Move left"
 
 [node name="KeybindingHelp5" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
@@ -498,17 +499,17 @@ help_text = "Go backward"
 [node name="KeybindingHelp6" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " D "
-help_text = "Strafe right"
+help_text = "Move right"
 
 [node name="KeybindingHelp7" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " Q "
-help_text = "Go up"
+help_text = "Go down"
 
 [node name="KeybindingHelp8" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " E "
-help_text = "Go down"
+help_text = "Go up"
 
 [node name="KeybindingHelp9" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
@@ -528,12 +529,12 @@ text = "Fulldome Camera Controls"
 [node name="KeybindingHelp13" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " A "
-help_text = "Rotate clockwise"
+help_text = "Rotate scene counterclockwise"
 
 [node name="KeybindingHelp14" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
 keybinding_text = " D "
-help_text = "Rotate anti-clockwise"
+help_text = "Rotate scene clockwise"
 
 [node name="KeybindingHelp15" parent="HelpPanel/Panel/MarginContainer/ScrollContainer/HBoxContainer/CameraControls" instance=ExtResource("4_b1xjj")]
 layout_mode = 2
