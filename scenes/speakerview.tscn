@@ -282,8 +282,11 @@ script = ExtResource("4_qw51s")
 fovx = 210.0
 lens = 7
 subviewport = NodePath("SubViewport")
+dynamically_resize_subviewport = true
 
 [node name="SubViewport" type="SubViewport" parent="Center/FulldomeCamera"]
+msaa_3d = 2
+screen_space_aa = 1
 
 [node name="cam_light" type="DirectionalLight3D" parent="Center/FulldomeCamera"]
 transform = Transform3D(1, 3.48787e-16, -3.48787e-16, 3.4878702e-16, -4.37114e-08, 1, 3.4878697e-16, -1, -4.37114e-08, 4, 15.8649, -6.0000005)
