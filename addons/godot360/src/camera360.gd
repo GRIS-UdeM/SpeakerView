@@ -51,6 +51,21 @@ enum Lens {
 ## antialiasing and other quality settings.
 @export var subviewport: SubViewport = null
 
+func set_dynamic_resize_callback():
+	if not get_viewport():
+		return
+	if dynamically_resize_subviewport and get_viewport():
+		get_viewport().size_changed.connect(adapt_subviewports_sizes)
+		print("connect")
+	else:
+		get_viewport().size_changed.disconnect(adapt_subviewports_sizes)
+		print("disconnect")
+
+@export var dynamically_resize_subviewport: bool = false:
+	set(value):
+		dynamically_resize_subviewport = value
+		set_dynamic_resize_callback()
+
 var viewports : Array[SubViewport] = []
 var cameras : Array[Camera3D] = []
 
@@ -58,6 +73,13 @@ var cameras : Array[Camera3D] = []
 var render_quad: MeshInstance3D = null
 ## The material used to produce the final image.
 var mat := ShaderMaterial.new()
+
+func adapt_subviewports_sizes():
+	mat.set_shader_parameter("resolution", get_viewport().size)
+	var biggest_square_size = Vector2i.ONE*(max(get_viewport().size[0], get_viewport().size[1]))
+	for viewport in viewports:
+		viewport.size = biggest_square_size
+
 
 
 func _ready() -> void:
@@ -99,6 +121,7 @@ func _ready() -> void:
 		for i in range(num_cameras + 1, 6):
 			mat.set_shader_parameter("Texture%d" % [i], Texture2D.new())
 
+	set_dynamic_resize_callback()
 
 func _process(_delta: float) -> void:
 	for camera in cameras:
