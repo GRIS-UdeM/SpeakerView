@@ -64,7 +64,7 @@ jobs:
       - name: Create build folder
         run: mkdir -p build/linux
       - name: Export Windows executable
-        run: godot --headless --export-release "LinuxARM" build/linux/${EXPORT_NAME}.x86_64
+        run: godot --headless --export-release "Linux" build/linux/${EXPORT_NAME}.x86_64
       - name: Archive Windows executable
         uses: actions/upload-artifact@v4
         with:
