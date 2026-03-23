@@ -22,6 +22,8 @@ var speakerview_node
 var spk_scn = load("res://scenes/speaker.tscn")
 
 var MIN_SPEAKER_SCALE: float = 0.4
+var MAX_SPEAKER_SCALE: float = 1.0
+var SPEAKER_OVERLAP_SCALE: float = 1.1
 var AUTO_SCALE_INCREMENT = 0.02
 
 func set_speakers_info(data: Variant):
@@ -118,27 +120,75 @@ func decrement_scale(cube:MeshInstance3D):
 		speaker_number_mesh.global_position = cube.get_parent().global_position + Vector3(0, 1*new_scale, 0)
 		speaker_number_mesh.scale = Vector3(3*new_scale, 3*new_scale, 1*new_scale)
 
+func increment_scale(cube:MeshInstance3D):
+	if cube == null:
+		return
+	var old_scale = cube.transform.basis.get_scale()[0]
+	var new_scale = min(MAX_SPEAKER_SCALE, old_scale + AUTO_SCALE_INCREMENT)
+	if not is_equal_approx(new_scale, old_scale):
+		should_autoscale = true
+		cube.scale = Vector3(new_scale, new_scale, new_scale)
+		var speaker_number_mesh = cube.get_parent().speaker_number_mesh
+		speaker_number_mesh.global_position = cube.get_parent().global_position + Vector3(0, 1*new_scale, 0)
+		speaker_number_mesh.scale = Vector3(3*new_scale, 3*new_scale, 1*new_scale)
+
+func test_speaker_would_overlap(speaker: Node3D, test_scale: float, other_spaces: Array) -> bool:
+	## This checks if a speaker with hypothetical scale would overlap another speaker
+	## without adding it to the 3D world.
+	var area := speaker.get_node_or_null("cube/Area3D") as Area3D
+	if area == null:
+		return false
+	var cs := area.get_node_or_null("CollisionShape3D") as CollisionShape3D
+	if cs == null or cs.shape == null:
+		return false
+
+	# Build world transform with the hypothetical scale
+	var test_transform := speaker.global_transform
+	test_transform.basis = test_transform.basis.scaled(Vector3.ONE * test_scale)
+
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = cs.shape
+	query.transform = test_transform
+	query.collide_with_areas = true
+	query.collide_with_bodies = true
+	query.collision_mask = area.collision_mask
+	# Exclude the speaker's own Area/Body so it won't report itself
+	query.exclude = [area.get_rid()]
+
+	# Test against other worlds / spaces
+	for ds in other_spaces:
+		var res = ds.intersect_shape(query, 1)
+		if res.size() > 0:
+			return true
+	return false
 
 func autoscale_speakers():
 	## This iterates over all of the speakers and tries to determine whether or not
-	## they should be rescaled. This algorithm finds a speaker that is not yet scaled
-	## as small as possible and that is overlapping with at least another speaker's mesh.
-	## It then finds all the neighbouring speakers that are also overlapping with another speaker's mesh.
+	## they should be rescaled.
+	## This algorithm increases the scale of a speaker that is smaller than the original scale by
+	## checking if the mesh would overlap another if it was bigger (test_speaker_would_overlap).
+	## It finds a speaker that is not yet scaled as small as possible and that is overlapping with at
+	## least another speaker's mesh. It then finds all the neighbouring speakers that are also
+	## overlapping with another speaker's mesh.
 	## It finaly decreases the scale of each one of these speakers and of their displayed text by a small increment.
 	## Calling this function will set the "should_autoscale" boolean to true if it did any scaling work,
 	## meaning another call to this function may potentially decrease the scale further.
 	should_autoscale = false
+	var spk_spaces:= []
+	for speaker in speakers_scenes:
+		spk_spaces.append(speaker.get_world_3d().get_direct_space_state())
 	for speaker in speakers_scenes:
 		var cube:MeshInstance3D = speaker.get_node("cube")
-		if is_equal_approx(cube.transform.basis.get_scale()[0], MIN_SPEAKER_SCALE):
-			continue
 		if speaker.get_node_or_null("cube/Area3D"):
+			should_autoscale = true
 			var overlapping_speakers = speaker.get_node("cube/Area3D").get_overlapping_areas()
 			if overlapping_speakers.size() == 0:
+				var intersects = test_speaker_would_overlap(speaker, SPEAKER_OVERLAP_SCALE, spk_spaces)
+				if not intersects and not is_equal_approx(cube.transform.basis.get_scale()[0], MAX_SPEAKER_SCALE):
+					increment_scale(cube)
 				continue
-			should_autoscale = true
 			var neighbouring_areas = speaker.get_node("Neighbourhood").get_overlapping_areas()
-			# we should only scale neighbours that actually overlap with something.
+			# we should only decrease the neighbours scale that actually overlap with something.
 			var neighbours_area_we_should_scale = neighbouring_areas.filter(func(n_a): n_a.get_overlapping_areas())
 			decrement_scale(cube)
 			for n_area in neighbours_area_we_should_scale:
