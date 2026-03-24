@@ -449,6 +449,7 @@ func set_SV_anti_aliasing(msaa: Viewport.MSAA) -> void:
 	get_viewport().set_msaa_3d(msaa)
 	anti_aliasing = get_viewport().get_msaa_3d()
 	DebugMenu.update_settings_label()
+	%FulldomeCamera.set_antialiasing(msaa)
 
 
 func _on_help_panel_button_pressed() -> void:

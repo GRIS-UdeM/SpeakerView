@@ -66,6 +66,17 @@ func set_dynamic_resize_callback():
 		dynamically_resize_subviewport = value
 		set_dynamic_resize_callback()
 
+func set_antialiasing(msaa_level: Viewport.MSAA):
+	if msaa_level != Viewport.MSAA_DISABLED:
+		for viewport in viewports:
+			viewport.msaa_3d = msaa_level
+			viewport.screen_space_aa = Viewport.SCREEN_SPACE_AA_FXAA
+	else:
+		for viewport in viewports:
+			viewport.msaa_3d = msaa_level
+			viewport.screen_space_aa = Viewport.SCREEN_SPACE_AA_DISABLED
+
+
 var viewports : Array[SubViewport] = []
 var cameras : Array[Camera3D] = []
 

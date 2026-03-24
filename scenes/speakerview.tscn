@@ -285,7 +285,7 @@ subviewport = NodePath("SubViewport")
 dynamically_resize_subviewport = true
 
 [node name="SubViewport" type="SubViewport" parent="Center/FulldomeCamera"]
-msaa_3d = 2
+msaa_3d = 1
 screen_space_aa = 1
 
 [node name="cam_light" type="DirectionalLight3D" parent="Center/FulldomeCamera"]
